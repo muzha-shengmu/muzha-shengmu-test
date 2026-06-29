@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>木柵聖母宮 AI 管理平台 v0.2</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #f6f6f6;
+      color: #111;
+      line-height: 1.7;
+    }
+    header {
+      background: #8b1e1e;
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    header p {
+      margin: 0.5rem 0 0;
+      font-size: 1rem;
+    }
+    main {
+      padding: 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .section {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.08);
+      margin-bottom: 1.2rem;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 1.5rem;
+    }
+    .notice {
+      background: #fff7e6;
+      border-left: 5px solid #b7791f;
+      padding: 0.8rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+    .announcement-card {
+      border-bottom: 1px solid #ddd;
+      padding: 1rem 0;
+    }
+    .announcement-card:last-child {
+      border-bottom: none;
+    }
+    .announcement-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.25rem;
+    }
+    .meta {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .tag {
+      display: inline-block;
+      background: #8b1e1e;
+      color: #fff;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      margin-left: 0.4rem;
+    }
+    .admin-link {
+      display: inline-block;
+      margin-top: 0.8rem;
+      background: #0066cc;
+      color: #fff;
+      text-decoration: none;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+    }
+    footer {
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      padding: 2rem 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>木柵聖母宮</h1>
+    <p>AI 管理平台 v0.2｜公告同步測試版</p>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>最新公告</h2>
+      <div id="status" class="notice">正在載入公告...</div>
+      <div id="announcements"></div>
+    </section>
+
+    <section class="section">
+      <h2>管理入口</h2>
+      <p>此頁為測試版首頁。公告資料由 Supabase 雲端資料庫同步。</p>
+      <a class="admin-link" href="./announcement-admin.html">進入公告管理後台</a>
+    </section>
+  </main>
+
+  <footer>
+    木柵聖母宮｜GitHub Pages 測試站
+  </footer>
+
+  <script>
+    const savedUrl = localStorage.getItem('supabase-url');
+    const savedKey = localStorage.getItem('supabase-key');
+
+    const statusEl = document.getElementById('status');
+    const listEl = document.getElementById('announcements');
+
+    if (!savedUrl || !savedKey) {
+      statusEl.textContent = '尚未設定 Supabase 連線。請先進入公告管理後台初始化連線。';
+    } else {
+      loadPublishedAnnouncements(savedUrl, savedKey);
+    }
+
+    async function loadPublishedAnnouncements(url, key) {
+      try {
+        const client = window.supabase.createClient(url, key);
+
+        const { data, error } = await client
+          .from('announcements')
+          .select('*')
+          .eq('status', 'published')
+          .order('is_pinned', { ascending: false })
+          .order('published_at', { ascending: false });
+
+        if (error) {
+          statusEl.textContent = '公告載入失敗：' + error.message;
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          statusEl.textContent = '目前尚無已發布公告。';
+          return;
+        }
+
+        statusEl.textContent = '公告同步成功。';
+        listEl.innerHTML = '';
+
+        data.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'announcement-card';
+
+          const title = document.createElement('h3');
+          title.textContent = item.title || '未命名公告';
+
+          if (item.is_pinned) {
+            const tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.textContent = '置頂';
+            title.appendChild(tag);
+          }
+
+          const content = document.createElement('p');
+          content.textContent = item.content || '';
+
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          meta.textContent = '發布時間：' + formatDate(item.published_at || item.updated_at || item.created_at);
+
+          card.appendChild(title);
+          card.appendChild(content);
+          card.appendChild(meta);
+          listEl.appendChild(card);
+        });
+      } catch (err) {
+        statusEl.textContent = '系統錯誤：' + err.message;
+      }
+    }
+
+    function formatDate(value) {
+      if (!value) return '未記錄';
+      return new Date(value).toLocaleString('zh-TW');
+    }
+  </script>
+</body>
+</html>
