@@ -1,18 +1,475 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<title>木柵聖母宮</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>木柵聖母宮公告管理後台 v0.1</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 1rem;
+            background-color: #f6f6f6;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .section {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        .field {
+            margin-bottom: 0.8rem;
+        }
+        .field label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="url"], textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 0.6rem 1rem;
+            background: #0066cc;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+        button.secondary {
+            background: #777;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .announcement-card {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 4px rgba(0,0,0,0.1);
+        }
+        .announcement-card h3 {
+            margin-top: 0;
+        }
+        .actions {
+            margin-top: 0.5rem;
+        }
+        .actions button {
+            margin-bottom: 0.3rem;
+        }
+        .edit-form {
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid #eee;
+        }
+        .logout {
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 600px) {
+            .actions button {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    </style>
 </head>
-
 <body>
-<h1>木柵聖母宮</h1>
+    <h1>木柵聖母宮公告管理後台 v0.1</h1>
 
-<h2>網站建置中</h2>
+    <div class="section" id="config-section">
+        <h2>Supabase 設定</h2>
+        <div class="field">
+            <label for="supabase-url">Supabase URL</label>
+            <input type="url" id="supabase-url" placeholder="https://your-project.supabase.co">
+        </div>
+        <div class="field">
+            <label for="supabase-key">Supabase Publishable Key</label>
+            <input type="text" id="supabase-key" placeholder="public-anon-key">
+        </div>
+        <button id="init-supabase">初始化連線</button>
+    </div>
 
-<p>歡迎來到木柵聖母宮官方網站。</p>
+    <div class="section" id="login-section" style="display:none;">
+        <h2>管理員登入</h2>
+        <p>管理員信箱：<strong>mj29379898@gmail.com</strong></p>
+        <button id="send-link">發送 Magic Link</button>
+        <p id="login-message" style="color:green;"></p>
+    </div>
 
-<p>本網站正在建置中，敬請期待。</p>
+    <div class="section" id="admin-section" style="display:none;">
+        <div class="logout">
+            <button id="logout-btn">登出</button>
+        </div>
 
+        <h2>新增公告</h2>
+        <div class="field">
+            <label for="new-title">標題</label>
+            <input type="text" id="new-title">
+        </div>
+        <div class="field">
+            <label for="new-content">內容</label>
+            <textarea id="new-content" rows="4"></textarea>
+        </div>
+        <button id="add-announcement">新增公告</button>
+
+        <h2 style="margin-top:1.5rem;">公告列表</h2>
+        <div id="announcements-list"></div>
+    </div>
+
+    <script>
+        let supabase = null;
+        const adminEmail = 'mj29379898@gmail.com';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUrl = localStorage.getItem('supabase-url');
+            const savedKey = localStorage.getItem('supabase-key');
+
+            if (savedUrl) document.getElementById('supabase-url').value = savedUrl;
+            if (savedKey) document.getElementById('supabase-key').value = savedKey;
+
+            if (savedUrl && savedKey) {
+                initSupabase(savedUrl, savedKey);
+            }
+        });
+
+        document.getElementById('init-supabase').addEventListener('click', () => {
+            const url = document.getElementById('supabase-url').value.trim();
+            const key = document.getElementById('supabase-key').value.trim();
+
+            if (!url || !key) {
+                alert('請輸入 Supabase URL 和 Publishable Key');
+                return;
+            }
+
+            localStorage.setItem('supabase-url', url);
+            localStorage.setItem('supabase-key', key);
+
+            initSupabase(url, key);
+        });
+
+        function initSupabase(url, key) {
+            supabase = window.supabase.createClient(url, key);
+
+            document.getElementById('config-section').style.display = 'none';
+            document.getElementById('login-section').style.display = 'block';
+
+            supabase.auth.onAuthStateChange((event, session) => {
+                if (session) {
+                    verifyAdmin(session);
+                }
+            });
+
+            checkLoginStatus();
+        }
+
+        document.getElementById('send-link').addEventListener('click', async () => {
+            if (!supabase) {
+                alert('請先設定 Supabase');
+                return;
+            }
+
+            const redirectUrl = window.location.href.split('#')[0];
+
+            const { error } = await supabase.auth.signInWithOtp({
+                email: adminEmail,
+                options: {
+                    emailRedirectTo: redirectUrl
+                }
+            });
+
+            if (error) {
+                alert('發送登入連結失敗：' + error.message);
+            } else {
+                document.getElementById('login-message').textContent =
+                    '登入連結已寄出，請至信箱查收並點擊連結完成登入。';
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            if (supabase) {
+                await supabase.auth.signOut();
+                document.getElementById('admin-section').style.display = 'none';
+                document.getElementById('login-section').style.display = 'block';
+            }
+        });
+
+        async function checkLoginStatus() {
+            if (!supabase) return;
+
+            const { data: { session } } = await supabase.auth.getSession();
+
+            if (session) {
+                verifyAdmin(session);
+            }
+        }
+
+        function verifyAdmin(session) {
+            if (session.user && session.user.email === adminEmail) {
+                showAdminSection();
+            } else {
+                alert('您沒有權限存取此後台。');
+                supabase.auth.signOut();
+            }
+        }
+
+        function showAdminSection() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('admin-section').style.display = 'block';
+            loadAnnouncements();
+        }
+
+        async function loadAnnouncements() {
+            const listDiv = document.getElementById('announcements-list');
+            listDiv.innerHTML = '載入中...';
+
+            const { data, error } = await supabase
+                .from('announcements')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                listDiv.innerHTML = '載入公告失敗：' + error.message;
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                listDiv.innerHTML = '<p>尚未有公告。</p>';
+                return;
+            }
+
+            listDiv.innerHTML = '';
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'announcement-card';
+                card.dataset.id = item.id;
+
+                const titleEl = document.createElement('h3');
+                titleEl.textContent = item.title;
+
+                const contentEl = document.createElement('p');
+                contentEl.textContent = item.content;
+
+                const statusEl = document.createElement('p');
+                statusEl.textContent =
+                    `狀態：${item.status === 'published' ? '已發布' : '草稿'}　${item.is_pinned ? '（置頂）' : ''}`;
+
+                const datesEl = document.createElement('p');
+                datesEl.style.fontSize = '0.8rem';
+                datesEl.style.color = '#666';
+                datesEl.textContent =
+                    `建立：${formatDate(item.created_at)}　更新：${formatDate(item.updated_at)}${item.published_at ? '　發布：' + formatDate(item.published_at) : ''}`;
+
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'actions';
+
+                const editBtn = document.createElement('button');
+                editBtn.textContent = '編輯';
+                editBtn.onclick = () => toggleEditMode(card, item);
+                actionsDiv.appendChild(editBtn);
+
+                const pubBtn = document.createElement('button');
+                pubBtn.textContent = item.status === 'published' ? '下架' : '發布';
+                pubBtn.onclick = () => togglePublish(item);
+                actionsDiv.appendChild(pubBtn);
+
+                const pinBtn = document.createElement('button');
+                pinBtn.textContent = item.is_pinned ? '取消置頂' : '置頂';
+                pinBtn.onclick = () => togglePin(item);
+                actionsDiv.appendChild(pinBtn);
+
+                card.appendChild(titleEl);
+                card.appendChild(contentEl);
+                card.appendChild(statusEl);
+                card.appendChild(datesEl);
+                card.appendChild(actionsDiv);
+
+                listDiv.appendChild(card);
+            });
+        }
+
+        document.getElementById('add-announcement').addEventListener('click', async () => {
+            const title = document.getElementById('new-title').value.trim();
+            const content = document.getElementById('new-content').value.trim();
+
+            if (!title || !content) {
+                alert('請輸入公告標題與內容');
+                return;
+            }
+
+            const now = new Date().toISOString();
+
+            const { error } = await supabase
+                .from('announcements')
+                .insert([{
+                    title,
+                    content,
+                    status: 'draft',
+                    is_pinned: false,
+                    created_at: now,
+                    updated_at: now
+                }]);
+
+            if (error) {
+                alert('新增公告失敗：' + error.message);
+            } else {
+                document.getElementById('new-title').value = '';
+                document.getElementById('new-content').value = '';
+                loadAnnouncements();
+            }
+        });
+
+        async function togglePublish(item) {
+            const isPublish = item.status !== 'published';
+            const now = new Date().toISOString();
+
+            let updates;
+
+            if (isPublish) {
+                updates = {
+                    status: 'published',
+                    published_at: now,
+                    updated_at: now
+                };
+            } else {
+                updates = {
+                    status: 'draft',
+                    published_at: null,
+                    updated_at: now
+                };
+            }
+
+            const { error } = await supabase
+                .from('announcements')
+                .update(updates)
+                .eq('id', item.id);
+
+            if (error) {
+                alert('更新發布狀態失敗：' + error.message);
+            } else {
+                loadAnnouncements();
+            }
+        }
+
+        async function togglePin(item) {
+            const now = new Date().toISOString();
+
+            const { error } = await supabase
+                .from('announcements')
+                .update({
+                    is_pinned: !item.is_pinned,
+                    updated_at: now
+                })
+                .eq('id', item.id);
+
+            if (error) {
+                alert('更新置頂狀態失敗：' + error.message);
+            } else {
+                loadAnnouncements();
+            }
+        }
+
+        function toggleEditMode(card, item) {
+            const existing = card.querySelector('.edit-form');
+
+            if (existing) {
+                existing.remove();
+                return;
+            }
+
+            const editDiv = document.createElement('div');
+            editDiv.className = 'edit-form';
+
+            const titleField = document.createElement('div');
+            titleField.className = 'field';
+
+            const titleLabel = document.createElement('label');
+            titleLabel.textContent = '標題';
+
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.value = item.title;
+
+            titleField.appendChild(titleLabel);
+            titleField.appendChild(titleInput);
+
+            const contentField = document.createElement('div');
+            contentField.className = 'field';
+
+            const contentLabel = document.createElement('label');
+            contentLabel.textContent = '內容';
+
+            const contentTextarea = document.createElement('textarea');
+            contentTextarea.rows = 4;
+            contentTextarea.value = item.content;
+
+            contentField.appendChild(contentLabel);
+            contentField.appendChild(contentTextarea);
+
+            const saveButton = document.createElement('button');
+            saveButton.textContent = '更新';
+            saveButton.onclick = async () => {
+                const newTitle = titleInput.value.trim();
+                const newContent = contentTextarea.value.trim();
+
+                if (!newTitle || !newContent) {
+                    alert('請輸入標題與內容');
+                    return;
+                }
+
+                const now = new Date().toISOString();
+
+                const { error } = await supabase
+                    .from('announcements')
+                    .update({
+                        title: newTitle,
+                        content: newContent,
+                        updated_at: now
+                    })
+                    .eq('id', item.id);
+
+                if (error) {
+                    alert('編輯公告失敗：' + error.message);
+                } else {
+                    editDiv.remove();
+                    loadAnnouncements();
+                }
+            };
+
+            const cancelButton = document.createElement('button');
+            cancelButton.textContent = '取消';
+            cancelButton.className = 'secondary';
+            cancelButton.onclick = () => {
+                editDiv.remove();
+            };
+
+            editDiv.appendChild(titleField);
+            editDiv.appendChild(contentField);
+            editDiv.appendChild(saveButton);
+            editDiv.appendChild(cancelButton);
+
+            card.appendChild(editDiv);
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const d = new Date(dateString);
+            return d.toLocaleString();
+        }
+    </script>
 </body>
 </html>
