@@ -1,0 +1,603 @@
+/* MZSM-MOTIONSITES-TEMPLE-INTEGRATION-001｜首頁高端動態骨架
+   ------------------------------------------------------------------
+   設計重點（對應 VISUAL-AND-MOTION-SPEC.md）
+   1. 底圖 assets/motion/hero-clean-*.webp 已移除原 hero.png 內「已烘焙的靜態煙」，
+      龍頭、龍身、屋脊本體完整保留且永遠靜止（底圖不套任何動畫）。
+   2. 所有可見煙霧都在獨立的 SVG 圖層 .mz-hero__smoke，與底圖同一組座標系
+      （viewBox 0 0 1672 941），因此每一縷煙都固定貼在龍／屋脊的正確位置。
+   3. 煙霧只做「向上」位移，左右僅有小幅擺動（sway），且擺動與上升的週期不同，
+      因此不會出現整片同步水平平移。
+   4. 主標題／說明文字／CTA 區由 .mz-hero__smokewrap 的遮罩完全排除煙霧。
+   5. 只用 transform / opacity（GPU 合成），不使用大型影片、不使用全螢幕 blur。 */
+
+/* ============================================================
+   1. Hero 容器
+   ============================================================ */
+.mz-hero{
+  position:relative;
+  overflow:hidden;
+  height:78vh;
+  min-height:560px;
+  max-height:820px;
+  background:var(--mz-ink-green-deep);
+  isolation:isolate;
+}
+@supports (height:100svh){ .mz-hero{ height:78svh } }
+@media (min-width:768px){ .mz-hero{ height:82vh; min-height:640px; max-height:900px } }
+@media (min-width:1024px){ .mz-hero{ height:86vh; min-height:660px; max-height:960px } }
+
+/* ------------------------------------------------------------
+   1a. 影像座標框
+   .mz-hero__frame 精準複製 object-fit:cover 的幾何，但因為它是一個真實的
+   盒子，底圖與煙霧層可以共用同一個座標系；煙霧因此不會因為裁切而錯位。
+   預設（容器比例比圖窄）：以高度撐滿，寬度由 aspect-ratio 推導 → 左右裁切。
+   焦點設在 viewBox x≈1080（龍頭與屋脊之間），手機才不會只看到空背景。
+   ------------------------------------------------------------ */
+.mz-hero__frame{
+  position:absolute;
+  top:50%;
+  left:50%;
+  height:100%;
+  width:auto;
+  aspect-ratio:1672 / 941;
+  transform:translate(-64.6%,-50%);
+}
+/* 容器比圖還寬時改成以寬度撐滿 → 上下裁切，水平不裁切 */
+@media (min-aspect-ratio:1528/1000){
+  .mz-hero__frame{ width:100%; height:auto; transform:translate(-50%,-50%) }
+}
+
+.mz-hero__media,
+.mz-hero__smokewrap{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+.mz-hero__media{ z-index:0 }
+.mz-hero__smokewrap{ z-index:1 }
+
+.mz-hero__img{
+  display:block;
+  width:100%;
+  height:100%;
+  /* 底圖永遠靜止：此處刻意不宣告任何 animation / transition */
+}
+
+/* ------------------------------------------------------------
+   1b. 煙霧遮罩｜下方主標題、說明文字與 CTA 區一律不得疊煙
+   遮罩掛在 .mz-hero__smokewrap（hero 盒座標），因此無論底圖如何裁切，
+   文字區永遠是 0 煙霧。
+   ------------------------------------------------------------ */
+.mz-hero__smokewrap{
+  -webkit-mask-image:linear-gradient(180deg,
+      #000 0%, #000 52%,
+      rgba(0,0,0,.75) 60%,
+      rgba(0,0,0,.30) 65%,
+      transparent 67%);
+          mask-image:linear-gradient(180deg,
+      #000 0%, #000 52%,
+      rgba(0,0,0,.75) 60%,
+      rgba(0,0,0,.30) 65%,
+      transparent 67%);
+}
+/* 桌機：文字改置於左側，龍與屋脊在右側，因此垂直遮罩可以放寬到 82%，
+   讓屋脊下段仍有煙；文字區改由 .mz-hero__smokeclip 的水平遮罩負責保護。
+   兩層遮罩是巢狀關係（相乘），不依賴 mask-composite，相容性較佳。 */
+@media (min-width:1024px){
+  .mz-hero__smokewrap{
+    -webkit-mask-image:linear-gradient(180deg,
+        #000 0%, #000 46%,
+        rgba(0,0,0,.8) 62%,
+        rgba(0,0,0,.3) 74%,
+        transparent 82%);
+            mask-image:linear-gradient(180deg,
+        #000 0%, #000 46%,
+        rgba(0,0,0,.8) 62%,
+        rgba(0,0,0,.3) 74%,
+        transparent 82%);
+  }
+  /* 左側文字欄（eyebrow／書法五字／說明／CTA）完全不得有煙 */
+  .mz-hero__smokeclip{
+    -webkit-mask-image:linear-gradient(90deg,
+        transparent 0%, transparent 43%,
+        rgba(0,0,0,.38) 48%,
+        #000 53%);
+            mask-image:linear-gradient(90deg,
+        transparent 0%, transparent 43%,
+        rgba(0,0,0,.38) 48%,
+        #000 53%);
+  }
+}
+.mz-hero__smokeclip{ position:absolute; inset:0; overflow:hidden }
+
+.mz-hero__smoke{
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+/* ------------------------------------------------------------
+   1c. 電影感壓暗層：把底圖下緣收進深墨綠，文字才有穩定底色
+   ------------------------------------------------------------ */
+.mz-hero__veil{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,
+      rgba(8,13,9,.62) 0%,
+      rgba(8,13,9,.10) 20%,
+      rgba(8,13,9,.10) 46%,
+      rgba(8,13,9,.60) 70%,
+      rgba(8,13,9,.94) 84%,
+      var(--mz-ink-green-deep) 96%),
+    linear-gradient(90deg,
+      rgba(8,13,9,.66) 0%,
+      rgba(8,13,9,.22) 44%,
+      rgba(8,13,9,0) 72%);
+}
+
+/* ============================================================
+   2. 煙霧動態
+   每一縷煙由兩層組成：
+     .mz-rise  負責向上位移 + 淡入淡出（主要方向，永遠向上）
+     .mz-puff  負責左右小幅擺動 + 逐步擴散變大（週期與上升不同）
+   兩個週期互質 → 觀感上不會出現整齊一致的水平平移，也沒有明顯循環跳切。
+   ============================================================ */
+.mz-rise{
+  animation:mz-rise var(--dur,15s) linear var(--delay,0s) infinite;
+  will-change:transform,opacity;
+}
+.mz-puff{
+  animation:mz-sway var(--sdur,8s) ease-in-out var(--sdelay,0s) infinite alternate;
+  transform-box:fill-box;
+  transform-origin:50% 50%;
+  will-change:transform;
+}
+
+@keyframes mz-rise{
+  0%   { transform:translateY(0);                 opacity:0 }
+  10%  {                                          opacity:var(--o,.4) }
+  62%  {                                          opacity:calc(var(--o,.4) * .55) }
+  100% { transform:translateY(calc(var(--rise,600px) * -1)); opacity:0 }
+}
+@keyframes mz-sway{
+  0%   { transform:translateX(calc(var(--sway,30px) * -1)) scale(var(--s0,.62)) }
+  100% { transform:translateX(var(--sway,30px))            scale(var(--s1,1.55)) }
+}
+
+/* 手機降載：只保留主要煙柱，避免過多合成層 */
+@media (max-width:430px){
+  .mz-plume--lite{ display:none }
+}
+
+/* ------------------------------------------------------------
+   2a. prefers-reduced-motion：停用所有位移動畫
+   依 VISUAL-AND-MOTION-SPEC「停用位移動畫，保留靜態薄霧或完全無煙」，
+   此處採「完全無煙 + 極淡靜態薄霧」，不留下任何會動的元素。
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion:reduce){
+  .mz-hero__smoke{ display:none }
+  .mz-hero__smokewrap{
+    background:
+      radial-gradient(120% 70% at 62% 34%, rgba(226,214,188,.10), rgba(226,214,188,0) 62%),
+      radial-gradient(80% 50% at 44% 52%, rgba(226,214,188,.06), rgba(226,214,188,0) 70%);
+  }
+  .mz-rise,.mz-puff{ animation:none }
+  html{ scroll-behavior:auto }
+}
+
+/* ============================================================
+   3. Hero 內容（書法五字、說明、CTA）
+   ============================================================ */
+.mz-hero__inner{
+  position:absolute;
+  z-index:3;
+  left:0; right:0; bottom:0;
+  padding:0 var(--mz-gutter) calc(24px + env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
+}
+@media (min-width:768px){ .mz-hero__inner{ padding-bottom:40px; gap:14px } }
+@media (min-width:1024px){
+  .mz-hero__inner{
+    padding-bottom:56px;
+    max-width:var(--mz-max);
+    margin:0 auto;
+  }
+}
+
+.mz-hero__eyebrow{
+  margin:0;
+  font-family:var(--mz-ui);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.3em;
+  color:var(--mz-gold);
+  text-shadow:0 2px 10px #000;
+}
+@media (min-width:1024px){ .mz-hero__eyebrow{ font-size:12px } }
+
+/* 書法五字：單一 SVG、五字共用同一縮放係數與同一基準線。
+   不逐字 fit-to-canvas、不拉伸、不以一般字型模仿。 */
+.mz-hero__title{ margin:0; line-height:0 }
+.mz-hero__title svg{
+  display:block;
+  width:min(86vw, 420px);
+  height:auto;
+  filter:drop-shadow(0 2px 0 rgba(70,45,18,.85)) drop-shadow(0 6px 18px rgba(0,0,0,.9));
+}
+@media (min-width:768px){ .mz-hero__title svg{ width:min(62vw, 520px) } }
+@media (min-width:1024px){ .mz-hero__title svg{ width:min(38vw, 500px) } }
+
+.mz-hero__lede{
+  margin:0;
+  max-width:34ch;
+  font-family:var(--mz-brush);
+  font-size:15px;
+  font-weight:700;
+  line-height:1.7;
+  letter-spacing:.04em;
+  color:var(--mz-rice);
+  text-shadow:0 2px 12px #000;
+}
+@media (min-width:768px){ .mz-hero__lede{ font-size:17px } }
+@media (min-width:1024px){ .mz-hero__lede{ font-size:19px; max-width:30ch } }
+
+.mz-hero__cta{ display:flex; flex-wrap:wrap; gap:9px; margin-top:2px }
+.mz-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:var(--mz-tap);
+  padding:11px 16px;
+  border-radius:6px;
+  font-family:var(--mz-brush);
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:.06em;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:background-color .25s var(--mz-ease-out), border-color .25s var(--mz-ease-out);
+}
+.mz-btn--primary{
+  color:#1a0f0c;
+  background:linear-gradient(160deg,var(--mz-gold-bright),var(--mz-gold));
+  border:1px solid var(--mz-gold-bright);
+  box-shadow:0 6px 20px rgba(0,0,0,.5);
+}
+.mz-btn--ghost{
+  color:var(--mz-gold-bright);
+  background:rgba(8,13,9,.5);
+  border:1px solid var(--mz-line-strong);
+  backdrop-filter:blur(2px);
+}
+.mz-btn--primary:hover{ background:linear-gradient(160deg,#f5dcab,var(--mz-gold-bright)) }
+.mz-btn--ghost:hover{ background:var(--mz-crimson); border-color:var(--mz-gold) }
+.mz-btn:focus-visible{ outline:3px solid var(--mz-gold-bright); outline-offset:3px }
+@media (prefers-reduced-motion:reduce){ .mz-btn{ transition:none } }
+
+/* ============================================================
+   4. 首頁區塊（深墨綠／暗朱紅／暖金）
+   ============================================================ */
+.mz-main{
+  background:
+    linear-gradient(180deg,var(--mz-ink-green-deep) 0, var(--mz-ink-green) 90px, var(--mz-ink-green) 100%);
+  color:var(--mz-text);
+  padding:0 var(--mz-gutter) 64px;
+}
+.mz-wrap{ max-width:var(--mz-max); margin:0 auto }
+.mz-section{ padding-top:44px }
+@media (min-width:768px){ .mz-section{ padding-top:60px } }
+
+.mz-h2{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:0 0 8px;
+  font-family:var(--mz-brush);
+  font-size:24px;
+  line-height:1.35;
+  letter-spacing:.09em;
+  font-weight:900;
+  color:var(--mz-gold-bright);
+}
+@media (min-width:768px){ .mz-h2{ font-size:29px } }
+.mz-h2::before{
+  content:"";
+  width:18px; height:18px; flex:0 0 18px;
+  transform:rotate(45deg);
+  background:var(--mz-crimson);
+  border:1px solid var(--mz-gold);
+}
+.mz-h2::after{
+  content:"";
+  height:1px; flex:1;
+  background:linear-gradient(90deg,var(--mz-line-strong),transparent);
+}
+.mz-lead{
+  margin:0 0 20px;
+  max-width:62ch;
+  font-family:var(--mz-brush);
+  font-size:14px;
+  line-height:1.8;
+  font-weight:700;
+  color:var(--mz-text-muted);
+}
+@media (min-width:768px){ .mz-lead{ font-size:15px } }
+
+.mz-grid{ display:grid; gap:12px }
+@media (min-width:768px){ .mz-grid--2{ grid-template-columns:repeat(2,1fr) } }
+@media (min-width:768px){ .mz-grid--3{ grid-template-columns:repeat(2,1fr) } }
+@media (min-width:1024px){ .mz-grid--3{ grid-template-columns:repeat(3,1fr) } }
+@media (min-width:1024px){ .mz-grid--4{ grid-template-columns:repeat(4,1fr) } }
+@media (min-width:768px) and (max-width:1023px){ .mz-grid--4{ grid-template-columns:repeat(2,1fr) } }
+
+.mz-card{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-height:var(--mz-tap);
+  padding:16px;
+  min-width:0;
+  overflow-wrap:anywhere;
+  text-decoration:none;
+  color:var(--mz-text);
+  background:var(--mz-surface-raised);
+  border:1px solid var(--mz-line);
+  border-radius:var(--mz-radius);
+  transition:border-color .25s var(--mz-ease-out), background-color .25s var(--mz-ease-out);
+}
+.mz-card:hover{ border-color:var(--mz-gold); background:#1a241c }
+.mz-card:focus-visible{ outline:3px solid var(--mz-gold-bright); outline-offset:2px }
+.mz-card__mark{
+  display:grid;
+  place-items:center;
+  flex:0 0 42px;
+  width:42px; height:42px;
+  border-radius:50%;
+  background:var(--mz-crimson);
+  border:1px solid var(--mz-gold);
+  color:var(--mz-gold-bright);
+  font-family:var(--mz-brush);
+  font-size:19px;
+  font-weight:900;
+}
+.mz-card__body{ min-width:0 }
+.mz-card h3{
+  margin:0;
+  font-family:var(--mz-brush);
+  font-size:19px;
+  line-height:1.3;
+  letter-spacing:.06em;
+  font-weight:900;
+  color:var(--mz-gold-bright);
+}
+.mz-card p{
+  margin:5px 0 0;
+  font-family:var(--mz-brush);
+  font-size:13px;
+  line-height:1.6;
+  font-weight:700;
+  color:var(--mz-text-muted);
+}
+.mz-card__arrow{ margin-left:auto; color:var(--mz-gold); font-family:var(--mz-ui); font-size:19px }
+
+/* 公告卡 */
+.mz-post{
+  display:block;
+  min-height:112px;
+  padding:16px;
+  min-width:0;
+  overflow-wrap:anywhere;
+  text-decoration:none;
+  background:var(--mz-surface-raised);
+  border:1px solid var(--mz-line);
+  border-radius:var(--mz-radius);
+  transition:border-color .25s var(--mz-ease-out);
+}
+.mz-post:hover{ border-color:var(--mz-gold) }
+.mz-post:focus-visible{ outline:3px solid var(--mz-gold-bright); outline-offset:2px }
+.mz-badge{
+  display:inline-block;
+  padding:4px 9px;
+  border:1px solid var(--mz-line-strong);
+  border-radius:99px;
+  font-family:var(--mz-ui);
+  font-size:11px;
+  font-weight:700;
+  color:var(--mz-gold);
+  background:rgba(104,31,27,.35);
+}
+.mz-post h3{
+  margin:10px 0 5px;
+  font-family:var(--mz-brush);
+  font-size:19px;
+  line-height:1.35;
+  font-weight:900;
+  color:var(--mz-gold-bright);
+}
+.mz-post p{
+  margin:0;
+  font-family:var(--mz-brush);
+  font-size:13px;
+  line-height:1.65;
+  font-weight:700;
+  color:var(--mz-text-muted);
+}
+
+/* 服務卡（暗朱紅系） */
+.mz-service{
+  display:block;
+  min-height:150px;
+  padding:18px;
+  min-width:0;
+  overflow-wrap:anywhere;
+  text-decoration:none;
+  color:var(--mz-rice);
+  border:1px solid var(--mz-line-strong);
+  border-radius:var(--mz-radius);
+  background:linear-gradient(150deg,var(--mz-crimson),#1b110e 78%);
+  transition:border-color .25s var(--mz-ease-out);
+}
+.mz-service:nth-child(2){ background:linear-gradient(150deg,#7a2620,#20130f 78%) }
+.mz-service:nth-child(3){ background:linear-gradient(150deg,#4a1a16,#17100e 78%) }
+.mz-service:hover{ border-color:var(--mz-gold-bright) }
+.mz-service:focus-visible{ outline:3px solid var(--mz-gold-bright); outline-offset:2px }
+.mz-service small{
+  display:block;
+  font-family:var(--mz-ui);
+  font-size:10px;
+  letter-spacing:.2em;
+  color:var(--mz-gold);
+}
+.mz-service h3{
+  margin:10px 0 6px;
+  font-family:var(--mz-brush);
+  font-size:25px;
+  line-height:1.3;
+  letter-spacing:.1em;
+  font-weight:900;
+  color:var(--mz-gold-bright);
+}
+.mz-service p{ margin:0; font-family:var(--mz-brush); font-size:13px; line-height:1.65; font-weight:700; color:#d9cdb6 }
+.mz-service span{ display:block; margin-top:14px; font-family:var(--mz-brush); font-size:13px; font-weight:900; color:var(--mz-gold-bright) }
+
+.mz-all{
+  display:inline-flex;
+  align-items:center;
+  min-height:var(--mz-tap);
+  margin-top:12px;
+  padding:0 2px;
+  font-family:var(--mz-brush);
+  font-size:14px;
+  font-weight:900;
+  color:var(--mz-gold);
+  text-decoration:none;
+}
+.mz-all:hover{ color:var(--mz-gold-bright) }
+.mz-all:focus-visible{ outline:3px solid var(--mz-gold-bright); outline-offset:2px }
+
+/* 媽祖文化：引文區 */
+.mz-culture{
+  padding:20px;
+  border:1px solid var(--mz-line);
+  border-left:3px solid var(--mz-crimson);
+  border-radius:var(--mz-radius);
+  background:linear-gradient(160deg,rgba(104,31,27,.20),rgba(20,29,22,.9));
+}
+.mz-culture p{
+  margin:0 0 12px;
+  font-family:var(--mz-brush);
+  font-size:15px;
+  line-height:1.9;
+  font-weight:700;
+  color:var(--mz-text);
+}
+.mz-culture p:last-child{ margin-bottom:0 }
+@media (min-width:768px){ .mz-culture{ padding:26px } .mz-culture p{ font-size:16px } }
+
+/* 交通聯絡 */
+.mz-contact dl{ margin:0; display:grid; gap:10px }
+@media (min-width:768px){ .mz-contact dl{ grid-template-columns:repeat(2,1fr) } }
+.mz-contact div{
+  padding:14px 16px;
+  border:1px solid var(--mz-line);
+  border-radius:var(--mz-radius);
+  background:var(--mz-surface-raised);
+}
+.mz-contact dt{
+  font-family:var(--mz-ui);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.2em;
+  color:var(--mz-gold);
+}
+.mz-contact dd{
+  margin:6px 0 0;
+  font-family:var(--mz-brush);
+  font-size:14px;
+  line-height:1.6;
+  font-weight:700;
+  color:var(--mz-text-muted);
+}
+
+/* 頁尾 */
+.mz-footer{
+  padding:34px var(--mz-gutter) calc(44px + env(safe-area-inset-bottom));
+  text-align:center;
+  background:var(--mz-ink-green-deep);
+  border-top:3px solid var(--mz-crimson);
+}
+.mz-footer b{
+  font-family:var(--mz-brush);
+  font-size:19px;
+  letter-spacing:.14em;
+  font-weight:900;
+  color:var(--mz-gold-bright);
+}
+.mz-footer p{ margin:9px 0 0; font-family:var(--mz-brush); font-size:12px; font-weight:700; color:var(--mz-text-dim) }
+
+/* 跳至主要內容 */
+.mz-skip{
+  position:absolute;
+  left:-9999px;
+  top:0;
+  z-index:20;
+  padding:12px 16px;
+  background:var(--mz-gold-bright);
+  color:#1a0f0c;
+  font-family:var(--mz-brush);
+  font-weight:900;
+  text-decoration:none;
+}
+.mz-skip:focus{ left:8px; top:8px }
+
+.mz-sr{
+  position:absolute!important;
+  width:1px!important; height:1px!important;
+  padding:0!important; margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+
+/* ============================================================
+   5. 首頁的頁首／導覽（沿用既有 .top / .site-nav 結構與路由，只換配色與寬度）
+   ============================================================ */
+.mz-page{ background:var(--mz-ink-green-deep) }
+.mz-page .top{
+  background:var(--mz-ink-green-deep);
+  border-bottom:1px solid var(--mz-line);
+  padding-left:var(--mz-gutter);
+  padding-right:var(--mz-gutter);
+}
+.mz-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  width:100%;
+  max-width:var(--mz-max);
+  margin:0 auto;
+  min-width:0;
+}
+.mz-page .brand-title{ color:var(--mz-gold-bright) }
+.mz-page .tag{ border-color:var(--mz-line-strong); color:var(--mz-gold) }
+.mz-page .site-nav{
+  background:var(--mz-ink-green);
+  border-bottom:1px solid var(--mz-line);
+}
+.mz-page .site-nav a{ color:var(--mz-gold-bright); font-family:var(--mz-ui) }
+.mz-page .site-nav a:hover,
+.mz-page .site-nav a:focus-visible{ background:var(--mz-crimson); color:var(--mz-rice) }
+.mz-page .site-nav a:focus-visible{ outline:3px solid var(--mz-gold-bright); outline-offset:-3px }
+@media (min-width:1024px){
+  .mz-page .site-nav{ justify-content:center; padding-left:var(--mz-gutter); padding-right:var(--mz-gutter) }
+}

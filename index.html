@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&amp;display=swap&amp;text=%E4%B8%AD%E4%B8%BB%E4%BA%A4%E4%BA%BA%E4%BB%8B%E4%BB%A5%E4%BB%B0%E4%BD%8D%E4%BD%91%E4%BF%A1%E5%80%8B%E5%82%B3%E5%85%88%E5%85%A5%E5%85%A7%E5%85%A8%E5%85%AC%E5%88%86%E5%88%B0%E5%89%8D%E5%8B%95%E5%8B%99%E5%8B%BF%E5%8D%97%E5%8D%B7%E5%8F%83%E5%8F%96%E5%8F%A3%E5%8F%B0%E5%8F%B2%E5%90%88%E5%90%8C%E5%90%8D%E5%90%91%E5%91%8A%E5%91%BD%E5%9C%93%E5%A0%B1%E5%A1%AB%E5%A4%AA%E5%A4%B1%E5%A8%98%E5%AA%BD%E5%AE%89%E5%AE%8C%E5%AE%AE%E5%AE%B6%E5%AE%B9%E5%AF%A6%E5%AF%AB%E5%B0%87%E5%B1%8B%E5%B7%A1%E5%B8%83%E5%B9%B3%E5%B9%B4%E5%BA%A6%E5%BB%9F%E5%BC%8F%E5%BD%A2%E5%BE%8C%E5%BE%9E%E6%81%AF%E6%82%B2%E6%83%85%E6%85%88%E6%89%BF%E6%8B%9C%E6%8F%90%E6%95%97%E6%95%B4%E6%96%99%E6%96%B0%E6%96%B9%E6%97%A5%E6%98%8E%E6%99%82%E6%9A%AB%E6%9C%80%E6%9C%89%E6%9C%8D%E6%9C%9F%E6%9C%A8%E6%9C%AA%E6%9C%AC%E6%9F%A5%E6%9F%B5%E6%A8%99%E6%AD%A5%E6%AD%B2%E6%AF%8D%E6%B2%92%E6%B2%BF%E6%B3%95%E6%B4%BB%E6%B6%88%E6%B8%AC%E7%84%A1%E7%87%88%E7%89%88%E7%90%86%E7%94%A8%E7%94%B1%E7%99%BB%E7%99%BC%E7%9A%84%E7%9B%AE%E7%9C%8B%E7%9C%9F%E7%9C%BE%E7%A4%BA%E7%A5%80%E7%A5%88%E7%A5%96%E7%A5%9E%E7%A6%8F%E7%A8%8D%E7%B0%A1%E7%B2%BE%E7%B4%80%E7%B4%85%E7%B5%A1%E7%BD%AE%E8%81%96%E8%81%AF%E8%84%8A%E8%88%87%E8%89%B2%E8%90%AC%E8%A1%8C%E8%A8%8A%E8%A8%98%E8%A9%A2%E8%A9%A6%E8%A9%B3%E8%AA%8C%E8%AA%8D%E8%AA%AA%E8%AB%8B%E8%AD%98%E8%AE%80%E8%B2%BB%E8%B3%87%E9%80%9A%E9%80%B2%E9%83%A8%E9%86%92%E9%87%8D%E9%87%91%E9%8C%84%E9%95%B7%E9%96%B1%E9%9D%A9%E9%A0%82%E9%A1%98%E9%A1%9E%E9%A1%AF%E9%A3%BE%E9%A6%99%E9%BB%9E%E9%BE%8D" rel="stylesheet"/>
-<meta content="#12100e" name="theme-color"/>
+<meta content="#080d09" name="theme-color"/>
 <title>木柵聖母宮</title>
 <meta name="description" content="木柵聖母宮網站建置中，提供本宮簡介、媽祖信仰、廟史沿革、公告與祈福服務資訊。正式內容以宮方公告為準。"/>
 <meta name="robots" content="noindex,nofollow,noarchive"/>
@@ -14,6 +14,9 @@
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <link rel="stylesheet" href="site-shell.css"/>
+<link rel="stylesheet" href="assets/css/mzsm-tokens.css"/>
+<link rel="stylesheet" href="assets/css/mzsm-motion.css"/>
+<link rel="preload" as="image" href="assets/motion/hero-clean-1200.webp" imagesrcset="assets/motion/hero-clean-840.webp 840w, assets/motion/hero-clean-1200.webp 1200w, assets/motion/hero-clean-1672.webp 1672w" imagesizes="100vw"/>
 <style>
 :root{
   --gold:#cba15b;
@@ -186,58 +189,173 @@ img{max-width:100%;display:block}
 body{overflow-x:hidden}.site-nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:8px 10px;background:#17130f;border-bottom:1px solid rgba(207,163,91,.35);-webkit-overflow-scrolling:touch}.site-nav::-webkit-scrollbar{display:none}.site-nav a{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 13px;border-radius:999px;color:#e9ca8c;text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:800;white-space:nowrap}.site-nav a:focus-visible,.site-nav a:hover{outline:none;background:#5e211b;color:#fff0cf}.about,.post,.service{min-width:0;overflow-wrap:anywhere}@media(max-width:430px){.top{padding-top:max(7px,env(safe-area-inset-top))}.footer{padding-bottom:max(48px,calc(24px + env(safe-area-inset-bottom)))}}
 </style>
 </head>
-<body>
-<div class="site">
+<body class="mz-page">
+<a class="mz-skip" href="#main">跳至主要內容</a>
+<div class="mz-shell">
+
 <header class="top">
+<div class="mz-bar">
 <div class="brand">
 <img alt="聖母宮紅金圓形標誌" class="brand-logo" src="assets/logo.png" width="700" height="700"/>
 <span class="brand-title v7-image-text"><span class="v7-a11y">木柵聖母宮</span><img alt="" aria-hidden="true" class="v7-script v7-brand-script" src="assets/v7-script/brand.png" width="261" height="49"/></span>
 </div>
 <span class="tag">網站建置中</span>
-</header><nav aria-label="主要導覽" class="site-nav"><a href="index.html">首頁</a><a href="about.html">本宮</a><a href="mazu.html">媽祖</a><a href="announcements.html">公告</a><a href="pilgrimage.html">服務</a><a href="contact.html">聯絡</a></nav>
-<section class="hero">
-<img alt="金色龍飾與宮廟屋脊" src="assets/hero.png" width="1672" height="941"/>
-<div class="hero-copy">
-<small class="latin">MUZHA SHENGMU TEMPLE</small>
-<h1 class="v7-image-text"><span class="v7-a11y">木柵聖母宮</span><img alt="" aria-hidden="true" class="v7-script v7-hero-title-script" src="assets/v7-script/hero-title.png" width="468" height="86"/></h1>
-<p>承聖母慈悲・佑萬家平安</p>
-<div class="hero-actions">
-<a href="#about">認識本宮　↓</a>
-<a href="mazu.html">認識媽祖娘娘　→</a>
 </div>
+</header>
+
+<nav aria-label="主要導覽" class="site-nav"><a href="index.html">首頁</a><a href="about.html">本宮</a><a href="mazu.html">媽祖</a><a href="announcements.html">公告</a><a href="pilgrimage.html">服務</a><a href="contact.html">聯絡</a></nav>
+
+<!-- ================= Hero：靜止的龍與屋脊 + 獨立煙霧圖層 ================= -->
+<section class="mz-hero">
+
+  <!-- 第 1 層：乾淨底圖（已移除烘焙靜態煙）。此層永遠靜止。 -->
+  <div class="mz-hero__media">
+    <div class="mz-hero__frame">
+      <picture>
+        <source type="image/webp"
+                srcset="assets/motion/hero-clean-840.webp 840w, assets/motion/hero-clean-1200.webp 1200w, assets/motion/hero-clean-1672.webp 1672w"
+                sizes="100vw"/>
+        <img class="mz-hero__img" src="assets/motion/hero-clean-1200.jpg"
+             alt="木柵聖母宮屋脊上的金色龍飾與宮廟簷角" width="1672" height="941"
+             fetchpriority="high" decoding="async"/>
+      </picture>
+    </div>
+  </div>
+
+  <!-- 第 2 層：獨立煙霧層。與底圖共用 viewBox 0 0 1672 941，因此每一縷煙都對準龍／屋脊。
+       遮罩由 .mz-hero__smokewrap 提供，確保下方標題與 CTA 區完全沒有煙。 -->
+  <div class="mz-hero__smokewrap" aria-hidden="true">
+    <div class="mz-hero__smokeclip">
+    <div class="mz-hero__frame">
+      <svg class="mz-hero__smoke" viewBox="0 0 1672 941" preserveAspectRatio="none" focusable="false">
+<!-- 發煙點：龍頭 -->
+<g transform="translate(933,307)"><g class="mz-rise" style="--rise:540px;--dur:19.4s;--delay:-0.5s;--o:0.57"><image class="mz-puff" style="--sway:26px;--sdur:6.8s;--sdelay:-2.8s;--s0:0.5;--s1:1.74" href="assets/motion/smoke-1.png" x="-120" y="-120" width="241" height="241"/></g></g>
+<g transform="translate(933,357)"><g class="mz-rise" style="--rise:601px;--dur:13.1s;--delay:-3.4s;--o:0.47"><image class="mz-puff" style="--sway:-44px;--sdur:7.4s;--sdelay:-4.4s;--s0:0.51;--s1:1.44" href="assets/motion/smoke-2.png" x="-151" y="-151" width="303" height="303"/></g></g>
+<g transform="translate(900,342)"><g class="mz-rise mz-plume--lite" style="--rise:562px;--dur:16.4s;--delay:-8.6s;--o:0.38"><image class="mz-puff" style="--sway:-38px;--sdur:7.5s;--sdelay:-0.7s;--s0:0.64;--s1:1.47" href="assets/motion/smoke-1.png" x="-156" y="-156" width="313" height="313"/></g></g>
+<g transform="translate(973,330)"><g class="mz-rise mz-plume--lite" style="--rise:553px;--dur:16.5s;--delay:-13.9s;--o:0.47"><image class="mz-puff" style="--sway:-39px;--sdur:10.0s;--sdelay:-10.0s;--s0:0.68;--s1:1.76" href="assets/motion/smoke-2.png" x="-138" y="-138" width="277" height="277"/></g></g>
+
+<!-- 發煙點：龍身中央 -->
+<g transform="translate(1109,450)"><g class="mz-rise" style="--rise:689px;--dur:16.6s;--delay:-1.4s;--o:0.51"><image class="mz-puff" style="--sway:26px;--sdur:9.4s;--sdelay:-7.6s;--s0:0.68;--s1:1.81" href="assets/motion/smoke-1.png" x="-155" y="-155" width="311" height="311"/></g></g>
+<g transform="translate(1142,446)"><g class="mz-rise" style="--rise:715px;--dur:11.9s;--delay:-3.5s;--o:0.57"><image class="mz-puff" style="--sway:29px;--sdur:9.0s;--sdelay:-0.8s;--s0:0.5;--s1:1.38" href="assets/motion/smoke-3.png" x="-146" y="-146" width="292" height="292"/></g></g>
+<g transform="translate(1112,439)"><g class="mz-rise mz-plume--lite" style="--rise:703px;--dur:14.5s;--delay:-8.0s;--o:0.62"><image class="mz-puff" style="--sway:42px;--sdur:9.4s;--sdelay:-2.1s;--s0:0.61;--s1:1.83" href="assets/motion/smoke-2.png" x="-153" y="-153" width="307" height="307"/></g></g>
+<g transform="translate(1137,417)"><g class="mz-rise mz-plume--lite" style="--rise:682px;--dur:13.3s;--delay:-11.2s;--o:0.62"><image class="mz-puff" style="--sway:48px;--sdur:8.1s;--sdelay:-3.6s;--s0:0.48;--s1:1.5" href="assets/motion/smoke-2.png" x="-133" y="-133" width="267" height="267"/></g></g>
+
+<!-- 發煙點：屋脊右 -->
+<g transform="translate(1507,447)"><g class="mz-rise" style="--rise:718px;--dur:12.4s;--delay:-0.8s;--o:0.51"><image class="mz-puff" style="--sway:36px;--sdur:8.0s;--sdelay:-6.0s;--s0:0.64;--s1:1.58" href="assets/motion/smoke-1.png" x="-157" y="-157" width="314" height="314"/></g></g>
+<g transform="translate(1477,422)"><g class="mz-rise" style="--rise:687px;--dur:12.4s;--delay:-5.5s;--o:0.38"><image class="mz-puff" style="--sway:40px;--sdur:8.5s;--sdelay:-1.4s;--s0:0.5;--s1:1.96" href="assets/motion/smoke-3.png" x="-133" y="-133" width="266" height="266"/></g></g>
+<g transform="translate(1555,404)"><g class="mz-rise mz-plume--lite" style="--rise:723px;--dur:17.7s;--delay:-12.1s;--o:0.57"><image class="mz-puff" style="--sway:-29px;--sdur:6.8s;--sdelay:-2.6s;--s0:0.56;--s1:1.7" href="assets/motion/smoke-1.png" x="-119" y="-119" width="238" height="238"/></g></g>
+
+<!-- 發煙點：屋脊中 -->
+<g transform="translate(1174,599)"><g class="mz-rise" style="--rise:726px;--dur:18.4s;--delay:-0.6s;--o:0.47"><image class="mz-puff" style="--sway:22px;--sdur:6.2s;--sdelay:-0.9s;--s0:0.5;--s1:1.73" href="assets/motion/smoke-3.png" x="-161" y="-161" width="323" height="323"/></g></g>
+<g transform="translate(1228,634)"><g class="mz-rise" style="--rise:833px;--dur:12.9s;--delay:-3.4s;--o:0.6"><image class="mz-puff" style="--sway:-20px;--sdur:6.8s;--sdelay:-1.7s;--s0:0.54;--s1:1.61" href="assets/motion/smoke-1.png" x="-148" y="-148" width="297" height="297"/></g></g>
+<g transform="translate(1224,634)"><g class="mz-rise mz-plume--lite" style="--rise:827px;--dur:12.2s;--delay:-7.3s;--o:0.52"><image class="mz-puff" style="--sway:35px;--sdur:8.0s;--sdelay:-3.7s;--s0:0.65;--s1:1.7" href="assets/motion/smoke-2.png" x="-118" y="-118" width="236" height="236"/></g></g>
+<g transform="translate(1201,588)"><g class="mz-rise mz-plume--lite" style="--rise:822px;--dur:13.1s;--delay:-10.7s;--o:0.49"><image class="mz-puff" style="--sway:20px;--sdur:6.5s;--sdelay:-3.2s;--s0:0.6;--s1:1.47" href="assets/motion/smoke-3.png" x="-136" y="-136" width="273" height="273"/></g></g>
+
+<!-- 發煙點：屋脊左 -->
+<g transform="translate(799,854)"><g class="mz-rise" style="--rise:920px;--dur:15.5s;--delay:-0.5s;--o:0.69"><image class="mz-puff" style="--sway:41px;--sdur:9.7s;--sdelay:-5.4s;--s0:0.69;--s1:1.39" href="assets/motion/smoke-2.png" x="-106" y="-106" width="212" height="212"/></g></g>
+<g transform="translate(876,818)"><g class="mz-rise" style="--rise:906px;--dur:15.9s;--delay:-4.2s;--o:0.75"><image class="mz-puff" style="--sway:38px;--sdur:9.5s;--sdelay:-5.0s;--s0:0.6;--s1:1.85" href="assets/motion/smoke-2.png" x="-152" y="-152" width="305" height="305"/></g></g>
+<g transform="translate(854,796)"><g class="mz-rise mz-plume--lite" style="--rise:883px;--dur:18.0s;--delay:-8.2s;--o:0.64"><image class="mz-puff" style="--sway:-26px;--sdur:6.3s;--sdelay:-6.3s;--s0:0.55;--s1:1.35" href="assets/motion/smoke-1.png" x="-127" y="-127" width="255" height="255"/></g></g>
+<g transform="translate(833,838)"><g class="mz-rise mz-plume--lite" style="--rise:928px;--dur:17.7s;--delay:-10.7s;--o:0.74"><image class="mz-puff" style="--sway:26px;--sdur:6.3s;--sdelay:-0.1s;--s0:0.64;--s1:1.43" href="assets/motion/smoke-2.png" x="-124" y="-124" width="248" height="248"/></g></g>
+<g transform="translate(888,818)"><g class="mz-rise mz-plume--lite" style="--rise:823px;--dur:12.7s;--delay:-10.3s;--o:0.72"><image class="mz-puff" style="--sway:38px;--sdur:7.5s;--sdelay:-4.9s;--s0:0.5;--s1:1.79" href="assets/motion/smoke-3.png" x="-129" y="-129" width="259" height="259"/></g></g>
+
+<!-- 發煙點：中段簷 -->
+<g transform="translate(890,695)"><g class="mz-rise" style="--rise:775px;--dur:14.8s;--delay:-1.0s;--o:0.56"><image class="mz-puff" style="--sway:19px;--sdur:7.3s;--sdelay:-0.7s;--s0:0.5;--s1:2.01" href="assets/motion/smoke-1.png" x="-131" y="-131" width="262" height="262"/></g></g>
+<g transform="translate(927,715)"><g class="mz-rise" style="--rise:871px;--dur:16.0s;--delay:-4.5s;--o:0.56"><image class="mz-puff" style="--sway:-46px;--sdur:7.0s;--sdelay:-6.2s;--s0:0.66;--s1:1.59" href="assets/motion/smoke-3.png" x="-109" y="-109" width="218" height="218"/></g></g>
+<g transform="translate(933,720)"><g class="mz-rise mz-plume--lite" style="--rise:777px;--dur:15.3s;--delay:-7.8s;--o:0.54"><image class="mz-puff" style="--sway:-30px;--sdur:7.9s;--sdelay:-5.7s;--s0:0.62;--s1:1.5" href="assets/motion/smoke-1.png" x="-155" y="-155" width="310" height="310"/></g></g>
+<g transform="translate(970,684)"><g class="mz-rise mz-plume--lite" style="--rise:816px;--dur:13.5s;--delay:-10.9s;--o:0.6"><image class="mz-puff" style="--sway:30px;--sdur:7.6s;--sdelay:-6.9s;--s0:0.58;--s1:1.93" href="assets/motion/smoke-2.png" x="-150" y="-150" width="301" height="301"/></g></g>
+
+<!-- 發煙點：香爐 -->
+<g transform="translate(1341,899)"><g class="mz-rise" style="--rise:878px;--dur:12.9s;--delay:-0.1s;--o:0.53"><image class="mz-puff" style="--sway:40px;--sdur:6.5s;--sdelay:-2.8s;--s0:0.67;--s1:1.85" href="assets/motion/smoke-2.png" x="-127" y="-127" width="255" height="255"/></g></g>
+<g transform="translate(1306,865)"><g class="mz-rise" style="--rise:994px;--dur:15.6s;--delay:-5.0s;--o:0.48"><image class="mz-puff" style="--sway:-29px;--sdur:6.3s;--sdelay:-3.2s;--s0:0.66;--s1:1.93" href="assets/motion/smoke-1.png" x="-131" y="-131" width="263" height="263"/></g></g>
+<g transform="translate(1304,894)"><g class="mz-rise mz-plume--lite" style="--rise:878px;--dur:13.8s;--delay:-8.2s;--o:0.57"><image class="mz-puff" style="--sway:44px;--sdur:8.7s;--sdelay:-7.8s;--s0:0.57;--s1:1.66" href="assets/motion/smoke-2.png" x="-159" y="-159" width="318" height="318"/></g></g>
+<g transform="translate(1339,863)"><g class="mz-rise mz-plume--lite" style="--rise:884px;--dur:19.0s;--delay:-14.5s;--o:0.52"><image class="mz-puff" style="--sway:46px;--sdur:6.2s;--sdelay:-2.9s;--s0:0.57;--s1:1.92" href="assets/motion/smoke-1.png" x="-139" y="-139" width="279" height="279"/></g></g>
+
+<!-- 發煙點：右緣 -->
+<g transform="translate(1587,796)"><g class="mz-rise" style="--rise:874px;--dur:16.8s;--delay:-0.7s;--o:0.48"><image class="mz-puff" style="--sway:-38px;--sdur:6.7s;--sdelay:-3.1s;--s0:0.54;--s1:1.85" href="assets/motion/smoke-3.png" x="-143" y="-143" width="287" height="287"/></g></g>
+<g transform="translate(1574,785)"><g class="mz-rise" style="--rise:861px;--dur:11.8s;--delay:-7.1s;--o:0.36"><image class="mz-puff" style="--sway:-39px;--sdur:7.7s;--sdelay:-3.3s;--s0:0.58;--s1:1.49" href="assets/motion/smoke-1.png" x="-108" y="-108" width="216" height="216"/></g></g>
+      </svg>
+    </div>
+    </div>
+  </div>
+
+  <!-- 第 3 層：電影感壓暗 -->
+  <div class="mz-hero__veil" aria-hidden="true"></div>
+
+  <!-- 第 4 層：可選取、可鍵盤操作的文字與 CTA -->
+  <div class="mz-hero__inner">
+    <p class="mz-hero__eyebrow">MUZHA SHENGMU TEMPLE</p>
+    <h1 class="mz-hero__title"><svg viewBox="325 50 3620 700" role="img" aria-labelledby="mzTitleLabel" focusable="false"><title id="mzTitleLabel">木柵聖母宮</title><defs><linearGradient id="mzGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ebcd91"/><stop offset=".52" stop-color="#d4a85d"/><stop offset="1" stop-color="#ad894e"/></linearGradient></defs><path fill-rule="evenodd" fill="url(#mzGold)" d="M665.0,732.5 L610.0,732.5 L582.5,695.0 L577.5,655.0 L567.5,640.0 L590.0,637.5 L602.5,620.0 L600.0,482.5 L572.5,510.0 L537.5,565.0 L500.0,602.5 L450.0,637.5 L425.0,637.5 L405.0,652.5 L370.0,652.5 L342.5,620.0 L345.0,612.5 L360.0,612.5 L390.0,597.5 L445.0,552.5 L527.5,460.0 L532.5,445.0 L557.5,415.0 L557.5,405.0 L572.5,390.0 L572.5,380.0 L565.0,377.5 L540.0,392.5 L490.0,402.5 L455.0,387.5 L437.5,370.0 L427.5,345.0 L450.0,317.5 L485.0,322.5 L602.5,285.0 L602.5,170.0 L572.5,125.0 L580.0,112.5 L615.0,87.5 L640.0,87.5 L670.0,102.5 L695.0,117.5 L712.5,140.0 L712.5,165.0 L697.5,190.0 L692.5,215.0 L695.0,262.5 L735.0,257.5 L790.0,232.5 L825.0,257.5 L835.0,257.5 L847.5,270.0 L857.5,295.0 L852.5,320.0 L830.0,332.5 L755.0,332.5 L750.0,337.5 L700.0,342.5 L692.5,355.0 L712.5,385.0 L795.0,472.5 L865.0,512.5 L930.0,537.5 L945.0,537.5 L987.5,580.0 L987.5,600.0 L980.0,607.5 L960.0,607.5 L940.0,617.5 L830.0,622.5 L777.5,580.0 L702.5,480.0 L685.0,467.5 L682.5,635.0 L687.5,640.0 L687.5,695.0 L677.5,720.0 L665.0,732.5 Z M1620.0,732.5 L1600.0,732.5 L1572.5,705.0 L1552.5,650.0 L1537.5,630.0 L1570.0,632.5 L1582.5,615.0 L1582.5,475.0 L1577.5,470.0 L1582.5,455.0 L1570.0,442.5 L1547.5,450.0 L1547.5,485.0 L1542.5,490.0 L1547.5,585.0 L1537.5,605.0 L1537.5,625.0 L1525.0,632.5 L1515.0,632.5 L1502.5,620.0 L1487.5,585.0 L1497.5,535.0 L1497.5,465.0 L1485.0,452.5 L1477.5,460.0 L1472.5,485.0 L1477.5,615.0 L1467.5,650.0 L1445.0,667.5 L1430.0,667.5 L1412.5,650.0 L1412.5,635.0 L1397.5,600.0 L1417.5,585.0 L1417.5,480.0 L1410.0,472.5 L1387.5,485.0 L1377.5,580.0 L1362.5,615.0 L1350.0,627.5 L1330.0,627.5 L1312.5,605.0 L1332.5,505.0 L1295.0,512.5 L1275.0,482.5 L1262.5,485.0 L1267.5,685.0 L1252.5,720.0 L1240.0,732.5 L1225.0,732.5 L1202.5,715.0 L1182.5,670.0 L1182.5,645.0 L1177.5,640.0 L1192.5,630.0 L1202.5,595.0 L1202.5,530.0 L1195.0,522.5 L1172.5,560.0 L1140.0,597.5 L1100.0,617.5 L1072.5,610.0 L1067.5,580.0 L1092.5,560.0 L1152.5,480.0 L1192.5,400.0 L1190.0,392.5 L1175.0,392.5 L1155.0,407.5 L1130.0,407.5 L1097.5,380.0 L1087.5,355.0 L1105.0,327.5 L1130.0,332.5 L1190.0,307.5 L1202.5,295.0 L1202.5,210.0 L1197.5,205.0 L1197.5,175.0 L1172.5,150.0 L1172.5,135.0 L1180.0,127.5 L1205.0,112.5 L1225.0,112.5 L1245.0,127.5 L1270.0,132.5 L1287.5,150.0 L1287.5,185.0 L1277.5,200.0 L1272.5,265.0 L1280.0,272.5 L1310.0,277.5 L1330.0,297.5 L1337.5,285.0 L1322.5,250.0 L1335.0,232.5 L1370.0,237.5 L1420.0,212.5 L1445.0,212.5 L1470.0,222.5 L1490.0,197.5 L1525.0,197.5 L1585.0,167.5 L1625.0,177.5 L1652.5,195.0 L1662.5,210.0 L1662.5,235.0 L1652.5,250.0 L1647.5,360.0 L1660.0,372.5 L1680.0,372.5 L1705.0,362.5 L1735.0,377.5 L1752.5,390.0 L1757.5,430.0 L1735.0,447.5 L1660.0,437.5 L1647.5,455.0 L1652.5,460.0 L1647.5,475.0 L1652.5,480.0 L1647.5,490.0 L1652.5,510.0 L1652.5,685.0 L1637.5,720.0 L1620.0,732.5 Z M1562.5,380.0 L1582.5,370.0 L1582.5,245.0 L1575.0,237.5 L1547.5,245.0 L1547.5,375.0 L1555.0,382.5 L1562.5,380.0 Z M1492.5,390.0 L1497.5,385.0 L1497.5,290.0 L1490.0,252.5 L1477.5,265.0 L1477.5,295.0 L1472.5,300.0 L1472.5,385.0 L1480.0,392.5 L1492.5,390.0 Z M1412.5,410.0 L1417.5,405.0 L1417.5,290.0 L1400.0,282.5 L1392.5,290.0 L1392.5,405.0 L1400.0,412.5 L1412.5,410.0 Z M1337.5,425.0 L1337.5,315.0 L1330.0,307.5 L1315.0,337.5 L1280.0,352.5 L1267.5,365.0 L1267.5,395.0 L1275.0,407.5 L1285.0,407.5 L1295.0,417.5 L1320.0,427.5 L1337.5,425.0 Z M1990.0,732.5 L1940.0,732.5 L1930.0,727.5 L1902.5,695.0 L1907.5,675.0 L1920.0,662.5 L1945.0,667.5 L1950.0,662.5 L1985.0,662.5 L2090.0,642.5 L2102.5,630.0 L2095.0,612.5 L2040.0,617.5 L2007.5,595.0 L2007.5,575.0 L2015.0,567.5 L2040.0,567.5 L2070.0,552.5 L2090.0,552.5 L2102.5,540.0 L2102.5,525.0 L2090.0,517.5 L2075.0,527.5 L2050.0,532.5 L2017.5,505.0 L2017.5,475.0 L2040.0,472.5 L2062.5,460.0 L2057.5,440.0 L2060.0,407.5 L2045.0,412.5 L2015.0,437.5 L1980.0,452.5 L1940.0,482.5 L1925.0,482.5 L1892.5,460.0 L1887.5,425.0 L1900.0,417.5 L1920.0,417.5 L1957.5,395.0 L1952.5,375.0 L1952.5,350.0 L1957.5,345.0 L1952.5,235.0 L1920.0,232.5 L1897.5,210.0 L1892.5,185.0 L1905.0,167.5 L1925.0,172.5 L2005.0,147.5 L2025.0,147.5 L2045.0,132.5 L2065.0,132.5 L2135.0,102.5 L2155.0,112.5 L2170.0,112.5 L2187.5,135.0 L2187.5,150.0 L2180.0,167.5 L2145.0,172.5 L2137.5,180.0 L2142.5,190.0 L2137.5,215.0 L2137.5,330.0 L2157.5,345.0 L2162.5,375.0 L2107.5,440.0 L2125.0,447.5 L2165.0,437.5 L2220.0,407.5 L2230.0,407.5 L2272.5,445.0 L2267.5,470.0 L2255.0,482.5 L2220.0,482.5 L2182.5,495.0 L2185.0,527.5 L2225.0,517.5 L2245.0,517.5 L2265.0,527.5 L2277.5,545.0 L2272.5,575.0 L2265.0,582.5 L2190.0,587.5 L2182.5,595.0 L2177.5,620.0 L2185.0,632.5 L2270.0,627.5 L2275.0,622.5 L2300.0,622.5 L2335.0,607.5 L2360.0,617.5 L2402.5,655.0 L2407.5,695.0 L2385.0,712.5 L2360.0,712.5 L2320.0,697.5 L2140.0,697.5 L2135.0,702.5 L2020.0,717.5 L1990.0,732.5 Z M2215.0,397.5 L2182.5,370.0 L2167.5,260.0 L2152.5,240.0 L2152.5,225.0 L2170.0,207.5 L2215.0,212.5 L2300.0,182.5 L2320.0,167.5 L2340.0,167.5 L2360.0,187.5 L2385.0,197.5 L2412.5,235.0 L2407.5,250.0 L2387.5,265.0 L2382.5,280.0 L2357.5,310.0 L2367.5,335.0 L2367.5,355.0 L2345.0,377.5 L2315.0,377.5 L2295.0,367.5 L2280.0,367.5 L2260.0,377.5 L2240.0,377.5 L2215.0,397.5 Z M2032.5,240.0 L2067.5,225.0 L2072.5,210.0 L2060.0,192.5 L2012.5,215.0 L2017.5,235.0 L2025.0,242.5 L2032.5,240.0 Z M2247.5,320.0 L2265.0,317.5 L2282.5,305.0 L2302.5,245.0 L2295.0,232.5 L2265.0,247.5 L2235.0,252.5 L2227.5,260.0 L2227.5,315.0 L2235.0,322.5 L2247.5,320.0 Z M2032.5,305.0 L2067.5,290.0 L2072.5,280.0 L2065.0,267.5 L2020.0,277.5 L2012.5,285.0 L2017.5,305.0 L2032.5,305.0 Z M2032.5,370.0 L2067.5,350.0 L2072.5,340.0 L2065.0,327.5 L2012.5,360.0 L2015.0,372.5 L2032.5,370.0 Z M2965.0,732.5 L2920.0,732.5 L2915.0,727.5 L2895.0,732.5 L2877.5,695.0 L2857.5,675.0 L2862.5,660.0 L2855.0,647.5 L2895.0,652.5 L2912.5,640.0 L2915.0,597.5 L2855.0,597.5 L2815.0,607.5 L2775.0,607.5 L2750.0,617.5 L2710.0,622.5 L2695.0,637.5 L2660.0,632.5 L2632.5,585.0 L2637.5,565.0 L2667.5,545.0 L2692.5,465.0 L2670.0,462.5 L2625.0,482.5 L2600.0,482.5 L2575.0,472.5 L2552.5,450.0 L2552.5,425.0 L2570.0,407.5 L2605.0,407.5 L2610.0,402.5 L2695.0,392.5 L2717.5,380.0 L2727.5,305.0 L2737.5,285.0 L2737.5,240.0 L2722.5,205.0 L2745.0,182.5 L2790.0,197.5 L2805.0,172.5 L2830.0,172.5 L2895.0,142.5 L2920.0,142.5 L2950.0,132.5 L2975.0,117.5 L3040.0,152.5 L3062.5,175.0 L3072.5,195.0 L3047.5,235.0 L3037.5,335.0 L3045.0,342.5 L3060.0,342.5 L3140.0,322.5 L3197.5,365.0 L3202.5,405.0 L3180.0,427.5 L3120.0,422.5 L3095.0,412.5 L3040.0,412.5 L3027.5,425.0 L3022.5,525.0 L3030.0,532.5 L3065.0,532.5 L3090.0,522.5 L3147.5,560.0 L3162.5,600.0 L3130.0,632.5 L3075.0,612.5 L3015.0,602.5 L3002.5,635.0 L2997.5,685.0 L2977.5,725.0 L2965.0,732.5 Z M2952.5,350.0 L2957.5,345.0 L2957.5,285.0 L2962.5,280.0 L2962.5,210.0 L2950.0,197.5 L2925.0,207.5 L2905.0,207.5 L2877.5,225.0 L2917.5,260.0 L2927.5,280.0 L2927.5,310.0 L2897.5,350.0 L2952.5,350.0 Z M2817.5,370.0 L2885.0,357.5 L2892.5,350.0 L2867.5,330.0 L2842.5,290.0 L2837.5,275.0 L2837.5,250.0 L2842.5,245.0 L2835.0,232.5 L2822.5,235.0 L2822.5,260.0 L2807.5,285.0 L2807.5,310.0 L2792.5,350.0 L2795.0,372.5 L2817.5,370.0 Z M2932.5,530.0 L2942.5,520.0 L2952.5,425.0 L2945.0,417.5 L2870.0,422.5 L2867.5,435.0 L2902.5,470.0 L2902.5,495.0 L2887.5,525.0 L2895.0,532.5 L2932.5,530.0 Z M2777.5,545.0 L2842.5,535.0 L2842.5,525.0 L2807.5,490.0 L2812.5,470.0 L2810.0,437.5 L2770.0,442.5 L2757.5,475.0 L2742.5,545.0 L2777.5,545.0 Z M3555.0,732.5 L3515.0,732.5 L3497.5,715.0 L3482.5,630.0 L3472.5,615.0 L3472.5,595.0 L3452.5,565.0 L3465.0,532.5 L3480.0,527.5 L3525.0,547.5 L3547.5,515.0 L3507.5,470.0 L3497.5,390.0 L3482.5,360.0 L3482.5,340.0 L3500.0,322.5 L3545.0,332.5 L3605.0,307.5 L3630.0,307.5 L3660.0,292.5 L3675.0,277.5 L3685.0,277.5 L3745.0,312.5 L3767.5,290.0 L3792.5,245.0 L3792.5,235.0 L3770.0,227.5 L3725.0,237.5 L3680.0,237.5 L3645.0,252.5 L3615.0,252.5 L3580.0,267.5 L3520.0,277.5 L3485.0,297.5 L3455.0,297.5 L3442.5,310.0 L3442.5,325.0 L3395.0,422.5 L3365.0,422.5 L3337.5,400.0 L3327.5,380.0 L3327.5,340.0 L3342.5,310.0 L3357.5,295.0 L3382.5,245.0 L3382.5,230.0 L3392.5,220.0 L3392.5,205.0 L3405.0,192.5 L3430.0,202.5 L3437.5,220.0 L3455.0,237.5 L3505.0,227.5 L3520.0,217.5 L3560.0,212.5 L3597.5,195.0 L3597.5,185.0 L3572.5,170.0 L3572.5,150.0 L3532.5,100.0 L3532.5,90.0 L3545.0,77.5 L3570.0,77.5 L3590.0,67.5 L3655.0,92.5 L3672.5,110.0 L3682.5,130.0 L3682.5,155.0 L3672.5,170.0 L3675.0,187.5 L3700.0,187.5 L3730.0,177.5 L3775.0,177.5 L3805.0,162.5 L3825.0,162.5 L3835.0,172.5 L3860.0,177.5 L3917.5,235.0 L3917.5,250.0 L3927.5,260.0 L3927.5,270.0 L3915.0,297.5 L3885.0,297.5 L3880.0,302.5 L3850.0,297.5 L3805.0,317.5 L3775.0,317.5 L3762.5,330.0 L3772.5,355.0 L3742.5,385.0 L3727.5,410.0 L3732.5,450.0 L3710.0,472.5 L3670.0,467.5 L3650.0,477.5 L3620.0,477.5 L3577.5,520.0 L3580.0,527.5 L3600.0,527.5 L3640.0,517.5 L3655.0,507.5 L3695.0,507.5 L3720.0,492.5 L3740.0,492.5 L3750.0,502.5 L3790.0,517.5 L3822.5,550.0 L3822.5,575.0 L3762.5,645.0 L3782.5,680.0 L3777.5,705.0 L3765.0,712.5 L3650.0,707.5 L3620.0,717.5 L3570.0,722.5 L3555.0,732.5 Z M3592.5,430.0 L3630.0,422.5 L3652.5,405.0 L3657.5,385.0 L3655.0,352.5 L3580.0,372.5 L3562.5,385.0 L3567.5,425.0 L3575.0,432.5 L3592.5,430.0 Z M3577.5,660.0 L3675.0,642.5 L3697.5,600.0 L3697.5,570.0 L3685.0,562.5 L3640.0,577.5 L3555.0,592.5 L3547.5,600.0 L3552.5,640.0 L3565.0,662.5 L3577.5,660.0 Z"/></svg></h1>
+    <p class="mz-hero__lede">承聖母慈悲・佑萬家平安</p>
+    <div class="mz-hero__cta">
+      <a class="mz-btn mz-btn--primary" href="#about">認識本宮</a>
+      <a class="mz-btn mz-btn--ghost" href="mazu.html">認識媽祖娘娘</a>
+    </div>
+  </div>
+</section>
+
+<main class="mz-main" id="main">
+<div class="mz-wrap">
+
+  <section class="mz-section" id="notice">
+    <h2 class="mz-h2">最新公告</h2>
+    <p class="mz-lead">本宮最新消息、活動與服務資訊。</p>
+    <div aria-live="polite" class="mz-grid mz-grid--3" id="homepagePosts">
+      <a class="mz-post" href="announcements.html"><span class="mz-badge">公告</span><h3>公告系統建置中</h3><p>最新消息將於宮方確認後正式刊登。</p></a>
+      <a class="mz-post" href="pilgrimage.html"><span class="mz-badge">活動</span><h3>南巡進香資訊</h3><p>活動日期、路線、費用與名額以宮方公告為準。</p></a>
+      <a class="mz-post" href="contact.html"><span class="mz-badge">服務</span><h3>聯絡資訊待確認</h3><p>地址、電話與服務時間確認後將更新。</p></a>
+    </div>
+    <a class="mz-all" href="announcements.html">查看全部公告與分類　→</a>
+  </section>
+
+  <section class="mz-section" id="about">
+    <h2 class="mz-h2">認識本宮</h2>
+    <p class="mz-lead">從本宮簡介、媽祖信仰、廟史到交通聯絡，先認識木柵聖母宮。</p>
+    <div class="mz-grid mz-grid--4">
+      <a class="mz-card" href="about.html"><span class="mz-card__mark">宮</span><div class="mz-card__body"><h3>本宮簡介</h3><p>本宮精神、主祀神明與服務方向。</p></div><span class="mz-card__arrow">→</span></a>
+      <a class="mz-card" href="mazu.html"><span class="mz-card__mark">媽</span><div class="mz-card__body"><h3>媽祖娘娘</h3><p>媽祖信仰、信眾祈願與參拜提醒。</p></div><span class="mz-card__arrow">→</span></a>
+      <a class="mz-card" href="history.html"><span class="mz-card__mark">史</span><div class="mz-card__body"><h3>廟史沿革</h3><p>以長卷紀錄式閱讀本宮傳承。</p></div><span class="mz-card__arrow">→</span></a>
+      <a class="mz-card" href="contact.html"><span class="mz-card__mark">行</span><div class="mz-card__body"><h3>交通・聯絡</h3><p>位置、交通方式與聯絡資訊。</p></div><span class="mz-card__arrow">→</span></a>
+    </div>
+  </section>
+
+  <section class="mz-section" id="culture">
+    <h2 class="mz-h2">媽祖文化</h2>
+    <p class="mz-lead">慈悲・守護・平安。</p>
+    <div class="mz-culture">
+      <p>媽祖娘娘是許多信眾敬仰的守護神明。信眾常以虔誠與感恩之心前來參拜，祈求平安、順遂與家庭和樂。</p>
+      <p>本宮所奉祀的媽祖神尊源自嘉義太保鎮福宮分靈。每年農曆三月二十三日為媽祖誕辰，本宮相關祭典與參拜安排仍以當年度公告為準。</p>
+      <p>參拜以恭敬、安靜與誠心為原則；實際參拜順序、香品使用與祭祀時間，請以本宮現場指示與公告為準。</p>
+      <a class="mz-all" href="mazu.html">閱讀媽祖娘娘專頁　→</a>
+    </div>
+  </section>
+
+  <section class="mz-section" id="services">
+    <h2 class="mz-h2">常用服務</h2>
+    <p class="mz-lead">南巡進香、點燈祈福與安太歲。線上服務尚未開放，頁面僅供資訊查閱。</p>
+    <div class="mz-grid mz-grid--3">
+      <a class="mz-service" href="pilgrimage.html"><small>ANNUAL PILGRIMAGE</small><h3>南巡進香</h3><p>活動說明與最新公告入口。</p><span>查看活動詳情　→</span></a>
+      <a class="mz-service" href="light.html"><small>LIGHT OFFERING</small><h3>點燈祈福</h3><p>祈福資訊與線上服務準備狀態。</p><span>查看活動詳情　→</span></a>
+      <a class="mz-service" href="taisui.html"><small>PEACE RITUAL</small><h3>安太歲</h3><p>年度資訊與線上服務準備狀態。</p><span>查看活動詳情　→</span></a>
+    </div>
+  </section>
+
+  <section class="mz-section mz-contact" id="visit">
+    <h2 class="mz-h2">交通・聯絡</h2>
+    <p class="mz-lead">交通與聯絡資訊仍待宮方確認，因此全部保留待補欄位，不會誤導香客。</p>
+    <dl>
+      <div><dt>ADDRESS</dt><dd>本宮地址：正式地址待宮方確認。</dd></div>
+      <div><dt>HOURS</dt><dd>服務時間：一般開放、辦公與祭典時間待確認。</dd></div>
+      <div><dt>PARKING</dt><dd>停車資訊：停車位置、臨停規範與大型車提醒待確認。</dd></div>
+      <div><dt>CONTACT</dt><dd>聯絡方式：電話、官方 LINE 與聯絡窗口待宮方確認後置入。</dd></div>
+    </dl>
+    <a class="mz-all" href="contact.html">查看交通・聯絡完整頁　→</a>
+  </section>
+
 </div>
-</section>
-<main class="main">
-<section class="section" id="about">
-<h2 class="heading">認識本宮</h2>
-<p class="sub">從本宮簡介、媽祖信仰、廟史到交通聯絡，先認識木柵聖母宮。</p>
-<div class="about-grid">
-<a class="about" href="about.html"><span class="mark">宮</span><div><h3>本宮簡介</h3><p>本宮精神、主祀神明與服務方向。</p></div><span class="arrow">→</span></a>
-<a class="about" href="mazu.html"><span class="mark">媽</span><div><h3>媽祖娘娘</h3><p>媽祖信仰、信眾祈願與參拜提醒。</p></div><span class="arrow">→</span></a>
-<a class="about" href="history.html"><span class="mark">史</span><div><h3>廟史沿革</h3><p>以長卷紀錄式閱讀本宮傳承。</p></div><span class="arrow">→</span></a>
-<a class="about" href="contact.html"><span class="mark">行</span><div><h3>交通・聯絡</h3><p>位置、交通方式與聯絡資訊。</p></div><span class="arrow">→</span></a>
-</div>
-</section>
-<section class="section" id="notice">
-<h2 class="heading">最新公告</h2>
-<p class="sub">本宮最新消息、活動與服務資訊。</p>
-<div aria-live="polite" class="posts" id="homepagePosts">
-<a class="post" href="announcements.html"><span class="badge">公告</span><h3>公告系統建置中</h3><p>最新消息將於宮方確認後正式刊登。</p></a>
-<a class="post" href="pilgrimage.html"><span class="badge">活動</span><h3>南巡進香資訊</h3><p>活動日期、路線、費用與名額以宮方公告為準。</p></a>
-<a class="post" href="contact.html"><span class="badge">服務</span><h3>聯絡資訊待確認</h3><p>地址、電話與服務時間確認後將更新。</p></a></div>
-<a class="all" href="announcements.html">查看全部公告與分類　→</a>
-</section>
-<section class="section" id="services">
-<h2 class="heading">本宮服務</h2>
-<p class="sub">南巡進香、點燈祈福與安太歲。</p>
-<div class="services">
-<a class="service" href="pilgrimage.html"><small class="latin">ANNUAL PILGRIMAGE</small><h2>南巡進香</h2><p>活動說明與最新公告入口。</p><span>查看活動詳情　→</span></a>
-<a class="service" href="light.html"><small class="latin">LIGHT OFFERING</small><h2>點燈祈福</h2><p>祈福資訊與線上服務準備狀態。</p><span>查看活動詳情　→</span></a>
-<a class="service" href="taisui.html"><small class="latin">PEACE RITUAL</small><h2>安太歲</h2><p>年度資訊與線上服務準備狀態。</p><span>查看活動詳情　→</span></a>
-</div>
-</section>
 </main>
-<footer class="footer"><b>木柵聖母宮</b><p>全站網站建置中｜請勿填寫真實個人資料。</p></footer>
+
+<footer class="mz-footer"><b>木柵聖母宮</b><p>全站網站建置中｜請勿填寫真實個人資料。正式內容以宮方公告為準。</p></footer>
+
 </div>
 
 </body>

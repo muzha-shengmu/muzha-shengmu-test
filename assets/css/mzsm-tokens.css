@@ -1,0 +1,42 @@
+/* MZSM-MOTIONSITES-TEMPLE-INTEGRATION-001｜共用設計 token
+   ------------------------------------------------------------------
+   本檔只宣告 CSS 自訂屬性（custom properties），不含任何選擇器樣式，
+   因此可安全掛在既有 14 個頁面而不改變任何現有外觀。
+   色票來源：00_READ_FIRST/VISUAL-AND-MOTION-SPEC.md「品牌公式／色彩 token」。 */
+
+:root{
+  /* 品牌主色｜深墨綠、暗朱紅、暖金 */
+  --mz-ink-green:#101812;        /* 深墨綠 */
+  --mz-ink-green-deep:#080d09;   /* 深墨綠暗部 */
+  --mz-crimson:#681f1b;          /* 暗朱紅 */
+  --mz-gold:#d4a85d;             /* 暖金 */
+  --mz-gold-bright:#ebcd91;      /* 亮金 */
+  --mz-rice:#eee3cd;             /* 米白 */
+
+  /* 由主色推導的介面色階 */
+  --mz-surface:#0d140f;
+  --mz-surface-raised:#141d16;
+  --mz-line:rgba(212,168,93,.28);
+  --mz-line-strong:rgba(212,168,93,.5);
+  --mz-text:var(--mz-rice);
+  --mz-text-muted:#b6ad98;
+  --mz-text-dim:#8d8677;
+
+  /* 字體：沿用既有 v7／v8 設定，未新增外部字體請求 */
+  --mz-brush:"Ma Shan Zheng","BiauKai","Kaiti TC","DFKai-SB","KaiTi",serif;
+  --mz-ui:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;
+
+  /* 版面 */
+  --mz-max:1440px;              /* 桌機內容最大寬度 1280–1440px */
+  --mz-max-text:1180px;
+  --mz-gutter:16px;
+  --mz-radius:10px;
+  --mz-tap:44px;                /* 最小觸控目標 */
+
+  /* 動態 */
+  --mz-ease-out:cubic-bezier(.22,.61,.36,1);
+  --mz-smoke-opacity:1;
+}
+
+@media (min-width:768px){ :root{ --mz-gutter:28px } }
+@media (min-width:1024px){ :root{ --mz-gutter:40px } }
