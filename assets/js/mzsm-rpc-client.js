@@ -154,21 +154,47 @@
     return value;
   }
 
+  // ── 測試模式安全邊界（獨立驗收 M-03）──────────────────────────────────
+  // 僅 loopback 主機視為本機。location.hostname 對 IPv6 會回傳去掉方括號的 '::1'，
+  // 但仍一併接受 '[::1]' 以防瀏覽器差異。空字串（file://）不視為本機，避免
+  // 把本機檔案直接開啟的情境當成開發環境。
+  function isLoopbackHost() {
+    const host = String(root.location && root.location.hostname || '').toLowerCase();
+    return host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '[::1]';
+  }
+
+  // 測試模式需要「開發 build 旗標」與「loopback 主機」同時成立，缺一不可。
+  function testModesAllowed() {
+    return cfg.developmentBuild === true && isLoopbackHost();
+  }
+
   function resolveMode() {
-    const demo = cfg.allowDemoQuery === true && params.get('demo') === '1';
-    const mock = cfg.allowRpcMockQuery === true && params.get('rpcmock') === '1';
-    if (demo && mock) return {mode: 'disabled', reason: 'MODE_CONFLICT'};
-    if (demo) return {mode: 'demo', reason: null};
-    if (mock) return {mode: 'rpcmock', reason: null};
     let validUrl = false;
     try {
       const url = new URL(String(cfg.supabaseUrl || ''));
       validUrl = url.protocol === 'https:' && !url.username && !url.password;
     } catch (_) {}
     const validPublishableKey = /^sb_publishable_[A-Za-z0-9_-]+$/.test(String(cfg.supabasePublishableKey || ''));
-    const hasLiveConfig = cfg.mode === 'rpc' && validUrl && validPublishableKey && cfg.supabaseJsVersion === '2.110.8';
-    if (hasLiveConfig) return {mode: 'rpc', reason: null};
-    return {mode: 'disabled', reason: cfg.mode === 'rpc' ? 'CONFIG_INCOMPLETE' : null};
+
+    // 正式模式優先判定：mode==='rpc' 時，query parameter 一律不得覆寫。
+    if (cfg.mode === 'rpc') {
+      const hasLiveConfig = validUrl && validPublishableKey && cfg.supabaseJsVersion === '2.110.8';
+      return hasLiveConfig ? {mode: 'rpc', reason: null} : {mode: 'disabled', reason: 'CONFIG_INCOMPLETE'};
+    }
+
+    const demoRequested = cfg.allowDemoQuery === true && params.get('demo') === '1';
+    const mockRequested = cfg.allowRpcMockQuery === true && params.get('rpcmock') === '1';
+
+    // 非開發 build 或非 loopback：即使帶 ?demo=1 / ?rpcmock=1 / ?role=admin，
+    // 也不得顯示假後台或產生假資料。
+    if (!testModesAllowed()) {
+      return {mode: 'disabled', reason: (demoRequested || mockRequested) ? 'TEST_MODE_BLOCKED' : null};
+    }
+
+    if (demoRequested && mockRequested) return {mode: 'disabled', reason: 'MODE_CONFLICT'};
+    if (demoRequested) return {mode: 'demo', reason: null};
+    if (mockRequested) return {mode: 'rpcmock', reason: null};
+    return {mode: 'disabled', reason: null};
   }
 
   let sharedSupabaseClient = null;
@@ -234,17 +260,42 @@
     };
   }
 
+  // ── localStorage 記憶體 fallback（獨立驗收 m-04）──────────────────────
+  // 瀏覽器封鎖儲存（Safari 無痕、第三方 cookie 阻擋、企業原則）時，
+  // localStorage 的存取本身就會丟 SecurityError。所有讀寫都必須是「不丟錯」的，
+  // 失敗時退回純記憶體 Map，Demo 仍可運作，只是重新整理後不保留。
+  const memoryStore = new Map();
+  let storageBlocked = false;
+
+  function storageGet(key) {
+    if (!storageBlocked) {
+      try { return root.localStorage.getItem(key); }
+      catch (_) { storageBlocked = true; }
+    }
+    return memoryStore.has(key) ? memoryStore.get(key) : null;
+  }
+
+  function storageSet(key, value) {
+    memoryStore.set(key, value); // 永遠先寫記憶體，確保單頁生命週期內一致
+    if (storageBlocked) return false;
+    try { root.localStorage.setItem(key, value); return true; }
+    catch (_) { storageBlocked = true; return false; }
+  }
+
+  function isStorageBlocked() { return storageBlocked; }
+
   function readStorage(key, fallback) {
     const base = fallback();
+    const raw = storageGet(key);            // 不會丟錯
+    if (!raw) {
+      storageSet(key, JSON.stringify(base)); // 不會丟錯
+      return base;
+    }
     try {
-      const raw = root.localStorage.getItem(key);
-      if (!raw) {
-        root.localStorage.setItem(key, JSON.stringify(base));
-        return base;
-      }
       return {...base, ...asObject(JSON.parse(raw))};
     } catch (_) {
-      root.localStorage.setItem(key, JSON.stringify(base));
+      // 內容毀損：重設為種子資料，同樣不得向外丟錯
+      storageSet(key, JSON.stringify(base));
       return base;
     }
   }
@@ -259,7 +310,7 @@
         state.rows = Array.isArray(state.rows) ? state.rows : seedAnnouncements().rows;
         return state;
       },
-      saveAnnouncements(state) { root.localStorage.setItem(ANNOUNCEMENTS, JSON.stringify(state)); },
+      saveAnnouncements(state) { storageSet(ANNOUNCEMENTS, JSON.stringify(state)); },
       getCombined() {
         const state = readStorage(COMBINED, seedCombined);
         const base = seedCombined();
@@ -267,13 +318,13 @@
         state.lamps = Array.isArray(state.lamps) ? state.lamps : base.lamps;
         return state;
       },
-      saveCombined(state) { root.localStorage.setItem(COMBINED, JSON.stringify(state)); },
+      saveCombined(state) { storageSet(COMBINED, JSON.stringify(state)); },
       getTaisui() {
         const state = readStorage(TAISUI, seedTaisui);
         state.rows = Array.isArray(state.rows) ? state.rows : seedTaisui().rows;
         return state;
       },
-      saveTaisui(state) { root.localStorage.setItem(TAISUI, JSON.stringify(state)); }
+      saveTaisui(state) { storageSet(TAISUI, JSON.stringify(state)); }
     };
   }
 
@@ -512,7 +563,12 @@
     }
 
     describe() {
-      return Object.freeze({mode:this.mode, reason:this.reason, role:this.role, scenario:this.scenario, timeoutMs:this.timeoutMs, candidateId:cfg.candidateId || ''});
+      return Object.freeze({
+        mode:this.mode, reason:this.reason, role:this.role, scenario:this.scenario,
+        timeoutMs:this.timeoutMs, candidateId:cfg.candidateId || '',
+        storageBlocked: isStorageBlocked(),
+        testModesAllowed: testModesAllowed()
+      });
     }
 
     getLog() {

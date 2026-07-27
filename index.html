@@ -42,7 +42,6 @@ body{
 }
 a,button,input,textarea,select{font:inherit}
 img{max-width:100%;display:block}
-.site{width:100%;max-width:820px;margin:auto;background:var(--paper);overflow:hidden}
 .top{
   min-height:62px;
   display:flex;
@@ -79,114 +78,28 @@ img{max-width:100%;display:block}
   font-family:var(--brush);
   font-size:11px;font-weight:800;white-space:nowrap;
 }
-.hero{position:relative;min-height:510px;background:#34251d;overflow:hidden}
-.hero>img{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:78% center;
-  filter:brightness(.9) contrast(1.06);
-}
-.hero:after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(7,6,5,.68),rgba(7,6,5,.2) 55%,rgba(7,6,5,.04)),linear-gradient(180deg,transparent 40%,rgba(7,6,5,.62));
-}
-.hero-copy{
-  position:absolute;z-index:2;left:22px;right:18px;bottom:49px;
-  color:#fff0cf;text-shadow:0 3px 16px #000;
-}
-.latin{font-family:var(--ui)!important;font-weight:700!important;-webkit-text-stroke:0!important}
-.hero-copy small{display:block;color:#edc987;font-size:10px;letter-spacing:.28em}
-.hero-copy h1{
-  margin:10px 0 0;
-  color:var(--gold-bright);
-  font-family:var(--logo-brush);
-  font-size:42px;line-height:1.18;letter-spacing:.12em;font-weight:900;
-  -webkit-text-stroke:.65px currentColor;
-  text-shadow:0 2px 0 #60401b,0 5px 18px #000;
-}
-.hero-copy p{
-  margin:9px 0 10px;
-  color:var(--gold-bright);
-  font-family:var(--logo-brush);
-  font-size:17px;line-height:1.45;letter-spacing:.05em;font-weight:900;
-  -webkit-text-stroke:.4px currentColor;
-  text-shadow:0 2px 0 #60401b,0 4px 14px #000;
-}
-.hero-actions{display:flex;gap:7px;flex-wrap:wrap}
-.hero-copy a{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-height:46px;margin-top:8px;padding:10px 13px;
-  border:1px solid #f2d89e;border-radius:4px;
-  color:#fff0cd;text-decoration:none;font-size:15px;font-weight:900;
-  background:rgba(10,8,7,.24);
-}
-.hero-copy a:focus-visible,.about:focus-visible,.post:focus-visible,.service:focus-visible,.all:focus-visible{outline:3px solid #fff1b4;outline-offset:2px}
-.main{padding:31px 16px 55px;background:linear-gradient(#20170f 0,#f3e8d7 7%,#f8f0e3 100%)}
-.section{margin-top:32px}.section:first-child{margin-top:0}
-.heading{
-  display:flex;align-items:center;gap:10px;margin:0 0 8px;
-  color:var(--ink);font-size:25px;line-height:1.35;letter-spacing:.08em;font-weight:900;
-  -webkit-text-stroke:.35px currentColor;
-}
-.heading:before{content:"";width:20px;height:20px;flex:0 0 20px;transform:rotate(45deg);background:#8d3028;border:1px solid #d8af69}
-.heading:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--gold),transparent)}
-.sub{margin:0 0 17px;color:#766958;font-size:14px;line-height:1.75;font-weight:700}
-.about-grid,.posts,.services{display:grid;gap:11px}
-.about{
-  display:flex;align-items:center;gap:13px;min-height:88px;padding:16px;
-  text-decoration:none;color:var(--ink);background:#fffaf1;border:1px solid #dac4a1;border-radius:8px;
-}
-.mark{
-  display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border-radius:50%;
-  background:#771f19;border:1px solid #d1a65d;color:#f5d79b;
-  font-size:18px;font-weight:900;-webkit-text-stroke:.3px currentColor;
-}
-.about h3{margin:0;font-size:20px;line-height:1.25;letter-spacing:.08em;font-weight:900;-webkit-text-stroke:.25px currentColor}
-.about p{margin:5px 0 0;color:#705f4d;font-size:13px;line-height:1.55;font-weight:700}
-.arrow{margin-left:auto;color:#8c3328;font-family:var(--ui);font-size:20px;font-weight:800}
-.post{display:block;min-height:108px;padding:15px;text-decoration:none;color:var(--ink);background:#fffaf1;border:1px solid #dac4a1;border-radius:8px}
-.badge{display:inline-block;padding:4px 8px;border:1px solid #d4ad6b;border-radius:99px;color:#98723c;background:#f8ebd5;font-size:11px;line-height:1.3;font-weight:800}
-.badge.is-pinned{background:#e2f0e7;color:#276249;border-color:#a8c9b1}
-.post h3{margin:9px 0 5px;font-size:20px;line-height:1.35;font-weight:900;-webkit-text-stroke:.22px currentColor}
-.post p{margin:0;color:#705f4d;font-size:13px;line-height:1.65;font-weight:700}
-.all{display:inline-flex;align-items:center;min-height:44px;margin-top:10px;color:#7a3026;text-decoration:none;font-size:14px;font-weight:900}
-.service{
-  display:block;min-height:160px;padding:18px;text-decoration:none;color:#f8e6c3;
-  border:1px solid #9d7744;border-radius:8px;background:linear-gradient(145deg,#542219,#1c1110)
-}
-.service:nth-child(2){background:linear-gradient(145deg,#742a20,#22120e)}
-.service:nth-child(3){background:linear-gradient(145deg,#402018,#17100e)}
-.service small{color:#e5c07d;font-size:10px;letter-spacing:.18em}
-.service h2{margin:10px 0 5px;font-size:27px;line-height:1.3;letter-spacing:.1em;font-weight:900;-webkit-text-stroke:.35px currentColor}
-.service p{margin:0;color:#d7c5a8;font-size:13px;line-height:1.65;font-weight:700}
-.service span{display:block;margin-top:15px;color:#f2d69d;font-size:13px;font-weight:900}
-.footer{padding:37px 16px 48px;text-align:center;background:#0d0c0b;border-top:4px solid #7e2d26;color:#d7c4a9}
-.footer b{font-size:19px;letter-spacing:.14em;font-weight:900;-webkit-text-stroke:.3px currentColor}
-.footer p{margin:9px 0 0;color:#9e907d;font-size:12px;font-weight:700}
-@media(max-width:370px){
-  .top{padding-left:10px;padding-right:10px}.brand-logo{width:42px;height:42px;flex-basis:42px}.brand-title{font-size:18px;letter-spacing:.06em}.tag{font-size:10px;padding:4px 7px}
-  .hero-copy h1{font-size:38px;letter-spacing:.09em}.hero-copy p{font-size:16px}.hero-copy{left:18px;right:14px}
-}
-@media(min-width:620px){
-  .hero{min-height:560px}.hero-copy{left:32px;bottom:57px}.main{padding-left:28px;padding-right:28px}
-  .about-grid{grid-template-columns:repeat(2,1fr)}.services{grid-template-columns:repeat(3,1fr)}.service{min-height:220px}
-}
+@media(max-width:370px){.top{padding-left:10px;padding-right:10px}
+.brand-logo{width:42px;height:42px;flex-basis:42px}
+.brand-title{font-size:18px;letter-spacing:.06em}
+.tag{font-size:10px;padding:4px 7px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-
 /* v7 homepage key-typography verification: fixed approved glyph assets only. */
 .v7-a11y{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 .v7-script{display:block;max-width:100%;height:auto;object-fit:contain;object-position:left center;pointer-events:none;user-select:none}
 .brand-title.v7-image-text{display:flex;align-items:center;min-height:25px}
 .v7-brand-script{width:128px;filter:drop-shadow(0 1px 0 #5c3516) drop-shadow(0 2px 4px rgba(0,0,0,.6))}
 .hero-copy h1.v7-image-text{display:flex;align-items:flex-start;min-height:49.56px}
-.v7-hero-title-script{width:230px;filter:drop-shadow(0 2px 0 #60401b) drop-shadow(0 5px 9px #000)}
 .hero-copy p.v7-image-text{display:flex;align-items:flex-start;min-height:24.65px}
-.v7-tagline-script{width:200px;margin-top:1px;filter:drop-shadow(0 2px 0 #60401b) drop-shadow(0 4px 7px #000)}
 .heading.v7-image-text .v7-heading-script{width:112px;flex:0 0 auto}
 .sub.v7-image-text{height:49px;overflow:visible}
-.v7-section-copy-script{width:350px;max-width:100%;margin-top:5px}
-@media(max-width:370px){.v7-brand-script{width:116px}.v7-hero-title-script{width:218px}.v7-tagline-script{width:190px}}
-
+@media(max-width:370px){.v7-brand-script{width:116px}}
 /* MZSM-V8-SITE-BUILD-001: stable site structure and mobile navigation. */
-body{overflow-x:hidden}.site-nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:8px 10px;background:#17130f;border-bottom:1px solid rgba(207,163,91,.35);-webkit-overflow-scrolling:touch}.site-nav::-webkit-scrollbar{display:none}.site-nav a{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 13px;border-radius:999px;color:#e9ca8c;text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:800;white-space:nowrap}.site-nav a:focus-visible,.site-nav a:hover{outline:none;background:#5e211b;color:#fff0cf}.about,.post,.service{min-width:0;overflow-wrap:anywhere}@media(max-width:430px){.top{padding-top:max(7px,env(safe-area-inset-top))}.footer{padding-bottom:max(48px,calc(24px + env(safe-area-inset-bottom)))}}
+body{overflow-x:hidden}
+.site-nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:8px 10px;background:#17130f;border-bottom:1px solid rgba(207,163,91,.35);-webkit-overflow-scrolling:touch}
+.site-nav::-webkit-scrollbar{display:none}
+.site-nav a{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 13px;border-radius:999px;color:#e9ca8c;text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:800;white-space:nowrap}
+.site-nav a:focus-visible,.site-nav a:hover{outline:none;background:#5e211b;color:#fff0cf}
+@media(max-width:430px){.top{padding-top:max(7px,env(safe-area-inset-top))}}
 </style>
 </head>
 <body class="mz-page">
@@ -229,50 +142,50 @@ body{overflow-x:hidden}.site-nav{display:flex;gap:4px;overflow-x:auto;scrollbar-
     <div class="mz-hero__frame">
       <svg class="mz-hero__smoke" viewBox="0 0 1672 941" preserveAspectRatio="none" focusable="false">
 <!-- 發煙點：龍頭 -->
-<g transform="translate(933,307)"><g class="mz-rise" style="--rise:540px;--dur:19.4s;--delay:-0.5s;--o:0.57"><image class="mz-puff" style="--sway:26px;--sdur:6.8s;--sdelay:-2.8s;--s0:0.5;--s1:1.74" href="assets/motion/smoke-1.png" x="-120" y="-120" width="241" height="241"/></g></g>
-<g transform="translate(933,357)"><g class="mz-rise" style="--rise:601px;--dur:13.1s;--delay:-3.4s;--o:0.47"><image class="mz-puff" style="--sway:-44px;--sdur:7.4s;--sdelay:-4.4s;--s0:0.51;--s1:1.44" href="assets/motion/smoke-2.png" x="-151" y="-151" width="303" height="303"/></g></g>
-<g transform="translate(900,342)"><g class="mz-rise mz-plume--lite" style="--rise:562px;--dur:16.4s;--delay:-8.6s;--o:0.38"><image class="mz-puff" style="--sway:-38px;--sdur:7.5s;--sdelay:-0.7s;--s0:0.64;--s1:1.47" href="assets/motion/smoke-1.png" x="-156" y="-156" width="313" height="313"/></g></g>
-<g transform="translate(973,330)"><g class="mz-rise mz-plume--lite" style="--rise:553px;--dur:16.5s;--delay:-13.9s;--o:0.47"><image class="mz-puff" style="--sway:-39px;--sdur:10.0s;--sdelay:-10.0s;--s0:0.68;--s1:1.76" href="assets/motion/smoke-2.png" x="-138" y="-138" width="277" height="277"/></g></g>
+<g transform="translate(933,307)"><g class="mz-rise" style="--rise:540px;--dur:19.4s;--delay:-0.5s;--o:0.57;--s0:0.5;--s1:1.74"><g class="mz-puff" style="--sway:26px;--sdur:6.8s;--sdelay:-2.8s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-120" y="-120" width="241" height="241"/></g></g></g></g>
+<g transform="translate(933,357)"><g class="mz-rise" style="--rise:601px;--dur:13.1s;--delay:-3.4s;--o:0.47;--s0:0.51;--s1:1.44"><g class="mz-puff" style="--sway:-44px;--sdur:7.4s;--sdelay:-4.4s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-151" y="-151" width="303" height="303"/></g></g></g></g>
+<g transform="translate(900,342)"><g class="mz-rise mz-plume--lite" style="--rise:562px;--dur:16.4s;--delay:-8.6s;--o:0.38;--s0:0.64;--s1:1.47"><g class="mz-puff" style="--sway:-38px;--sdur:7.5s;--sdelay:-0.7s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-156" y="-156" width="313" height="313"/></g></g></g></g>
+<g transform="translate(973,330)"><g class="mz-rise mz-plume--lite" style="--rise:553px;--dur:16.5s;--delay:-13.9s;--o:0.47;--s0:0.68;--s1:1.76"><g class="mz-puff" style="--sway:-39px;--sdur:10.0s;--sdelay:-10.0s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-138" y="-138" width="277" height="277"/></g></g></g></g>
 
 <!-- 發煙點：龍身中央 -->
-<g transform="translate(1109,450)"><g class="mz-rise" style="--rise:689px;--dur:16.6s;--delay:-1.4s;--o:0.51"><image class="mz-puff" style="--sway:26px;--sdur:9.4s;--sdelay:-7.6s;--s0:0.68;--s1:1.81" href="assets/motion/smoke-1.png" x="-155" y="-155" width="311" height="311"/></g></g>
-<g transform="translate(1142,446)"><g class="mz-rise" style="--rise:715px;--dur:11.9s;--delay:-3.5s;--o:0.57"><image class="mz-puff" style="--sway:29px;--sdur:9.0s;--sdelay:-0.8s;--s0:0.5;--s1:1.38" href="assets/motion/smoke-3.png" x="-146" y="-146" width="292" height="292"/></g></g>
-<g transform="translate(1112,439)"><g class="mz-rise mz-plume--lite" style="--rise:703px;--dur:14.5s;--delay:-8.0s;--o:0.62"><image class="mz-puff" style="--sway:42px;--sdur:9.4s;--sdelay:-2.1s;--s0:0.61;--s1:1.83" href="assets/motion/smoke-2.png" x="-153" y="-153" width="307" height="307"/></g></g>
-<g transform="translate(1137,417)"><g class="mz-rise mz-plume--lite" style="--rise:682px;--dur:13.3s;--delay:-11.2s;--o:0.62"><image class="mz-puff" style="--sway:48px;--sdur:8.1s;--sdelay:-3.6s;--s0:0.48;--s1:1.5" href="assets/motion/smoke-2.png" x="-133" y="-133" width="267" height="267"/></g></g>
+<g transform="translate(1109,450)"><g class="mz-rise" style="--rise:689px;--dur:16.6s;--delay:-1.4s;--o:0.51;--s0:0.68;--s1:1.81"><g class="mz-puff" style="--sway:26px;--sdur:9.4s;--sdelay:-7.6s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-155" y="-155" width="311" height="311"/></g></g></g></g>
+<g transform="translate(1142,446)"><g class="mz-rise" style="--rise:715px;--dur:11.9s;--delay:-3.5s;--o:0.57;--s0:0.5;--s1:1.38"><g class="mz-puff" style="--sway:29px;--sdur:9.0s;--sdelay:-0.8s"><g class="mz-expand"><image href="assets/motion/smoke-3.png" x="-146" y="-146" width="292" height="292"/></g></g></g></g>
+<g transform="translate(1112,439)"><g class="mz-rise mz-plume--lite" style="--rise:703px;--dur:14.5s;--delay:-8.0s;--o:0.62;--s0:0.61;--s1:1.83"><g class="mz-puff" style="--sway:42px;--sdur:9.4s;--sdelay:-2.1s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-153" y="-153" width="307" height="307"/></g></g></g></g>
+<g transform="translate(1137,417)"><g class="mz-rise mz-plume--lite" style="--rise:682px;--dur:13.3s;--delay:-11.2s;--o:0.62;--s0:0.48;--s1:1.5"><g class="mz-puff" style="--sway:48px;--sdur:8.1s;--sdelay:-3.6s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-133" y="-133" width="267" height="267"/></g></g></g></g>
 
 <!-- 發煙點：屋脊右 -->
-<g transform="translate(1507,447)"><g class="mz-rise" style="--rise:718px;--dur:12.4s;--delay:-0.8s;--o:0.51"><image class="mz-puff" style="--sway:36px;--sdur:8.0s;--sdelay:-6.0s;--s0:0.64;--s1:1.58" href="assets/motion/smoke-1.png" x="-157" y="-157" width="314" height="314"/></g></g>
-<g transform="translate(1477,422)"><g class="mz-rise" style="--rise:687px;--dur:12.4s;--delay:-5.5s;--o:0.38"><image class="mz-puff" style="--sway:40px;--sdur:8.5s;--sdelay:-1.4s;--s0:0.5;--s1:1.96" href="assets/motion/smoke-3.png" x="-133" y="-133" width="266" height="266"/></g></g>
-<g transform="translate(1555,404)"><g class="mz-rise mz-plume--lite" style="--rise:723px;--dur:17.7s;--delay:-12.1s;--o:0.57"><image class="mz-puff" style="--sway:-29px;--sdur:6.8s;--sdelay:-2.6s;--s0:0.56;--s1:1.7" href="assets/motion/smoke-1.png" x="-119" y="-119" width="238" height="238"/></g></g>
+<g transform="translate(1507,447)"><g class="mz-rise" style="--rise:718px;--dur:12.4s;--delay:-0.8s;--o:0.51;--s0:0.64;--s1:1.58"><g class="mz-puff" style="--sway:36px;--sdur:8.0s;--sdelay:-6.0s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-157" y="-157" width="314" height="314"/></g></g></g></g>
+<g transform="translate(1477,422)"><g class="mz-rise" style="--rise:687px;--dur:12.4s;--delay:-5.5s;--o:0.38;--s0:0.5;--s1:1.96"><g class="mz-puff" style="--sway:40px;--sdur:8.5s;--sdelay:-1.4s"><g class="mz-expand"><image href="assets/motion/smoke-3.png" x="-133" y="-133" width="266" height="266"/></g></g></g></g>
+<g transform="translate(1555,404)"><g class="mz-rise mz-plume--lite" style="--rise:723px;--dur:17.7s;--delay:-12.1s;--o:0.57;--s0:0.56;--s1:1.7"><g class="mz-puff" style="--sway:-29px;--sdur:6.8s;--sdelay:-2.6s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-119" y="-119" width="238" height="238"/></g></g></g></g>
 
 <!-- 發煙點：屋脊中 -->
-<g transform="translate(1174,599)"><g class="mz-rise" style="--rise:726px;--dur:18.4s;--delay:-0.6s;--o:0.47"><image class="mz-puff" style="--sway:22px;--sdur:6.2s;--sdelay:-0.9s;--s0:0.5;--s1:1.73" href="assets/motion/smoke-3.png" x="-161" y="-161" width="323" height="323"/></g></g>
-<g transform="translate(1228,634)"><g class="mz-rise" style="--rise:833px;--dur:12.9s;--delay:-3.4s;--o:0.6"><image class="mz-puff" style="--sway:-20px;--sdur:6.8s;--sdelay:-1.7s;--s0:0.54;--s1:1.61" href="assets/motion/smoke-1.png" x="-148" y="-148" width="297" height="297"/></g></g>
-<g transform="translate(1224,634)"><g class="mz-rise mz-plume--lite" style="--rise:827px;--dur:12.2s;--delay:-7.3s;--o:0.52"><image class="mz-puff" style="--sway:35px;--sdur:8.0s;--sdelay:-3.7s;--s0:0.65;--s1:1.7" href="assets/motion/smoke-2.png" x="-118" y="-118" width="236" height="236"/></g></g>
-<g transform="translate(1201,588)"><g class="mz-rise mz-plume--lite" style="--rise:822px;--dur:13.1s;--delay:-10.7s;--o:0.49"><image class="mz-puff" style="--sway:20px;--sdur:6.5s;--sdelay:-3.2s;--s0:0.6;--s1:1.47" href="assets/motion/smoke-3.png" x="-136" y="-136" width="273" height="273"/></g></g>
+<g transform="translate(1174,599)"><g class="mz-rise" style="--rise:726px;--dur:18.4s;--delay:-0.6s;--o:0.47;--s0:0.5;--s1:1.73"><g class="mz-puff" style="--sway:22px;--sdur:6.2s;--sdelay:-0.9s"><g class="mz-expand"><image href="assets/motion/smoke-3.png" x="-161" y="-161" width="323" height="323"/></g></g></g></g>
+<g transform="translate(1228,634)"><g class="mz-rise" style="--rise:833px;--dur:12.9s;--delay:-3.4s;--o:0.6;--s0:0.54;--s1:1.61"><g class="mz-puff" style="--sway:-20px;--sdur:6.8s;--sdelay:-1.7s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-148" y="-148" width="297" height="297"/></g></g></g></g>
+<g transform="translate(1224,634)"><g class="mz-rise mz-plume--lite" style="--rise:827px;--dur:12.2s;--delay:-7.3s;--o:0.52;--s0:0.65;--s1:1.7"><g class="mz-puff" style="--sway:35px;--sdur:8.0s;--sdelay:-3.7s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-118" y="-118" width="236" height="236"/></g></g></g></g>
+<g transform="translate(1201,588)"><g class="mz-rise mz-plume--lite" style="--rise:822px;--dur:13.1s;--delay:-10.7s;--o:0.49;--s0:0.6;--s1:1.47"><g class="mz-puff" style="--sway:20px;--sdur:6.5s;--sdelay:-3.2s"><g class="mz-expand"><image href="assets/motion/smoke-3.png" x="-136" y="-136" width="273" height="273"/></g></g></g></g>
 
 <!-- 發煙點：屋脊左 -->
-<g transform="translate(799,854)"><g class="mz-rise" style="--rise:920px;--dur:15.5s;--delay:-0.5s;--o:0.69"><image class="mz-puff" style="--sway:41px;--sdur:9.7s;--sdelay:-5.4s;--s0:0.69;--s1:1.39" href="assets/motion/smoke-2.png" x="-106" y="-106" width="212" height="212"/></g></g>
-<g transform="translate(876,818)"><g class="mz-rise" style="--rise:906px;--dur:15.9s;--delay:-4.2s;--o:0.75"><image class="mz-puff" style="--sway:38px;--sdur:9.5s;--sdelay:-5.0s;--s0:0.6;--s1:1.85" href="assets/motion/smoke-2.png" x="-152" y="-152" width="305" height="305"/></g></g>
-<g transform="translate(854,796)"><g class="mz-rise mz-plume--lite" style="--rise:883px;--dur:18.0s;--delay:-8.2s;--o:0.64"><image class="mz-puff" style="--sway:-26px;--sdur:6.3s;--sdelay:-6.3s;--s0:0.55;--s1:1.35" href="assets/motion/smoke-1.png" x="-127" y="-127" width="255" height="255"/></g></g>
-<g transform="translate(833,838)"><g class="mz-rise mz-plume--lite" style="--rise:928px;--dur:17.7s;--delay:-10.7s;--o:0.74"><image class="mz-puff" style="--sway:26px;--sdur:6.3s;--sdelay:-0.1s;--s0:0.64;--s1:1.43" href="assets/motion/smoke-2.png" x="-124" y="-124" width="248" height="248"/></g></g>
-<g transform="translate(888,818)"><g class="mz-rise mz-plume--lite" style="--rise:823px;--dur:12.7s;--delay:-10.3s;--o:0.72"><image class="mz-puff" style="--sway:38px;--sdur:7.5s;--sdelay:-4.9s;--s0:0.5;--s1:1.79" href="assets/motion/smoke-3.png" x="-129" y="-129" width="259" height="259"/></g></g>
+<g transform="translate(799,854)"><g class="mz-rise" style="--rise:920px;--dur:15.5s;--delay:-0.5s;--o:0.69;--s0:0.69;--s1:1.39"><g class="mz-puff" style="--sway:41px;--sdur:9.7s;--sdelay:-5.4s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-106" y="-106" width="212" height="212"/></g></g></g></g>
+<g transform="translate(876,818)"><g class="mz-rise" style="--rise:906px;--dur:15.9s;--delay:-4.2s;--o:0.75;--s0:0.6;--s1:1.85"><g class="mz-puff" style="--sway:38px;--sdur:9.5s;--sdelay:-5.0s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-152" y="-152" width="305" height="305"/></g></g></g></g>
+<g transform="translate(854,796)"><g class="mz-rise mz-plume--lite" style="--rise:883px;--dur:18.0s;--delay:-8.2s;--o:0.64;--s0:0.55;--s1:1.35"><g class="mz-puff" style="--sway:-26px;--sdur:6.3s;--sdelay:-6.3s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-127" y="-127" width="255" height="255"/></g></g></g></g>
+<g transform="translate(833,838)"><g class="mz-rise mz-plume--lite" style="--rise:928px;--dur:17.7s;--delay:-10.7s;--o:0.74;--s0:0.64;--s1:1.43"><g class="mz-puff" style="--sway:26px;--sdur:6.3s;--sdelay:-0.1s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-124" y="-124" width="248" height="248"/></g></g></g></g>
+<g transform="translate(888,818)"><g class="mz-rise mz-plume--lite" style="--rise:823px;--dur:12.7s;--delay:-10.3s;--o:0.72;--s0:0.5;--s1:1.79"><g class="mz-puff" style="--sway:38px;--sdur:7.5s;--sdelay:-4.9s"><g class="mz-expand"><image href="assets/motion/smoke-3.png" x="-129" y="-129" width="259" height="259"/></g></g></g></g>
 
 <!-- 發煙點：中段簷 -->
-<g transform="translate(890,695)"><g class="mz-rise" style="--rise:775px;--dur:14.8s;--delay:-1.0s;--o:0.56"><image class="mz-puff" style="--sway:19px;--sdur:7.3s;--sdelay:-0.7s;--s0:0.5;--s1:2.01" href="assets/motion/smoke-1.png" x="-131" y="-131" width="262" height="262"/></g></g>
-<g transform="translate(927,715)"><g class="mz-rise" style="--rise:871px;--dur:16.0s;--delay:-4.5s;--o:0.56"><image class="mz-puff" style="--sway:-46px;--sdur:7.0s;--sdelay:-6.2s;--s0:0.66;--s1:1.59" href="assets/motion/smoke-3.png" x="-109" y="-109" width="218" height="218"/></g></g>
-<g transform="translate(933,720)"><g class="mz-rise mz-plume--lite" style="--rise:777px;--dur:15.3s;--delay:-7.8s;--o:0.54"><image class="mz-puff" style="--sway:-30px;--sdur:7.9s;--sdelay:-5.7s;--s0:0.62;--s1:1.5" href="assets/motion/smoke-1.png" x="-155" y="-155" width="310" height="310"/></g></g>
-<g transform="translate(970,684)"><g class="mz-rise mz-plume--lite" style="--rise:816px;--dur:13.5s;--delay:-10.9s;--o:0.6"><image class="mz-puff" style="--sway:30px;--sdur:7.6s;--sdelay:-6.9s;--s0:0.58;--s1:1.93" href="assets/motion/smoke-2.png" x="-150" y="-150" width="301" height="301"/></g></g>
+<g transform="translate(890,695)"><g class="mz-rise" style="--rise:775px;--dur:14.8s;--delay:-1.0s;--o:0.56;--s0:0.5;--s1:2.01"><g class="mz-puff" style="--sway:19px;--sdur:7.3s;--sdelay:-0.7s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-131" y="-131" width="262" height="262"/></g></g></g></g>
+<g transform="translate(927,715)"><g class="mz-rise" style="--rise:871px;--dur:16.0s;--delay:-4.5s;--o:0.56;--s0:0.66;--s1:1.59"><g class="mz-puff" style="--sway:-46px;--sdur:7.0s;--sdelay:-6.2s"><g class="mz-expand"><image href="assets/motion/smoke-3.png" x="-109" y="-109" width="218" height="218"/></g></g></g></g>
+<g transform="translate(933,720)"><g class="mz-rise mz-plume--lite" style="--rise:777px;--dur:15.3s;--delay:-7.8s;--o:0.54;--s0:0.62;--s1:1.5"><g class="mz-puff" style="--sway:-30px;--sdur:7.9s;--sdelay:-5.7s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-155" y="-155" width="310" height="310"/></g></g></g></g>
+<g transform="translate(970,684)"><g class="mz-rise mz-plume--lite" style="--rise:816px;--dur:13.5s;--delay:-10.9s;--o:0.6;--s0:0.58;--s1:1.93"><g class="mz-puff" style="--sway:30px;--sdur:7.6s;--sdelay:-6.9s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-150" y="-150" width="301" height="301"/></g></g></g></g>
 
 <!-- 發煙點：香爐 -->
-<g transform="translate(1341,899)"><g class="mz-rise" style="--rise:878px;--dur:12.9s;--delay:-0.1s;--o:0.53"><image class="mz-puff" style="--sway:40px;--sdur:6.5s;--sdelay:-2.8s;--s0:0.67;--s1:1.85" href="assets/motion/smoke-2.png" x="-127" y="-127" width="255" height="255"/></g></g>
-<g transform="translate(1306,865)"><g class="mz-rise" style="--rise:994px;--dur:15.6s;--delay:-5.0s;--o:0.48"><image class="mz-puff" style="--sway:-29px;--sdur:6.3s;--sdelay:-3.2s;--s0:0.66;--s1:1.93" href="assets/motion/smoke-1.png" x="-131" y="-131" width="263" height="263"/></g></g>
-<g transform="translate(1304,894)"><g class="mz-rise mz-plume--lite" style="--rise:878px;--dur:13.8s;--delay:-8.2s;--o:0.57"><image class="mz-puff" style="--sway:44px;--sdur:8.7s;--sdelay:-7.8s;--s0:0.57;--s1:1.66" href="assets/motion/smoke-2.png" x="-159" y="-159" width="318" height="318"/></g></g>
-<g transform="translate(1339,863)"><g class="mz-rise mz-plume--lite" style="--rise:884px;--dur:19.0s;--delay:-14.5s;--o:0.52"><image class="mz-puff" style="--sway:46px;--sdur:6.2s;--sdelay:-2.9s;--s0:0.57;--s1:1.92" href="assets/motion/smoke-1.png" x="-139" y="-139" width="279" height="279"/></g></g>
+<g transform="translate(1341,899)"><g class="mz-rise" style="--rise:878px;--dur:12.9s;--delay:-0.1s;--o:0.53;--s0:0.67;--s1:1.85"><g class="mz-puff" style="--sway:40px;--sdur:6.5s;--sdelay:-2.8s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-127" y="-127" width="255" height="255"/></g></g></g></g>
+<g transform="translate(1306,865)"><g class="mz-rise" style="--rise:994px;--dur:15.6s;--delay:-5.0s;--o:0.48;--s0:0.66;--s1:1.93"><g class="mz-puff" style="--sway:-29px;--sdur:6.3s;--sdelay:-3.2s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-131" y="-131" width="263" height="263"/></g></g></g></g>
+<g transform="translate(1304,894)"><g class="mz-rise mz-plume--lite" style="--rise:878px;--dur:13.8s;--delay:-8.2s;--o:0.57;--s0:0.57;--s1:1.66"><g class="mz-puff" style="--sway:44px;--sdur:8.7s;--sdelay:-7.8s"><g class="mz-expand"><image href="assets/motion/smoke-2.png" x="-159" y="-159" width="318" height="318"/></g></g></g></g>
+<g transform="translate(1339,863)"><g class="mz-rise mz-plume--lite" style="--rise:884px;--dur:19.0s;--delay:-14.5s;--o:0.52;--s0:0.57;--s1:1.92"><g class="mz-puff" style="--sway:46px;--sdur:6.2s;--sdelay:-2.9s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-139" y="-139" width="279" height="279"/></g></g></g></g>
 
 <!-- 發煙點：右緣 -->
-<g transform="translate(1587,796)"><g class="mz-rise" style="--rise:874px;--dur:16.8s;--delay:-0.7s;--o:0.48"><image class="mz-puff" style="--sway:-38px;--sdur:6.7s;--sdelay:-3.1s;--s0:0.54;--s1:1.85" href="assets/motion/smoke-3.png" x="-143" y="-143" width="287" height="287"/></g></g>
-<g transform="translate(1574,785)"><g class="mz-rise" style="--rise:861px;--dur:11.8s;--delay:-7.1s;--o:0.36"><image class="mz-puff" style="--sway:-39px;--sdur:7.7s;--sdelay:-3.3s;--s0:0.58;--s1:1.49" href="assets/motion/smoke-1.png" x="-108" y="-108" width="216" height="216"/></g></g>
+<g transform="translate(1587,796)"><g class="mz-rise" style="--rise:874px;--dur:16.8s;--delay:-0.7s;--o:0.48;--s0:0.54;--s1:1.85"><g class="mz-puff" style="--sway:-38px;--sdur:6.7s;--sdelay:-3.1s"><g class="mz-expand"><image href="assets/motion/smoke-3.png" x="-143" y="-143" width="287" height="287"/></g></g></g></g>
+<g transform="translate(1574,785)"><g class="mz-rise" style="--rise:861px;--dur:11.8s;--delay:-7.1s;--o:0.36;--s0:0.58;--s1:1.49"><g class="mz-puff" style="--sway:-39px;--sdur:7.7s;--sdelay:-3.3s"><g class="mz-expand"><image href="assets/motion/smoke-1.png" x="-108" y="-108" width="216" height="216"/></g></g></g></g>
       </svg>
     </div>
     </div>

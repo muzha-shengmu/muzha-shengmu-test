@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-Hant"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <title>公告宮務後台｜內部候選</title><meta name="robots" content="noindex,nofollow,noarchive"/><meta name="referrer" content="no-referrer"/>
-<link href="site-shell.css" rel="stylesheet"/>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png"/><link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png"/><link href="site-shell.css" rel="stylesheet"/>
 <link rel="stylesheet" href="assets/css/mzsm-tokens.css"/>
 <style>
 .admin-wrap{max-width:760px;margin:auto;padding:18px 14px 72px}.admin-banner{padding:14px;border:2px solid #9b342b;background:#fff1e8;border-radius:10px;color:#6b211c;line-height:1.7}.admin-grid{display:grid;gap:12px}.admin-card{padding:16px;background:#fffaf1;border:1px solid #dac4a1;border-radius:9px}.admin-card h2,.admin-card h3{margin-top:0}.admin-form{display:grid;gap:12px}.admin-form label{display:grid;gap:6px;font-weight:800}.admin-form input,.admin-form textarea,.admin-form select{width:100%;box-sizing:border-box;padding:12px;border:1px solid #bda57f;border-radius:7px;background:#fff;font:inherit}.admin-form textarea{min-height:120px;resize:vertical}.admin-actions{display:flex;flex-wrap:wrap;gap:8px}.admin-actions button,.admin-button{min-height:44px;padding:9px 13px;border:0;border-radius:7px;background:#6c261f;color:#fff;font-weight:900;cursor:pointer}.admin-actions button.secondary,.admin-button.secondary{background:#55483b}.admin-actions button:disabled{opacity:.45;cursor:not-allowed}.admin-status{padding:12px;border-radius:7px;background:#f4eadb;line-height:1.6}.admin-record{padding:14px;border:1px solid #d9c09b;border-radius:8px;background:#fff}.admin-record p{white-space:pre-wrap}.muted{color:#6f6254;font-size:13px}.hidden{display:none!important}
 </style></head><body><div class="site"><header class="top"><a class="brand" href="index.html"><img src="assets/logo.png" alt="木柵聖母宮標誌"/><span>木柵聖母宮</span></a><a class="back" href="index.html">← 回公開前台</a></header>
-<main class="admin-wrap"><div class="admin-banner"><b>內部 RPC 候選後台，不在公開導覽。</b><br/>預設停用；`?demo=1` 只寫本機 localStorage，`?rpcmock=1&amp;role=admin` 只用記憶體 Mock。不得填入真實個資，也未連線正式 Supabase。</div>
+<main class="admin-wrap"><div class="admin-banner"><b>內部 RPC 候選後台，不在公開導覽。</b><br/>預設停用，且僅在開發組建 + 本機 loopback（localhost／127.0.0.1／[::1]）時才可能啟用；<code>?demo=1</code> 只寫本機 localStorage，<code>?rpcmock=1&amp;role=admin</code> 只用記憶體 Mock。不得填入真實個資，也未連線正式 Supabase。</div>
 <section class="admin-card"><h1>公告宮務後台</h1><div id="adminStatus" class="admin-status">正在檢查候選設定。</div></section>
 <section id="loginPanel" class="admin-card hidden"><h2>管理員登入</h2><p class="muted">請由管理者自行輸入已預先建立的帳號信箱；真正權限由資料庫內的管理者名單強制。</p><div class="admin-form"><label>管理員信箱<input id="adminEmailInput" type="email" inputmode="email" autocomplete="username" maxlength="254" required placeholder="name@example.com"/></label><div class="admin-actions"><button id="sendMagicLink" class="admin-button" type="button">發送 Magic Link</button><button id="loginSignOut" class="admin-button secondary hidden" type="button">登出目前帳號</button></div></div></section>
 <section id="editorPanel" class="admin-card hidden"><h2 id="editorTitle">新增公告</h2><form id="announcementForm" class="admin-form"><input id="announcementId" type="hidden"/>
-<label>公告標題<input id="announcementTitle" maxlength="120" required placeholder="測試公告標題"/></label>
+<label>公告標題<input type="text" id="announcementTitle" maxlength="120" required placeholder="測試公告標題"/></label>
 <label>公告內容<textarea id="announcementContent" maxlength="4000" required placeholder="請勿填寫真實個資"></textarea></label>
 <label>狀態<select id="announcementStatusField"><option value="draft">草稿</option><option value="published">發布</option></select></label>
 <label><span><input id="announcementPinned" type="checkbox"/> 置頂公告</span></label>

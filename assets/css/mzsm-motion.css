@@ -141,11 +141,22 @@
 }
 
 /* ============================================================
-   2. 煙霧動態
-   每一縷煙由兩層組成：
-     .mz-rise  負責向上位移 + 淡入淡出（主要方向，永遠向上）
-     .mz-puff  負責左右小幅擺動 + 逐步擴散變大（週期與上升不同）
-   兩個週期互質 → 觀感上不會出現整齊一致的水平平移，也沒有明顯循環跳切。
+   2. 煙霧動態（獨立驗收 M-04 修正）
+   ------------------------------------------------------------
+   Candidate-001 的缺陷：sway 同時負責「左右擺動」與「scale」，而且用
+   infinite alternate、週期又與 rise 各自獨立。結果 scale 會在同一次上升
+   途中先放大再反向縮小（呼吸式），與「逐步擴散變大」不符。
+
+   Candidate-002 改成三個各自獨立的圖層，一層只做一件事：
+
+     .mz-rise    向上位移 + 淡入淡出        週期 = --dur
+     .mz-puff    只做左右小幅擺動（X）      週期 = --sdur（可 alternate）
+     .mz-expand  只做 scale，s0 -> s1 單向  週期 = --dur（與 rise 同步）
+
+   關鍵：.mz-expand 與 .mz-rise 共用同一個 --dur 與 --delay（custom property
+   會繼承），因此 scale 在單次上升週期內恆為單調遞增，且 scale 重設的瞬間
+   正好是 rise 的 0%/100%，此時 opacity 必為 0，肉眼看不到重設。
+   sway 不再碰 scale，所以擺動週期不同也不會影響擴散單調性。
    ============================================================ */
 .mz-rise{
   animation:mz-rise var(--dur,15s) linear var(--delay,0s) infinite;
@@ -153,6 +164,10 @@
 }
 .mz-puff{
   animation:mz-sway var(--sdur,8s) ease-in-out var(--sdelay,0s) infinite alternate;
+  will-change:transform;
+}
+.mz-expand{
+  animation:mz-expand var(--dur,15s) linear var(--delay,0s) infinite;
   transform-box:fill-box;
   transform-origin:50% 50%;
   will-change:transform;
@@ -164,9 +179,15 @@
   62%  {                                          opacity:calc(var(--o,.4) * .55) }
   100% { transform:translateY(calc(var(--rise,600px) * -1)); opacity:0 }
 }
+/* 只有 X 位移，不含 scale */
 @keyframes mz-sway{
-  0%   { transform:translateX(calc(var(--sway,30px) * -1)) scale(var(--s0,.62)) }
-  100% { transform:translateX(var(--sway,30px))            scale(var(--s1,1.55)) }
+  0%   { transform:translateX(calc(var(--sway,30px) * -1)) }
+  100% { transform:translateX(var(--sway,30px)) }
+}
+/* 單向放大，不使用 alternate；重設點與 rise 的 opacity:0 對齊 */
+@keyframes mz-expand{
+  0%   { transform:scale(var(--s0,.55)) }
+  100% { transform:scale(var(--s1,1.6)) }
 }
 
 /* 手機降載：只保留主要煙柱，避免過多合成層 */
@@ -186,7 +207,7 @@
       radial-gradient(120% 70% at 62% 34%, rgba(226,214,188,.10), rgba(226,214,188,0) 62%),
       radial-gradient(80% 50% at 44% 52%, rgba(226,214,188,.06), rgba(226,214,188,0) 70%);
   }
-  .mz-rise,.mz-puff{ animation:none }
+  .mz-rise,.mz-puff,.mz-expand{ animation:none }
   html{ scroll-behavior:auto }
 }
 
@@ -601,3 +622,13 @@
 @media (min-width:1024px){
   .mz-page .site-nav{ justify-content:center; padding-left:var(--mz-gutter); padding-right:var(--mz-gutter) }
 }
+
+/* ============================================================
+   6. 觸控目標 44×44（獨立驗收 m-01）
+   本站採用 44×44 標準，因此寬與高都不得小於 44px。
+   獨立驗收量到共用導覽連結 42×44、「回首頁」43×44，於此一併補上 min-width。
+   ============================================================ */
+.mz-page .site-nav a{ min-width:44px; padding-left:14px; padding-right:14px }
+.mz-btn{ min-width:44px }
+.mz-all{ min-width:44px }
+.mz-card,.mz-post,.mz-service{ min-height:44px }

@@ -230,16 +230,43 @@
     setStatus('若此信箱為預先建立的管理帳號，系統會寄出登入連結；真正權限仍由資料庫驗證。');
   }));
 
+  // 統一的受控錯誤呈現（獨立驗收 m-03）：任何 refresh／init 失敗都必須讓測試者
+  // 在畫面上看到錯誤碼與訊息，不得只留在 console，也不得產生未處理的 page error。
+  function showFailure(context, error) {
+    const normalized = error || {};
+    const code = normalized.code || 'UNKNOWN_ERROR';
+    const message = normalized.message || '未知錯誤。';
+    setStatus(`${context}失敗：${code}`);
+    rowsBox.replaceChildren(
+      element('p', `錯誤碼：${code}`, 'muted'),
+      element('p', `說明：${message}`, 'muted'),
+      element('p', '資料未載入。請更正情境或重新整理後再試。', 'muted')
+    );
+  }
+
   async function init() {
     if (meta.mode === 'disabled') {
-      setStatus(meta.reason === 'MODE_CONFLICT' ? '測試模式衝突，已停止。' : '候選設定預設停用；未連線 Supabase。');
-      rowsBox.replaceChildren(element('p', '請由內部測試入口選擇 Demo 或 RPC Mock。', 'muted'));
+      if (meta.reason === 'MODE_CONFLICT') {
+        setStatus('測試模式衝突，已停止。');
+      } else if (meta.reason === 'TEST_MODE_BLOCKED') {
+        setStatus('測試模式已封鎖：本組建非開發版本，或目前網址不是本機 loopback。');
+      } else {
+        setStatus('候選設定預設停用；未連線 Supabase。');
+      }
+      rowsBox.replaceChildren(element('p',
+        meta.reason === 'TEST_MODE_BLOCKED'
+          ? 'Demo 與 RPC Mock 僅能在開發組建且網址為 localhost／127.0.0.1／[::1] 時啟用。'
+          : '請由內部測試入口選擇 Demo 或 RPC Mock。', 'muted'));
       return;
     }
     if (meta.mode === 'demo') {
       editorPanel.classList.remove('hidden');
-      setStatus('本機 localStorage Demo 已啟用；只准使用假資料。');
-      await refresh();
+      try { await refresh(); } catch (error) { showFailure('Demo 載入', error); return; }
+      // 儲存是否被封鎖，要在實際存取過之後才知道，因此在 refresh 之後重新查詢。
+      const blocked = api.create().describe().storageBlocked;
+      setStatus(blocked
+        ? '本機 Demo 已啟用；瀏覽器封鎖 localStorage，已改用記憶體暫存（重新整理後不保留）。'
+        : '本機 localStorage Demo 已啟用；只准使用假資料。');
       return;
     }
     if (meta.mode === 'rpcmock') {
@@ -250,7 +277,7 @@
       }
       editorPanel.classList.remove('hidden');
       setStatus(`RPC Mock 管理者候選已啟用；情境=${meta.scenario}，只用記憶體假資料。`);
-      await refresh();
+      try { await refresh(); } catch (error) { showFailure('RPC Mock 載入', error); }
       return;
     }
     try {
@@ -268,5 +295,7 @@
   }
 
   window.addEventListener('pagehide', () => authSubscription?.unsubscribe(), {once:true});
-  init();
+  // 最外層保護（獨立驗收 m-03）：init() 任何未預期的失敗都轉為受控錯誤 UI，
+  // 不得逸出成 unhandled promise rejection / page error。
+  init().catch((error) => showFailure('初始化', error));
 })();
