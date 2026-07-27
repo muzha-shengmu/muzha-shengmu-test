@@ -2,7 +2,27 @@
    ------------------------------------------------------------------
    本檔只宣告 CSS 自訂屬性（custom properties），不含任何選擇器樣式，
    因此可安全掛在既有 14 個頁面而不改變任何現有外觀。
-   色票來源：00_READ_FIRST/VISUAL-AND-MOTION-SPEC.md「品牌公式／色彩 token」。 */
+   色票來源：00_READ_FIRST/VISUAL-AND-MOTION-SPEC.md「品牌公式／色彩 token」。
+
+   Candidate-004｜M-05 字型方案 A：自託管 Noto Serif TC。
+   字型檔在 assets/fonts/，授權為 SIL Open Font License 1.1（assets/fonts/OFL.txt）。
+   子集化涵蓋本站 14 頁實際用到的 591 個字元（447 中文），覆蓋率 100%，
+   因此全站不再發出任何外部字型請求。 */
+
+@font-face{
+  font-family:"Noto Serif TC";
+  src:url("../fonts/NotoSerifTC-subset-400.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Noto Serif TC";
+  src:url("../fonts/NotoSerifTC-subset-700.woff2") format("woff2");
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
 
 :root{
   /* 品牌主色｜深墨綠、暗朱紅、暖金 */
@@ -22,8 +42,9 @@
   --mz-text-muted:#b6ad98;
   --mz-text-dim:#8d8677;
 
-  /* 字體：沿用既有 v7／v8 設定，未新增外部字體請求 */
-  --mz-brush:"Ma Shan Zheng","BiauKai","Kaiti TC","DFKai-SB","KaiTi",serif;
+  /* 字體：自託管 Noto Serif TC 為第一順位，其後保留原有系統楷體作為回退。
+     全站 0 個外部字型請求。 */
+  --mz-brush:"Noto Serif TC","BiauKai","Kaiti TC","DFKai-SB","KaiTi",serif;
   --mz-ui:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;
 
   /* 版面 */
