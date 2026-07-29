@@ -1,193 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>木柵聖母宮 AI 管理平台 v0.2</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      background: #f6f6f6;
-      color: #111;
-      line-height: 1.7;
-    }
-    header {
-      background: #8b1e1e;
-      color: #fff;
-      padding: 2rem 1rem;
-      text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-    header p {
-      margin: 0.5rem 0 0;
-      font-size: 1rem;
-    }
-    main {
-      padding: 1rem;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .section {
-      background: #fff;
-      padding: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.08);
-      margin-bottom: 1.2rem;
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 1.5rem;
-    }
-    .notice {
-      background: #fff7e6;
-      border-left: 5px solid #b7791f;
-      padding: 0.8rem;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-    }
-    .announcement-card {
-      border-bottom: 1px solid #ddd;
-      padding: 1rem 0;
-    }
-    .announcement-card:last-child {
-      border-bottom: none;
-    }
-    .announcement-card h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1.25rem;
-    }
-    .meta {
-      color: #666;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-    }
-    .tag {
-      display: inline-block;
-      background: #8b1e1e;
-      color: #fff;
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      margin-left: 0.4rem;
-    }
-    .admin-link {
-      display: inline-block;
-      margin-top: 0.8rem;
-      background: #0066cc;
-      color: #fff;
-      text-decoration: none;
-      padding: 0.6rem 1rem;
-      border-radius: 6px;
-    }
-    footer {
-      text-align: center;
-      color: #666;
-      font-size: 0.9rem;
-      padding: 2rem 1rem;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=yes">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#07100b">
+<title>木柵聖母宮 Candidate-006B｜臨時真機驗證</title>
+<style>
+:root{--bg:#07100b;--panel:#0d1911;--gold:#d7ae62;--gold2:#f0d291;--text:#f2e5c7;--muted:#b7aa90;--line:rgba(215,174,98,.35);--red:#8e3028;--ui:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;--serif:"Noto Serif TC","Songti TC","PMingLiU",serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg)}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--serif);overflow-x:hidden}button,input,textarea{font:inherit}.notice{position:sticky;top:0;z-index:50;padding:max(10px,env(safe-area-inset-top)) 14px 10px;background:#641f1a;color:#fff1d5;text-align:center;font-family:var(--ui);font-size:13px;font-weight:800;border-bottom:1px solid #c8994b}.nav{display:flex;gap:6px;overflow:auto;padding:8px 10px;background:#07100b;border-bottom:1px solid var(--line);scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:8px 13px;border-radius:999px;color:var(--gold2);text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:800;white-space:nowrap}.nav a:active{background:#6d251f}.hero{position:relative;min-height:min(94svh,820px);overflow:hidden;background:#17110d}.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:76% center;filter:brightness(.58) contrast(1.08) saturate(.92)}.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,8,5,.84),rgba(3,8,5,.22) 61%,rgba(3,8,5,.06)),linear-gradient(180deg,transparent 45%,rgba(3,8,5,.92))}.smoke-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}.puff{position:absolute;left:var(--x);top:var(--y);width:var(--size);height:var(--size);opacity:var(--o);animation:rise var(--dur) linear infinite var(--delay),sway var(--swaydur) ease-in-out infinite alternate}.puff img{width:100%;height:100%;object-fit:contain;filter:blur(.2px);animation:expand var(--dur) linear infinite var(--delay)}@keyframes rise{0%{transform:translate3d(0,10vh,0)}100%{transform:translate3d(0,-82vh,0)}}@keyframes sway{from{margin-left:calc(var(--sway)*-1)}to{margin-left:var(--sway)}}@keyframes expand{0%{scale:.55;opacity:.65}100%{scale:1.75;opacity:0}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.puff,.puff img{animation:none!important;opacity:.14!important}.puff{transform:none!important}}
+.hero-copy{position:absolute;z-index:4;left:22px;right:22px;bottom:54px;text-shadow:0 3px 18px #000}.eyebrow{font-family:var(--ui);font-size:11px;letter-spacing:.26em;color:#edc77e}.hero h1{margin:13px 0 8px;font-size:clamp(40px,11vw,72px);letter-spacing:.08em;color:#f1d28e;line-height:1.08}.hero p{margin:0;max-width:520px;font-size:15px;line-height:1.9;color:#f0e3c7}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:11px 16px;border:1px solid #d2aa62;border-radius:8px;background:#8b3028;color:#fff0d0;text-decoration:none;font-family:var(--ui);font-weight:800}.btn.alt{background:rgba(7,16,11,.66)}main{max-width:920px;margin:auto;padding:28px 16px 80px}.section{scroll-margin-top:112px;margin:0 0 30px;padding:20px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,rgba(17,32,22,.98),rgba(7,15,10,.98));box-shadow:0 12px 35px rgba(0,0,0,.18)}h2{margin:0 0 12px;color:var(--gold2);font-size:25px;letter-spacing:.06em}.section p{color:var(--muted);line-height:1.9}.cards{display:grid;gap:12px}.card{padding:17px;border:1px solid var(--line);border-radius:12px;background:#101c14}.card b{color:var(--gold2);font-size:18px}.card p{margin:8px 0 0;font-size:14px}.device-meta{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:18px}.device-meta input,.notes{width:100%;min-height:48px;padding:11px 12px;border:1px solid rgba(215,174,98,.45);border-radius:10px;background:#fffaf0;color:#332517;font-family:var(--ui);font-size:16px}.notes{min-height:100px;resize:vertical}.checklist{display:grid;gap:12px}.item{padding:15px;border:1px solid rgba(215,174,98,.32);border-radius:12px;background:#0b160f}.item-title{font-family:var(--ui);font-weight:800;line-height:1.6}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.choices button{min-height:46px;border:1px solid #b79861;border-radius:9px;background:#fffaf0;color:#3f2d19;font-family:var(--ui);font-size:14px;font-weight:900}.choices button.selected[data-v="PASS"]{background:#286440;color:white;border-color:#286440}.choices button.selected[data-v="FAIL"]{background:#a6382d;color:white;border-color:#a6382d}.choices button.selected[data-v="未測"]{background:#6b6256;color:white;border-color:#6b6256}.progress{margin:15px 0;padding:13px;border-radius:10px;background:#1d2c21;color:#ead6ad;font-family:var(--ui);line-height:1.7}.report-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}.report-actions button{min-height:50px;border:1px solid #d0aa63;border-radius:10px;background:#8b3028;color:white;font-family:var(--ui);font-weight:900}.report-actions button.alt{background:#16251a}.footer{padding:30px 16px calc(30px + env(safe-area-inset-bottom));text-align:center;color:#9c907a;font-family:var(--ui);font-size:12px;border-top:1px solid var(--line)}@media(min-width:650px){.cards{grid-template-columns:repeat(3,1fr)}.device-meta{grid-template-columns:repeat(3,1fr)}}
+</style>
 </head>
 <body>
-  <header>
-    <h1>木柵聖母宮</h1>
-    <p>AI 管理平台 v0.2｜公告同步測試版</p>
-  </header>
-
-  <main>
-    <section class="section">
-      <h2>最新公告</h2>
-      <div id="status" class="notice">正在載入公告...</div>
-      <div id="announcements"></div>
-    </section>
-
-    <section class="section">
-      <h2>管理入口</h2>
-      <p>此頁為測試版首頁。公告資料由 Supabase 雲端資料庫同步。</p>
-      <a class="admin-link" href="./announcement-admin.html">進入公告管理後台</a>
-    </section>
-  </main>
-
-  <footer>
-    木柵聖母宮｜GitHub Pages 測試站
-  </footer>
-
-  <script>
-    const savedUrl = localStorage.getItem('supabase-url');
-    const savedKey = localStorage.getItem('supabase-key');
-
-    const statusEl = document.getElementById('status');
-    const listEl = document.getElementById('announcements');
-
-    if (!savedUrl || !savedKey) {
-      statusEl.textContent = '尚未設定 Supabase 連線。請先進入公告管理後台初始化連線。';
-    } else {
-      loadPublishedAnnouncements(savedUrl, savedKey);
-    }
-
-    async function loadPublishedAnnouncements(url, key) {
-      try {
-        const client = window.supabase.createClient(url, key);
-
-        const { data, error } = await client
-          .from('announcements')
-          .select('*')
-          .eq('status', 'published')
-          .order('is_pinned', { ascending: false })
-          .order('published_at', { ascending: false });
-
-        if (error) {
-          statusEl.textContent = '公告載入失敗：' + error.message;
-          return;
-        }
-
-        if (!data || data.length === 0) {
-          statusEl.textContent = '目前尚無已發布公告。';
-          return;
-        }
-
-        statusEl.textContent = '公告同步成功。';
-        listEl.innerHTML = '';
-
-        data.forEach(item => {
-          const card = document.createElement('div');
-          card.className = 'announcement-card';
-
-          const title = document.createElement('h3');
-          title.textContent = item.title || '未命名公告';
-
-          if (item.is_pinned) {
-            const tag = document.createElement('span');
-            tag.className = 'tag';
-            tag.textContent = '置頂';
-            title.appendChild(tag);
-          }
-
-          const content = document.createElement('p');
-          content.textContent = item.content || '';
-
-          const meta = document.createElement('div');
-          meta.className = 'meta';
-          meta.textContent = '發布時間：' + formatDate(item.published_at || item.updated_at || item.created_at);
-
-          card.appendChild(title);
-          card.appendChild(content);
-          card.appendChild(meta);
-          listEl.appendChild(card);
-        });
-      } catch (err) {
-        statusEl.textContent = '系統錯誤：' + err.message;
-      }
-    }
-
-    function formatDate(value) {
-      if (!value) return '未記錄';
-      return new Date(value).toLocaleString('zh-TW');
-    }
-  </script>
-</body>
-</html>
+<div class="notice">Candidate-006B 臨時真機測試｜非正式站｜不連 Supabase｜不寫入資料</div>
+<nav class="nav"><a href="#home">首頁</a><a href="#about">本宮</a><a href="#services">服務</a><a href="#check">驗證表</a></nav>
+<section class="hero" id="home">
+<img class="hero-bg" src="hero.webp" alt="木柵聖母宮屋脊與金龍主視覺 Variant B">
+<div class="shade"></div><div class="smoke-layer" id="smoke"></div>
+<div class="hero-copy"><div class="eyebrow">MUZHA SHENGMU TEMPLE</div><h1>木柵聖母宮</h1><p>承聖母慈悲，佑萬家平安。此頁僅供 Candidate-006B 的 iPhone、iPad 與 Android 真機顯示、動畫、觸控與效能驗證。</p><div class="actions"><a class="btn" href="#about">認識本宮</a><a class="btn alt" href="#check">開始驗證</a></div></div>
+</section>
+<main>
+<section class="section" id="about"><h2>認識本宮</h2><p>請確認文字完整、沒有吃字或重疊；快速上下滑動後，畫面不應白屏或閃爍。旋轉手機後再轉回直向，版面應自動恢復。</p><div class="cards"><div class="card"><b>本宮簡介</b><p>測試卡片寬度、中文字型與觸控區域。</p></div><div class="card"><b>媽祖娘娘</b><p>測試不同字數下是否有截斷或溢出。</p></div><div class="card"><b>廟史沿革</b><p>測試頁面長距離滑動的穩定性。</p></div></div></section>
+<section class="section" id="services"><h2>常用服務</h2><div class="cards"><div class="card"><b>南巡進香</b><p>按鈕及卡片均需保持清晰、可讀。</p></div><div class="card"><b>點燈祈福</b><p>此臨時測試頁不送出任何表單資料。</p></div><div class="card"><b>安太歲</b><p>不連 Supabase，所有驗證結果只存本機。</p></div></div></section>
+<section class="section" id="check"><h2>手機真機驗證表</h2><p>逐項點選 PASS、FAIL 或未測。結果只存在你目前的瀏覽器，可一鍵複製回報。</p><div class="device-meta"><input id="tester" placeholder="測試人，例如：林"><input id="device" placeholder="裝置，例如：iPhone 17 Pro"><input id="os" placeholder="系統，例如：iOS 26.5.2"></div><div class="progress" id="progress">尚未開始</div><div class="checklist" id="list"></div><label style="display:block;margin-top:16px;color:#e8cf9e;font-family:var(--ui);font-weight:800">總備註</label><textarea class="notes" id="notes" placeholder="例如：全部通過；只有橫向時標題略擠。"></textarea><div class="report-actions"><button id="copy">複製回報</button><button class="alt" id="download">下載 TXT</button></div></section>
+</main><footer class="footer">Temporary branch: temp-c006b-real-device-20260728｜測試完成後可刪除</footer>
+<script>
+const smoke=document.getElementById('smoke');for(let i=0;i<30;i++){const p=document.createElement('span');p.className='puff';p.style.setProperty('--x',(47+Math.random()*49)+'%');p.style.setProperty('--y',(48+Math.random()*34)+'%');p.style.setProperty('--size',(105+Math.random()*160)+'px');p.style.setProperty('--o',(0.18+Math.random()*.42));p.style.setProperty('--dur',(12+Math.random()*8)+'s');p.style.setProperty('--delay',(-Math.random()*18)+'s');p.style.setProperty('--sway',(12+Math.random()*35)+'px');p.style.setProperty('--swaydur',(5+Math.random()*5)+'s');const img=document.createElement('img');img.src='smoke.png';img.alt='';p.appendChild(img);smoke.appendChild(p)}
+const items=['Variant B 主視覺清楚，沒有破圖或異常色塊','煙霧持續向上飄，沒有倒退、突然縮小或卡住','快速上下滑動順暢，沒有白屏或明顯閃爍','瀏海、動態島與底部安全區沒有遮住文字或按鈕','中文字完整，沒有吃字、缺字、重疊或不自然混用字型','所有導覽與按鈕容易點到，沒有過小觸控區','旋轉橫向再回直向，版面會正常恢復','Safari 放大至 200%，文字仍可閱讀且不重疊','開啟系統「減少動態效果」後，煙霧停止或大幅降低','持續觀看並滑動 30–60 秒，沒有明顯卡頓或過熱','點擊「認識本宮」「開始驗證」可跳到正確位置','頁面沒有錯誤訊息、全白畫面或重新整理循環','整體主視覺與操作可接受，可作為 Variant B 主站候選'];
+const state=JSON.parse(localStorage.getItem('c006b-real-device')||'{}');const list=document.getElementById('list');function save(){state.tester=tester.value;state.device=device.value;state.os=os.value;state.notes=notes.value;localStorage.setItem('c006b-real-device',JSON.stringify(state));update()}function update(){let p=0,f=0,u=0;items.forEach((_,i)=>{if(state[i]==='PASS')p++;else if(state[i]==='FAIL')f++;else if(state[i]==='未測')u++});progress.textContent=`PASS ${p}｜FAIL ${f}｜未測 ${u}｜未填 ${items.length-p-f-u}`}items.forEach((t,i)=>{const box=document.createElement('div');box.className='item';box.innerHTML=`<div class="item-title">${i+1}. ${t}</div><div class="choices"></div>`;const choices=box.querySelector('.choices');['PASS','FAIL','未測'].forEach(v=>{const b=document.createElement('button');b.type='button';b.dataset.v=v;b.textContent=v;if(state[i]===v)b.classList.add('selected');b.onclick=()=>{state[i]=v;choices.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b));save()};choices.appendChild(b)});list.appendChild(box)});['tester','device','os','notes'].forEach(id=>{const e=document.getElementById(id);e.value=state[id]||'';e.addEventListener('input',save)});update();function report(){let out=['木柵聖母宮 Candidate-006B 真機驗證回報',`測試人：${tester.value||'未填'}`,`裝置：${device.value||'未填'}`,`系統：${os.value||'未填'}`,`時間：${new Date().toLocaleString('zh-TW')}`,''];items.forEach((t,i)=>out.push(`${i+1}. [${state[i]||'未填'}] ${t}`));out.push('',`總備註：${notes.value||'無'}`);return out.join('\n')}copy.onclick=async()=>{const t=report();try{await navigator.clipboard.writeText(t);copy.textContent='已複製';setTimeout(()=>copy.textContent='複製回報',1500)}catch{prompt('長按全選複製：',t)}};download.onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([report()],{type:'text/plain;charset=utf-8'}));a.download='MZSM-C006B-REAL-DEVICE-REPORT.txt';a.click();URL.revokeObjectURL(a.href)};
+</script>
+</body></html>
