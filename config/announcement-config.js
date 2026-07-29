@@ -18,7 +18,7 @@
   });
 
   const config = Object.freeze({
-    candidateId: 'MZSM-MOTION-TEMPLE-INTEGRATION-CANDIDATE-007',
+    candidateId: 'MZSM-MOTION-TEMPLE-INTEGRATION-CANDIDATE-008',
     mode: 'disabled', // disabled | rpc
     supabaseUrl: '',
     supabasePublishableKey: '',

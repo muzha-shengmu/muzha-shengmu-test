@@ -190,15 +190,33 @@
   100% { transform:scale(var(--s1,1.6)) }
 }
 
-/* 手機降載：只保留主要煙柱，避免過多合成層 */
-@media (max-width:430px){
-  .mz-plume--lite{ display:none }
-}
+/* Candidate-008：手機不再隱藏任何煙團（獨立驗收 M-12 修正）。
+   已核定的臨時真機頁（temp-c006b-real-device-20260728）在手機上是
+   30 團全部可見、無降載，且已由 sen 於實機 PASS。之前 Candidate-006/007
+   用 .mz-plume--lite 在 <=430px 隱藏 14 團，等於自行把手機基準降到
+   16 團，未經證據支持也未經 sen 決策，已被判定為未核定的偏移。
+   本版動畫只用 transform/opacity（見上方 .mz-rise/.mz-puff/.mz-expand），
+   30 組 × 3 層 = 90 個動畫元件皆可 GPU 合成、無 layout/paint 觸發屬性，
+   與已 PASS 的臨時頁同量級，因此手機版本維持與桌機相同的 30 團全顯示，
+   不再降載。.mz-plume--lite 類名保留於 index.html 標記中以利追蹤，
+   但不再綁定任何隱藏規則。若未來仍需針對特定機型降載，須提出量測
+   證據並交由 sen 決策，不得由模型自行隱藏。 */
 
 /* ------------------------------------------------------------
-   2a. prefers-reduced-motion：停用所有位移動畫
+   2a. prefers-reduced-motion：停用所有位移動畫（Candidate-008 對照臨時頁）
    依 VISUAL-AND-MOTION-SPEC「停用位移動畫，保留靜態薄霧或完全無煙」，
    此處採「完全無煙 + 極淡靜態薄霧」，不留下任何會動的元素。
+
+   對照已核定臨時頁（temp-c006b-real-device-20260728）：該頁 reduced-motion
+   下是把 30 個 .puff 的 animation 設為 none，但元件本身仍留在畫面上，
+   opacity 停在固定的 .14（看得到靜止的煙團，只是不再動）。
+   本站選擇不同作法：直接隱藏整個 .mz-hero__smoke SVG 圖層，改用兩層
+   radial-gradient 的靜態薄霧取代，理由是 SVG 三層結構（rise/puff/expand）
+   停格後每一團的位置、opacity 是動畫執行到停用當下的隨機瞬間值，
+   30 團同時停格容易出現不對稱、東一塊西一塊的視覺瑕疵；用固定薄霧
+   background 可以保證跨瀏覽器、跨載入時間都一致好看。
+   這是刻意的設計決策，不是遺漏；如果 sen 認為「保留靜止煙團形狀」比
+   「一致的靜態薄霧」更重要，屬於後續可調整的品牌決策，非本輪必改項。
    ------------------------------------------------------------ */
 @media (prefers-reduced-motion:reduce){
   .mz-hero__smoke{ display:none }
