@@ -97,16 +97,24 @@
         rgba(0,0,0,.3) 74%,
         transparent 82%);
   }
-  /* 左側文字欄（eyebrow／書法五字／說明／CTA）完全不得有煙 */
+  /* 左側文字欄（eyebrow／書法五字／說明／CTA）完全不得有煙。
+     2026-08-03 修正：原本用 linear-gradient(90deg) 做「整條左欄」遮罩，
+     等於把左側 43% 由上到下全部抹掉。但桌機的文字區是 .mz-hero__inner，
+     它靠下對齊，只佔左「下」角——左上方那一大片天空其實沒有文字，
+     卻也一起被抹掉，導致該區只剩底圖烘焙的靜態霧氣、完全不會動，
+     與右側會動的煙形成明顯不一致（sen 2026-08-03 回饋）。
+     改成以左下角為圓心的 radial-gradient：只在文字實際所在的角落保持
+     透明（無煙），越往右上越不遮，左上方因此能有會動的煙。
+     文字安全區未放寬——已用像素量測確認文字區塊內的煙霧貢獻仍為 0。 */
   .mz-hero__smokeclip{
-    -webkit-mask-image:linear-gradient(90deg,
-        transparent 0%, transparent 43%,
-        rgba(0,0,0,.38) 48%,
-        #000 53%);
-            mask-image:linear-gradient(90deg,
-        transparent 0%, transparent 43%,
-        rgba(0,0,0,.38) 48%,
-        #000 53%);
+    -webkit-mask-image:radial-gradient(118% 80% at -8% 110%,
+        transparent 0%, transparent 44%,
+        rgba(0,0,0,.42) 58%,
+        #000 74%);
+            mask-image:radial-gradient(118% 80% at -8% 110%,
+        transparent 0%, transparent 44%,
+        rgba(0,0,0,.42) 58%,
+        #000 74%);
   }
 }
 .mz-hero__smokeclip{ position:absolute; inset:0; overflow:hidden }
