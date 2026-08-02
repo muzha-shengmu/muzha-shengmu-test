@@ -181,10 +181,16 @@
   will-change:transform;
 }
 
+/* --mz-smoke-gain：全站煙量總濃度的單一調節點（sen 2026-08-03 要求「畫面煙量都不夠」）。
+   每一團的 --o 只負責「彼此之間的相對濃淡」，整體要多濃由這一個變數決定，
+   因此日後要調濃或調淡，只需要改這一個數字，不必重新產生 60 團的 manifest，
+   也不會破壞各團之間已經調好的相對關係。 */
+.mz-hero__smoke{ --mz-smoke-gain:2.7 }
+
 @keyframes mz-rise{
   0%   { transform:translateY(0);                 opacity:0 }
-  10%  {                                          opacity:var(--o,.4) }
-  62%  {                                          opacity:calc(var(--o,.4) * .55) }
+  10%  {                                          opacity:calc(var(--o,.4) * var(--mz-smoke-gain,1)) }
+  62%  {                                          opacity:calc(var(--o,.4) * var(--mz-smoke-gain,1) * .55) }
   100% { transform:translateY(calc(var(--rise,600px) * -1)); opacity:0 }
 }
 /* 只有 X 位移，不含 scale */
