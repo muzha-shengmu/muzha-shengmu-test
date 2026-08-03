@@ -26,8 +26,15 @@
   container-type:size;
 }
 @supports (height:100svh){ .mz-hero{ height:78svh } }
-@media (min-width:768px){ .mz-hero{ height:82vh; min-height:640px; max-height:900px } }
-@media (min-width:1024px){ .mz-hero{ height:86vh; min-height:660px; max-height:960px } }
+@media (min-width:768px){ .mz-hero{ height:82vh; min-height:min(640px,88svh); max-height:900px } }
+@media (min-width:1024px){ .mz-hero{ height:86vh; min-height:min(660px,88svh); max-height:960px } }
+/* 2026-08-03：min-height 改為 min(固定值, 88svh)。
+   原本寫死 640px／660px，在**橫向手機**（視窗高僅約 393px）會把 hero 撐到
+   163% 視窗高，導致第一屏只看得到主視覺，廟名、說明與 CTA 全部落在視窗外，
+   必須捲動才看得到。改成同時受 88svh 約束後：
+     直向 390×844、iPad 768×1024、桌機 1440×900 → 完全不受影響（視窗夠高）
+     橫向 852×393 → hero 由 640px 收成約 346px，標題與 CTA 回到第一屏
+   只修正「hero 高過視窗」這個壞掉的情況，不動其他尺寸的既有構圖。 */
 
 /* ------------------------------------------------------------
    1a. 影像座標框
