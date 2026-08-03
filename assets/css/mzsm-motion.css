@@ -21,6 +21,9 @@
   max-height:820px;
   background:var(--mz-ink-green-deep);
   isolation:isolate;
+  /* 讓 .mz-hero__frame 能以 hero 盒自己的尺寸（cqw/cqh）計算，
+     而不是拿視窗尺寸去猜——見下方 1a 的說明。 */
+  container-type:size;
 }
 @supports (height:100svh){ .mz-hero{ height:78svh } }
 @media (min-width:768px){ .mz-hero{ height:82vh; min-height:640px; max-height:900px } }
@@ -33,18 +36,44 @@
    預設（容器比例比圖窄）：以高度撐滿，寬度由 aspect-ratio 推導 → 左右裁切。
    焦點設在 viewBox x≈1080（龍頭與屋脊之間），手機才不會只看到空背景。
    ------------------------------------------------------------ */
+/* 2026-08-03 修正（sen 第 2 項：橫向出現上下深色空帶）。
+   舊寫法用 @media (min-aspect-ratio:1528/1000) 決定「以高度撐滿」還是「以寬度撐滿」，
+   但 media query 量的是**視窗**比例，真正決定會不會露邊的卻是 **hero 盒**的比例。
+   橫向手機因為 .mz-hero 有 min-height:640px，hero 遠比視窗高：
+   852x393 的視窗 → hero 是 852x640（比例 1.33），媒體查詢卻因視窗比例 2.17 而成立，
+   於是切成寬度撐滿，高度只剩 852/1.777=480，上下各露出 80px 深色空帶。
+   實測：852x393 缺 161px、932x430 缺 115px，其餘尺寸正常。
+
+   改為直接用 hero 盒自己的尺寸計算，不再猜：
+   - 寬高各取「填滿所需」的較大值 → 恆為 cover，任何比例都不會露邊。
+   - 水平位移仍偏向焦點 viewBox x≈1080（龍頭與屋脊之間），但用 clamp() 夾在
+     [不露右邊, 不露左邊] 的合法區間內；先前固定 -64.6% 在溢出量不足時
+     會把圖推過頭（852x640 就會右緣少 23px），clamp 之後不可能發生。 */
 .mz-hero__frame{
+  --mz-fw: max(100cqw, 100cqh * 1672 / 941);   /* 填滿所需寬度 */
+  --mz-fh: max(100cqh, 100cqw * 941 / 1672);   /* 填滿所需高度 */
   position:absolute;
   top:50%;
-  left:50%;
-  height:100%;
-  width:auto;
-  aspect-ratio:1672 / 941;
-  transform:translate(-64.6%,-50%);
+  left:0;
+  width:var(--mz-fw);
+  height:var(--mz-fh);
+  transform:translate(
+      clamp(calc(100cqw - var(--mz-fw)), calc(50cqw - 0.646 * var(--mz-fw)), 0px),
+      -50%);
 }
-/* 容器比圖還寬時改成以寬度撐滿 → 上下裁切，水平不裁切 */
-@media (min-aspect-ratio:1528/1000){
-  .mz-hero__frame{ width:100%; height:auto; transform:translate(-50%,-50%) }
+
+/* 舊瀏覽器（不支援 container query / cq 單位）維持原本行為，不做行為倒退 */
+@supports not (container-type:size){
+  .mz-hero__frame{
+    left:50%;
+    width:auto;
+    height:100%;
+    aspect-ratio:1672 / 941;
+    transform:translate(-64.6%,-50%);
+  }
+  @media (min-aspect-ratio:1528/1000){
+    .mz-hero__frame{ width:100%; height:auto; transform:translate(-50%,-50%) }
+  }
 }
 
 .mz-hero__media,
