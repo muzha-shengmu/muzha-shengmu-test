@@ -23,8 +23,14 @@
 
   const config = Object.freeze({
     candidateId: 'MZSM-MOTION-TEMPLE-INTEGRATION-CANDIDATE-008',
+    // 啟用步驟見 supabase/DEPLOY.md。改成 'rpc' 之前請先確認下面兩項都填好，
+    // 否則 resolveMode() 會判定設定不完整並自動退回 disabled（不會誤連）。
     mode: 'disabled', // disabled | rpc
-    supabaseUrl: '',
+    // 專案 mzsm-temple（木柵聖母宮 / Free / 東京機房 / 建立於 2026-07-21）。
+    // Project URL 不是機密：它會出現在每一個前端請求裡，可以安全放進版控。
+    supabaseUrl: 'https://nujoqsmeozzjzegmfyhp.supabase.co',
+    // Project Settings → API → Publishable key，以 sb_publishable_ 開頭。
+    // 絕對不要填 service_role 或任何 secret key：本檔會被所有訪客下載。
     supabasePublishableKey: '',
     authRedirectUrl: '', // 正式啟用前須與目前網站同源，且精確加入 Supabase Redirect URLs。
     supabaseJsVersion: '2.110.8',

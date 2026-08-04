@@ -15,21 +15,41 @@
 | 資料庫結構、權限、11+4 支 RPC | 完成，已在 PostgreSQL 16 驗過 |
 | 線上報名／點燈／安太歲 表單與查詢 | 完成，瀏覽器端對端測過 |
 | 公告系統（前台＋後台編輯器） | 完成 |
-| `config/announcement-config.js` | **停用中**，URL 與 Key 都是空字串 |
+| `config/announcement-config.js` | **停用中**；Project URL 已填，Key 仍為空 |
 
 出貨的設定檔是「停用」狀態，所以現在直接部署，網站會正常顯示但線上服務不會運作。
-下面第 4 步填入兩個值之後才會真正啟用。
+第 4 步填入 Publishable key、並把 `mode` 改成 `'rpc'` 之後才會真正啟用。
 
 ---
 
-## 第 1 步：建立 Supabase 專案
+## 第 1 步：專案已經有了——先做事前檢查
 
-1. 到 https://supabase.com 註冊／登入
-2. New project
-   - Name：`mzsm`（隨意）
-   - Database Password：**用密碼管理器產生一組並存好**，遺失只能重設
-   - Region：選 `Northeast Asia (Tokyo)` 或 `Southeast Asia (Singapore)`，離台灣近
-3. 等待專案建立完成（約 2 分鐘）
+專案在 2026-07-21 就建立好了，**不要再建一個**：
+
+| | |
+|---|---|
+| 專案 | `mzsm-temple` |
+| 組織 | 木柵聖母宮（Free） |
+| 機房 | Northeast Asia（東京） |
+| Project URL | `https://nujoqsmeozzjzegmfyhp.supabase.co` |
+| 登入 | `mj29379898@gmail.com`（Google 登入） |
+
+這個 URL 已經替你填進 `config/announcement-config.js` 了。
+
+因為專案不是全新的，裡面可能已經有先前留下的東西。**先做檢查再動手**：
+
+1. 左側 **SQL Editor** → New query
+2. 貼上 `supabase/00_PREFLIGHT_CHECK.sql` 全部內容 → Run
+3. 看最後一行判定：
+
+| 判定 | 意思 | 下一步 |
+|---|---|---|
+| ✅ 全新專案 | 沒有任何 mzsm_ 物件 | 直接做第 2 步 |
+| ⚠️ 已經裝好了 | 資料表與函式都在 | 重跑是安全的（實測資料不變），做第 2 步即可 |
+| ❌ 結構不符 | 有同名但欄位不同的舊表 | **先停下來**，把第 4 節結果整份回報再決定 |
+
+這份檢查只做 SELECT，不會建立、修改或刪除任何東西——已實測執行前後資料
+md5 完全一致。
 
 ---
 
@@ -41,6 +61,15 @@
 2. 貼上 `supabase/migrations/20260804000002_mzsm_admin_console.sql` 全部內容 → Run
 
 兩次都要看到 `Success`。
+
+**關於重複執行**：這兩份可以安全重跑。實測在一個已有 14 筆點燈、10 筆進香、
+5 筆安太歲、3 則公告的資料庫上重跑兩份 migration，各表筆數與內容 md5
+完全不變（`0a9dd4f5…`），只有函式被更新成最新版。所以不確定上次有沒有跑完時，
+直接重跑即可，不會重複建表也不會弄丟資料。
+
+**萬一失敗**：整份會回滾（實測失敗後函式數為 0），不會留下半殘狀態。
+最常見的失敗訊息是 `ERROR: column "xxx" does not exist`，代表專案裡有同名
+但欄位不同的舊表——這正是第 1 步要先檢查的原因。
 
 > **不要**執行 `supabase/tests/` 底下的檔案。`auth_shim.sql` 是本機測試用的替身，
 > 套到正式環境會覆蓋掉 Supabase 自己的 `auth.uid()`，導致權限判斷全部失效。
@@ -75,12 +104,12 @@ delete from public.mzsm_admins where email = '要移除的信箱';
 
 ---
 
-## 第 4 步：取得連線資訊並填入設定檔
+## 第 4 步：取得 Publishable key 並填入設定檔
 
-Supabase 後台 **Project Settings → API**：
+Project URL 已經填好了，只差一把鑰匙。
 
-- **Project URL**：形如 `https://xxxxxxxxxxxx.supabase.co`
-- **Publishable key**：以 `sb_publishable_` 開頭的那一組
+Supabase 後台 **Project Settings → API** → 複製 **Publishable key**
+（以 `sb_publishable_` 開頭）
 
 > 只用 Publishable key。**絕對不要**把 `service_role` 或任何 secret key 填進前端，
 > 那把鑰匙可以繞過所有權限檢查。設定檔會被所有訪客下載。
@@ -88,11 +117,14 @@ Supabase 後台 **Project Settings → API**：
 編輯 `config/announcement-config.js`，改這四行：
 
 ```js
-mode: 'rpc',                                             // 原本是 'disabled'
-supabaseUrl: 'https://xxxxxxxxxxxx.supabase.co',         // 第 4 步的 Project URL
-supabasePublishableKey: 'sb_publishable_...',            // 第 4 步的 Publishable key
-authRedirectUrl: 'https://你的網域/admin.html',           // 見下方說明
+mode: 'rpc',                                              // 原本是 'disabled'，改這個才會啟用
+supabaseUrl: 'https://nujoqsmeozzjzegmfyhp.supabase.co',  // 已填好，不用動
+supabasePublishableKey: 'sb_publishable_...',             // ← 貼上你複製的那一組
+authRedirectUrl: 'https://你的網域/admin.html',            // ← 部署拿到網域後再填
 ```
+
+三個值沒有同時齊備時，程式會自動判定設定不完整並退回 `disabled`，
+不會半通不通地亂連——所以可以放心分兩次填。
 
 `authRedirectUrl` 規則（程式會擋，填錯登入寄不出去）：
 
