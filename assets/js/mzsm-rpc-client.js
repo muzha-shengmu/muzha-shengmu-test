@@ -15,19 +15,26 @@
     adminListLights: 'mzsm_admin_list_lights',
     adminUpdateLight: 'mzsm_admin_update_light',
     publicCreateTaisui: 'mzsm_public_create_taisui',
-    publicLookupTaisui: 'mzsm_public_lookup_taisui'
+    publicLookupTaisui: 'mzsm_public_lookup_taisui',
+    adminListPilgrimage: 'mzsm_admin_list_pilgrimage',
+    adminUpdatePilgrimage: 'mzsm_admin_update_pilgrimage',
+    adminListTaisui: 'mzsm_admin_list_taisui',
+    adminUpdateTaisui: 'mzsm_admin_update_taisui'
   });
   const ADMIN_CALLS = new Set([
     'adminListAnnouncements',
     'adminSaveAnnouncement',
     'adminListLights',
-    'adminUpdateLight'
+    'adminUpdateLight',
+    'adminListPilgrimage',
+    'adminUpdatePilgrimage',
+    'adminListTaisui',
+    'adminUpdateTaisui'
   ]);
-  const LIVE_RPC_CALLS = new Set([
-    'publicListAnnouncements',
-    'adminListAnnouncements',
-    'adminSaveAnnouncement'
-  ]);
+  // 全部 11 支都已在 supabase/migrations 建立對應的 Postgres 函式，
+  // 並以 supabase/tests/rpc_test.sql 驗過契約（權限、驗證、冪等、樂觀鎖、
+  // 個資遮蔽、查詢節流）。先前只開放公告 3 支是因為後端尚未實作。
+  const LIVE_RPC_CALLS = new Set(Object.keys(RPC_DEFAULTS));
   const SENSITIVE_LOG_FIELDS = new Set([
     'title', 'content', 'name', 'phone', 'last4', 'target', 'birth', 'note'
   ]);
@@ -493,6 +500,52 @@
           idempotent.set(`${logicalName}:${key}`, result);
           return clone(result);
         }
+        case 'adminListPilgrimage': {
+          assertOnly(payload, ['limit', 'cursor']);
+          const rows = repository.getCombined().registrations.map((row) => ({
+            id:row.id, name:row.name, phone_last4:String(row.phone || '').slice(-4),
+            adult:Number(row.adult || 0), child:Number(row.child || 0), note:row.note || '',
+            status:row.status, created_at:row.created, version:Number(row.version || 1)
+          }));
+          return {rows:clone(rows), next_cursor:null};
+        }
+        case 'adminUpdatePilgrimage': {
+          assertOnly(payload, ['id', 'expected_version', 'status']);
+          const id = text(payload, 'id', {required:true, max:80});
+          const expectedVersion = integer(payload, 'expected_version', {min:1, max:999999});
+          const state = repository.getCombined();
+          const row = state.registrations.find((item) => String(item.id) === id);
+          if (!row) fail('NOT_FOUND', '找不到報名資料。', {status:404});
+          if (Number(row.version || 1) !== expectedVersion) fail('CONFLICT', '資料已被其他操作更新，請重新載入。', {status:409});
+          if (payload.status != null) row.status = statusValue(payload, 'status', ['待確認', '已確認', '已取消']);
+          row.version = expectedVersion + 1;
+          repository.saveCombined(state);
+          return {row:{id:row.id, status:row.status, version:row.version}};
+        }
+        case 'adminListTaisui': {
+          assertOnly(payload, ['limit', 'cursor']);
+          const rows = repository.getTaisui().rows.map((row) => ({
+            id:row.id, name:row.name, phone_last4:String(row.phone || '').slice(-4),
+            target:row.target, birth:row.birth || '', note:row.note || '',
+            status:row.status, lunar_status:row.lunar_status || 'pending_review',
+            created_at:row.created || '', version:Number(row.version || 1)
+          }));
+          return {rows:clone(rows), next_cursor:null};
+        }
+        case 'adminUpdateTaisui': {
+          assertOnly(payload, ['id', 'expected_version', 'status', 'lunar_status']);
+          const id = text(payload, 'id', {required:true, max:80});
+          const expectedVersion = integer(payload, 'expected_version', {min:1, max:999999});
+          const state = repository.getTaisui();
+          const row = state.rows.find((item) => String(item.id) === id);
+          if (!row) fail('NOT_FOUND', '找不到安太歲資料。', {status:404});
+          if (Number(row.version || 1) !== expectedVersion) fail('CONFLICT', '資料已被其他操作更新，請重新載入。', {status:409});
+          if (payload.status != null) row.status = statusValue(payload, 'status', ['待確認', '已確認', '已取消']);
+          if (payload.lunar_status != null) row.lunar_status = statusValue(payload, 'lunar_status', ['pending_review', 'confirmed']);
+          row.version = expectedVersion + 1;
+          repository.saveTaisui(state);
+          return {row:{id:row.id, status:row.status, lunar_status:row.lunar_status, version:row.version}};
+        }
         case 'publicLookupTaisui': {
           assertOnly(payload, ['code', 'last4']);
           const code = text(payload, 'code', {required:true, max:80});
@@ -508,11 +561,18 @@
     return {execute};
   }
 
+  // 邏輯名稱 → Postgres 函式具名參數。名稱與型別必須與
+  // supabase/migrations/20260804000001_mzsm_core.sql 完全一致，
+  // 否則 PostgREST 會找不到對應的函式簽章。
   function liveArgs(logicalName, payload) {
     switch (logicalName) {
       case 'publicListAnnouncements':
       case 'adminListAnnouncements':
+      case 'adminListLights':
+      case 'adminListPilgrimage':
+      case 'adminListTaisui':
         return {p_limit:payload.limit ?? 20, p_cursor:payload.cursor || null};
+
       case 'adminSaveAnnouncement':
         return {
           p_title:payload.title,
@@ -522,14 +582,74 @@
           p_id:payload.id || null,
           p_expected_version:payload.expected_version ?? null
         };
+
+      case 'publicCreatePilgrimage':
+        return {
+          p_name:payload.name,
+          p_phone:payload.phone,
+          p_adult:payload.adult,
+          p_child:payload.child,
+          p_note:payload.note || '',
+          p_idempotency_key:payload.idempotency_key
+        };
+
+      case 'publicCreateLight':
+        return {
+          p_name:payload.name,
+          p_phone:payload.phone,
+          p_type:payload.type,
+          p_target:payload.target,
+          p_birth:payload.birth || '',
+          p_note:payload.note || '',
+          p_idempotency_key:payload.idempotency_key
+        };
+
+      case 'publicCreateTaisui':
+        return {
+          p_name:payload.name,
+          p_phone:payload.phone,
+          p_target:payload.target,
+          p_birth:payload.birth || '',
+          p_note:payload.note || '',
+          p_idempotency_key:payload.idempotency_key
+        };
+
+      case 'publicLookupPilgrimage':
+      case 'publicLookupLight':
+      case 'publicLookupTaisui':
+        return {p_code:payload.code, p_last4:payload.last4};
+
+      case 'adminUpdateLight':
+        return {
+          p_id:payload.id,
+          p_expected_version:payload.expected_version,
+          p_status:payload.status ?? null,
+          p_pay:payload.pay ?? null
+        };
+
+      case 'adminUpdatePilgrimage':
+        return {
+          p_id:payload.id,
+          p_expected_version:payload.expected_version,
+          p_status:payload.status ?? null
+        };
+
+      case 'adminUpdateTaisui':
+        return {
+          p_id:payload.id,
+          p_expected_version:payload.expected_version,
+          p_status:payload.status ?? null,
+          p_lunar_status:payload.lunar_status ?? null
+        };
+
       default:
-        fail('FEATURE_DISABLED', '本候選只開放公告 3 支 RPC；其餘功能維持停用。');
+        fail('RPC_NOT_MAPPED', `沒有對應的 RPC：${logicalName}`);
     }
   }
 
   function supabaseAdapter() {
     async function execute(logicalName, payload) {
-      if (!LIVE_RPC_CALLS.has(logicalName)) fail('FEATURE_DISABLED', '本候選只開放公告 3 支 RPC；其餘功能維持停用。');
+      if (!LIVE_RPC_CALLS.has(logicalName)) fail('FEATURE_DISABLED', `此功能尚未開放：${logicalName}`);
       const rpcName = rpcMap[logicalName];
       if (!rpcName) fail('RPC_NOT_MAPPED', `沒有對應的 RPC：${logicalName}`);
       const controller = new AbortController();
@@ -612,6 +732,10 @@
     adminUpdateLight(payload) { return this.call('adminUpdateLight', payload); }
     publicCreateTaisui(payload) { return this.call('publicCreateTaisui', payload); }
     publicLookupTaisui(payload) { return this.call('publicLookupTaisui', payload); }
+    adminListPilgrimage(payload) { return this.call('adminListPilgrimage', payload); }
+    adminUpdatePilgrimage(payload) { return this.call('adminUpdatePilgrimage', payload); }
+    adminListTaisui(payload) { return this.call('adminListTaisui', payload); }
+    adminUpdateTaisui(payload) { return this.call('adminUpdateTaisui', payload); }
   }
 
   root.MZSM_RPC_CLIENT = Object.freeze({

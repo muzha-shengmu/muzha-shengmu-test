@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#12100e" name="theme-color"/><title>宮務後台｜木柵聖母宮</title>
+<meta name="description" content="木柵聖母宮宮務後台：點燈、南巡進香與安太歲登記管理。"/>
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<meta name="application-name" content="木柵聖母宮"/>
+<meta name="apple-mobile-web-app-title" content="木柵聖母宮"/>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png"/>
+<link rel="manifest" href="manifest.webmanifest"/><link href="site-shell.css" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/mzsm-tokens.css"/>
+<style>.hidden{display:none}.muted{color:#806d56;font-size:13px;line-height:1.7;margin:0}#adminStatus{margin:0;color:#4b3a29;font-size:13px;line-height:1.7}.record .row .btn{font-size:14px;min-height:44px;padding:10px}.admin-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}.admin-bar .btn{width:auto;padding:10px 16px;min-height:44px;font-size:14px}</style></head><body><div class="site">
+<header class="top"><a class="brand" href="index.html"><img alt="木柵聖母宮紅金圓形標誌" src="assets/logo.png" width="700" height="700"/><span>木柵聖母宮</span></a><a class="back" href="index.html">← 回首頁</a></header>
+<main class="main">
+
+<div class="note"><b>宮務後台</b><br/>本頁不在公開導覽內。資料需登入且通過資料庫管理者名單驗證後才會載入；未授權帳號即使登入也讀不到任何資料。</div>
+
+<section class="section">
+<h2 class="heading">登入狀態</h2>
+<div class="card"><p id="adminStatus">初始化中…</p>
+<div class="admin-bar"><button class="btn hidden" id="signOut" type="button">登出</button>
+<button class="btn" id="refreshAll" type="button">重新載入</button></div></div>
+</section>
+
+<section class="section hidden" id="loginPanel">
+<h2 class="heading">管理者登入</h2>
+<form class="form" id="loginForm" novalidate onsubmit="return false">
+<div class="field"><label for="adminEmailInput">管理者信箱</label>
+<input id="adminEmailInput" type="email" autocomplete="email" placeholder="admin@example.com"/>
+<p class="help">系統只會寄送登入連結給「已預先建立」的管理帳號；本頁不開放自行註冊。</p></div>
+<button class="btn" id="sendMagicLink" type="button">寄送登入連結</button>
+<button class="btn hidden" id="loginSignOut" type="button">登出目前帳號</button>
+</form>
+</section>
+
+<section class="section hidden" id="consolePanel">
+<h2 class="heading">登記管理</h2>
+<div class="tabs" id="consoleTabs">
+<button type="button" data-tab="tabLight" class="active">點燈</button>
+<button type="button" data-tab="tabPilgrimage">南巡進香</button>
+<button type="button" data-tab="tabTaisui">安太歲</button>
+</div>
+<div class="panel active" id="tabLight"><div class="table-list" id="lightRows"></div></div>
+<div class="panel" id="tabPilgrimage"><div class="table-list" id="pilgrimageRows"></div></div>
+<div class="panel" id="tabTaisui"><div class="table-list" id="taisuiRows"></div></div>
+<p class="help" style="margin-top:14px">狀態更新採版本鎖：若同一筆資料被其他人先改過，這裡會提示並自動重新載入最新狀態，不會覆蓋掉別人的修改。畫面只顯示手機末四碼，完整號碼不會傳到瀏覽器。</p>
+</section>
+
+<section class="section">
+<h2 class="heading">其他管理</h2>
+<div class="grid three">
+<article class="card"><h3>公告管理</h3><p>新增、編輯、發佈與置頂公告請至公告後台。</p><a class="btn" href="announcement-admin.html">前往公告後台</a></article>
+<article class="card"><h3>個資原則</h3><p>後台不顯示完整手機號碼；查詢與列表都只回傳末四碼。</p></article>
+<article class="card"><h3>權限來源</h3><p>管理權限來自資料庫的管理者名單，不是前端畫面，也無法用網址參數繞過。</p></article>
+</div>
+</section>
+
+<footer class="footer"><b>木柵聖母宮</b><p>宮務後台｜僅供宮方人員使用。</p></footer>
+</main></div>
+<script src="assets/vendor/supabase-js-2.110.8.min.js"></script>
+<script src="config/announcement-config.js"></script>
+<script src="assets/js/mzsm-rpc-client.js"></script>
+<script src="assets/js/mzsm-admin-console.js"></script>
+</body></html>

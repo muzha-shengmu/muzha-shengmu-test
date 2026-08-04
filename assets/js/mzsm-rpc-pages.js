@@ -28,8 +28,8 @@
     note.append(document.createElement('br'));
     if (meta.mode === 'demo') note.append(document.createTextNode('本機 localStorage Demo；只准使用假資料，不連線 Supabase。'));
     else if (meta.mode === 'rpcmock') note.append(document.createTextNode(`RPC Mock 記憶體候選；角色=${meta.role}、情境=${meta.scenario}，重新整理即重置，不連線 Supabase。`));
-    else if (meta.mode === 'rpc') note.append(document.createTextNode('RPC 候選模式；正式啟用仍須後端契約、權限與人工驗證。'));
-    else note.append(document.createTextNode(meta.reason === 'MODE_CONFLICT' ? 'demo 與 rpcmock 不可同時啟用；目前已停止。' : '預設停用。請由內部測試入口選擇 Demo 或 RPC Mock。'));
+    else if (meta.mode === 'rpc') note.append(document.createTextNode('線上服務已開放。送出後會取得編號，可用編號與手機末四碼查詢狀態。'));
+    else note.append(document.createTextNode(meta.reason === 'MODE_CONFLICT' ? 'demo 與 rpcmock 不可同時啟用；目前已停止。' : '線上服務目前停用中，請洽宮方或稍後再試。'));
   }
 
   function disablePage() {
@@ -39,15 +39,15 @@
   function messageFor(error) {
     const code = error?.code || 'UNKNOWN_ERROR';
     const known = {
-      VALIDATION_ERROR: '欄位內容不符合候選契約。',
-      FIELD_NOT_ALLOWED: '送出的欄位超出候選契約。',
-      FORBIDDEN: '目前角色沒有執行此操作的權限。',
-      UNAUTHENTICATED: '尚未完成登入。',
-      NOT_FOUND: '找不到指定資料。',
-      CONFLICT: '資料版本衝突，請重新載入後再試。',
-      TIMEOUT: 'RPC Mock 逾時，未重複送出。',
-      NETWORK_ERROR: 'RPC Mock 網路錯誤，未重複送出。',
-      DISABLED: 'RPC 候選目前停用。',
+      VALIDATION_ERROR: '填寫的內容有誤，請檢查後再送出。',
+      FIELD_NOT_ALLOWED: '送出的欄位不正確。',
+      FORBIDDEN: '目前帳號沒有執行此操作的權限。',
+      UNAUTHENTICATED: '請先登入管理者帳號。',
+      NOT_FOUND: '查無此筆資料。',
+      CONFLICT: '資料已被其他人更新，請重新載入後再試。',
+      TIMEOUT: '連線逾時，資料未送出，請再試一次。',
+      NETWORK_ERROR: '網路連線失敗，資料未送出，請再試一次。',
+      DISABLED: '線上服務目前停用中。',
       MODE_CONFLICT: '測試模式互相衝突，已停止。'
     };
     return `${known[code] || error?.message || '操作失敗。'}（${code}）`;
@@ -122,7 +122,7 @@
   }
 
   function initPilgrimage() {
-    setModeNote('南巡進香內部候選頁。');
+    setModeNote('南巡進香線上報名');
     setupTabs(document.querySelector('#action > .tabs'), [...document.querySelectorAll('#action > .panel')]);
     applyLimits([['pName',80],['pPhone',10],['pNote',500],['pCode',80],['pLast',4]]);
     const form = $('pilgrimageForm');
@@ -137,7 +137,7 @@
         const total = adult * 3000 + child * 1500;
         fare.textContent = `Demo 試算：成人 ${adult} 位 × 3,000 元；孩童 ${child} 位 × 1,500 元；合計 ${total.toLocaleString('zh-TW')} 元。非正式價目。`;
       } else {
-        fare.textContent = 'RPC 候選不在前端計算或提交正式金額；費用須由後端核定。';
+        fare.textContent = '費用與繳費方式以本宮正式公告為準，本頁不收款、不試算金額。';
       }
     }
     $('pAdult').addEventListener('input', showFare);
@@ -158,7 +158,7 @@
           });
           const rows = [['報名碼',result.code],['狀態',result.status]];
           if (meta.mode === 'demo' && result.demo_total != null) rows.push(['Demo 試算合計',`${Number(result.demo_total).toLocaleString('zh-TW')} 元（非正式）`]);
-          renderResult($('pCreated'), {title:'候選報名建立完成', rows});
+          renderResult($('pCreated'), {title:'報名完成，請記下報名碼', rows});
           delete form.dataset.idempotencyKey;
         } catch (error) {
           renderError($('pCreated'), error);
@@ -171,7 +171,7 @@
       locked(lookup, async () => {
         try {
           const {record} = await client.publicLookupPilgrimage({code:$('pCode').value.trim(), last4:$('pLast').value.trim()});
-          if (!record) return renderResult($('pOut'), {title:'查無符合的測試資料。', error:true});
+          if (!record) return renderResult($('pOut'), {title:'查無此筆資料，請確認編號與手機末四碼。', error:true});
           renderResult($('pOut'), {title:record.code, rows:[['人數',`成人 ${record.adult}、孩童 ${record.child}`]], badges:[record.status]});
         } catch (error) {
           renderError($('pOut'), error);
@@ -182,7 +182,7 @@
   }
 
   function initLight() {
-    setModeNote('點燈祈福內部候選頁。');
+    setModeNote('點燈祈福線上登記');
     const birthLabel = document.querySelector('label[for="lBirth"]');
     if (birthLabel) birthLabel.textContent = '國曆生日（可留白）';
     setupTabs(document.querySelector('#action > .tabs'), [...document.querySelectorAll('#action > .panel')]);
@@ -205,7 +205,7 @@
             note:$('lNote').value.trim(),
             idempotency_key:idempotencyKey(form)
           });
-          renderResult($('lCreated'), {title:'候選點燈登記完成', rows:[['點燈碼',result.code],['燈別',result.type]], badges:[result.status]});
+          renderResult($('lCreated'), {title:'點燈登記完成，請記下點燈碼', rows:[['點燈碼',result.code],['燈別',result.type]], badges:[result.status]});
           delete form.dataset.idempotencyKey;
         } catch (error) {
           renderError($('lCreated'), error);
@@ -213,18 +213,21 @@
       });
     });
 
-    lookup.addEventListener('submit', (event) => {
-      event.preventDefault();
-      locked(lookup, async () => {
-        try {
-          const {record} = await client.publicLookupLight({code:$('lCode').value.trim(), last4:$('lLast').value.trim()});
-          if (!record) return renderResult($('lOut'), {title:'查無符合的測試資料。', error:true});
-          renderResult($('lOut'), {title:record.code, rows:[['燈別',record.type],['祈福對象',record.target]], badges:[record.status]});
-        } catch (error) {
-          renderError($('lOut'), error);
-        }
+    // 登記專用頁（light-register）沒有查詢區塊，這裡允許它不存在。
+    if (lookup) {
+      lookup.addEventListener('submit', (event) => {
+        event.preventDefault();
+        locked(lookup, async () => {
+          try {
+            const {record} = await client.publicLookupLight({code:$('lCode').value.trim(), last4:$('lLast').value.trim()});
+            if (!record) return renderResult($('lOut'), {title:'查無此點燈資料，請確認點燈碼與手機末四碼。', error:true});
+            renderResult($('lOut'), {title:record.code, rows:[['燈別',record.type],['祈福對象',record.target]], badges:[record.status]});
+          } catch (error) {
+            renderError($('lOut'), error);
+          }
+        });
       });
-    });
+    }
     if (meta.mode === 'disabled') disablePage();
   }
 
@@ -263,13 +266,13 @@
   }
 
   function initLightAdmin() {
-    setModeNote('點燈宮務後台 RPC 候選頁。');
+    setModeNote('點燈宮務後台');
     const rowsBox = $('adminRows');
     async function refresh() {
       clear(rowsBox);
       try {
         const result = await client.adminListLights({limit:50, cursor:null});
-        if (!result.rows?.length) return rowsBox.append(element('div', '目前沒有測試資料。', 'record'));
+        if (!result.rows?.length) return rowsBox.append(element('div', '目前沒有登記資料。', 'record'));
         result.rows.forEach((row) => rowsBox.append(lightAdminRecord(row, refresh)));
       } catch (error) {
         renderError(rowsBox, error);
@@ -277,21 +280,21 @@
     }
     if (meta.mode === 'disabled') {
       disablePage();
-      renderResult(rowsBox, {title:'候選功能預設停用。', error:true});
+      renderResult(rowsBox, {title:'線上服務目前停用中。', error:true});
       return;
     }
     refresh();
   }
 
   function initLightQuery() {
-    setModeNote('點燈最小欄位查詢候選頁。');
-    document.title = '點燈最小欄位查詢｜木柵聖母宮｜內部測試';
+    setModeNote('點燈登記查詢');
+    document.title = '點燈查詢｜木柵聖母宮';
     const heroTitle = document.querySelector('.hero h1');
     const heroCopy = document.querySelector('.hero p');
     const heading = document.querySelector('#action .heading');
-    if (heroTitle) heroTitle.textContent = '點燈最小欄位查詢';
-    if (heroCopy) heroCopy.textContent = '只顯示候選契約允許的最小資料。';
-    if (heading) heading.textContent = '候選查詢';
+    if (heroTitle) heroTitle.textContent = '點燈查詢';
+    if (heroCopy) heroCopy.textContent = '查詢結果只顯示編號、燈別、祈福對象與狀態。';
+    if (heading) heading.textContent = '點燈登記查詢';
     applyLimits([['cqCode',80],['cqLast',4]]);
     const form = $('completeQuery');
     form.addEventListener('submit', (event) => {
@@ -299,7 +302,7 @@
       locked(form, async () => {
         try {
           const {record} = await client.publicLookupLight({code:$('cqCode').value.trim(), last4:$('cqLast').value.trim()});
-          if (!record) return renderResult($('cqOut'), {title:'查無符合的測試資料。', error:true});
+          if (!record) return renderResult($('cqOut'), {title:'查無此筆資料，請確認編號與手機末四碼。', error:true});
           renderResult($('cqOut'), {title:record.code, rows:[['燈別',record.type],['祈福對象',record.target]], badges:[record.status]});
         } catch (error) {
           renderError($('cqOut'), error);
@@ -310,7 +313,7 @@
   }
 
   function initTaisui() {
-    setModeNote('安太歲內部 RPC 候選頁。');
+    setModeNote('安太歲線上登記');
     const heroCopy = document.querySelector('.hero p');
     const birthCard = $('birthModes')?.closest('.card');
     if (heroCopy) heroCopy.textContent = '前台測試登記與查詢；農曆、生肖及正式規範待後端或人工確認。';
@@ -318,7 +321,7 @@
       const title = birthCard.querySelector('h3');
       const copy = birthCard.querySelector('p');
       if (title) title.textContent = '生日輸入（不在前端換算）';
-      if (copy) copy.textContent = '可輸入西元或民國年；候選版只提交原始國曆生日。';
+      if (copy) copy.textContent = '可輸入西元或民國年；本頁只提交原始國曆生日，不做農曆換算。';
     }
     setupTabs(document.querySelector('#action > .tabs'), [...document.querySelectorAll('#action > .panel')]);
     applyLimits([['tName',80],['tPhone',10],['tTarget',80],['tNote',500],['tCode',80],['tLast',4]]);
@@ -338,7 +341,7 @@
       return `${String(y).padStart(4,'0')}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     }
     function showBirth(value) {
-      preview.textContent = value ? `國曆生日：${value}。農曆與生肖不由前端換算，須待後端或人工確認。` : '填寫國曆生日；本候選不在前端計算農曆與生肖。';
+      preview.textContent = value ? `國曆生日：${value}。農曆與生肖由宮方人工核對。` : '請填寫國曆生日；農曆與生肖由宮方人工核對。';
     }
     function syncFromParts() {
       const value = ymd();
@@ -378,7 +381,7 @@
             note:$('tNote').value.trim(),
             idempotency_key:idempotencyKey(form)
           });
-          renderResult($('tCreated'), {title:'候選安太歲登記完成', rows:[['安太歲碼',result.code],['農曆／生肖','待後端或人工確認']], badges:[result.status]});
+          renderResult($('tCreated'), {title:'安太歲登記完成，請記下安太歲碼', rows:[['安太歲碼',result.code],['農曆／生肖','由宮方人工核對']], badges:[result.status]});
           delete form.dataset.idempotencyKey;
         } catch (error) {
           preview.classList.toggle('error', error?.code === 'VALIDATION_ERROR');
@@ -392,8 +395,8 @@
       locked(lookup, async () => {
         try {
           const {record} = await client.publicLookupTaisui({code:$('tCode').value.trim(), last4:$('tLast').value.trim()});
-          if (!record) return renderResult($('tOut'), {title:'查無符合的測試資料。', error:true});
-          renderResult($('tOut'), {title:record.code, rows:[['祈福對象',record.target],['國曆生日',record.birth],['農曆／生肖','待後端或人工確認']], badges:[record.status]});
+          if (!record) return renderResult($('tOut'), {title:'查無此筆資料，請確認編號與手機末四碼。', error:true});
+          renderResult($('tOut'), {title:record.code, rows:[['祈福對象',record.target],['國曆生日',record.birth],['農曆／生肖','由宮方人工核對']], badges:[record.status]});
         } catch (error) {
           renderError($('tOut'), error);
         }

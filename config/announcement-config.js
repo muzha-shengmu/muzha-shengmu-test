@@ -14,7 +14,11 @@
     adminListLights: 'mzsm_admin_list_lights',
     adminUpdateLight: 'mzsm_admin_update_light',
     publicCreateTaisui: 'mzsm_public_create_taisui',
-    publicLookupTaisui: 'mzsm_public_lookup_taisui'
+    publicLookupTaisui: 'mzsm_public_lookup_taisui',
+    adminListPilgrimage: 'mzsm_admin_list_pilgrimage',
+    adminUpdatePilgrimage: 'mzsm_admin_update_pilgrimage',
+    adminListTaisui: 'mzsm_admin_list_taisui',
+    adminUpdateTaisui: 'mzsm_admin_update_taisui'
   });
 
   const config = Object.freeze({

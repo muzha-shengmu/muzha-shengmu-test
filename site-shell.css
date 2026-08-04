@@ -181,3 +181,6 @@ img{max-width:100%;display:block}
 
 /* MZSM-V8-SITE-BUILD-001: stable site structure and mobile navigation. */
 body{overflow-x:hidden}.site-nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:8px 10px;background:#17130f;border-bottom:1px solid rgba(207,163,91,.35);-webkit-overflow-scrolling:touch}.site-nav::-webkit-scrollbar{display:none}.site-nav a{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:8px 14px;border-radius:999px;color:#e9ca8c;text-decoration:none;font-family:var(--ui);font-size:13px;font-weight:800;white-space:nowrap}.site-nav a:focus-visible,.site-nav a:hover{outline:none;background:#5e211b;color:#fff0cf}.about,.post,.service{min-width:0;overflow-wrap:anywhere}@media(max-width:430px){.top{padding-top:max(7px,env(safe-area-inset-top))}.footer{padding-bottom:max(48px,calc(24px + env(safe-area-inset-bottom)))}}
+
+/* 卡片內的連結按鈕：確保觸控目標達 44px（全站無障礙基準） */
+.card a.btn{display:block;width:100%;text-align:center;text-decoration:none;margin-top:12px;line-height:1.4}
