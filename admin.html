@@ -26,9 +26,13 @@
 <h2 class="heading">管理者登入</h2>
 <form class="form" id="loginForm" novalidate onsubmit="return false">
 <div class="field"><label for="adminEmailInput">管理者信箱</label>
-<input id="adminEmailInput" type="email" autocomplete="email" placeholder="admin@example.com"/>
-<p class="help">系統只會寄送登入連結給「已預先建立」的管理帳號；本頁不開放自行註冊。</p></div>
-<button class="btn" id="sendMagicLink" type="button">寄送登入連結</button>
+<input id="adminEmailInput" type="email" autocomplete="username" placeholder="admin@example.com"/></div>
+<div class="field"><label for="adminPasswordInput">密碼</label>
+<input id="adminPasswordInput" type="password" autocomplete="current-password" placeholder="建立帳號時設定的密碼"/>
+<p class="help">本頁不開放自行註冊。帳號需由宮方在資料庫端預先建立並授權。</p></div>
+<button class="btn" id="signInPassword" type="button">登入</button>
+<p class="help" style="text-align:center;margin:2px 0">忘記密碼，或想用信箱連結登入：</p>
+<button class="btn" id="sendMagicLink" type="button" style="background:#fffefa;color:#5d4222;border-color:#d8cbb8">寄送登入連結到信箱</button>
 <button class="btn hidden" id="loginSignOut" type="button">登出目前帳號</button>
 </form>
 </section>

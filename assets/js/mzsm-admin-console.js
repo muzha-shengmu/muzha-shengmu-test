@@ -19,6 +19,8 @@
   const consolePanel = $('consolePanel');
   const emailInput = $('adminEmailInput');
   const sendMagicLink = $('sendMagicLink');
+  const passwordInput = $('adminPasswordInput');
+  const signInPassword = $('signInPassword');
   const loginSignOut = $('loginSignOut');
   const signOut = $('signOut');
 
@@ -195,9 +197,11 @@
     loginPanel.classList.remove('hidden');
     consolePanel.classList.add('hidden');
     sendMagicLink.classList.remove('hidden');
+    signInPassword?.classList.remove('hidden');
     loginSignOut.classList.add('hidden');
     signOut.classList.add('hidden');
     emailInput.disabled = false;
+    if (passwordInput) { passwordInput.disabled = false; passwordInput.value = ''; }
     setStatus(text);
   }
 
@@ -205,6 +209,8 @@
     loginPanel.classList.remove('hidden');
     consolePanel.classList.add('hidden');
     sendMagicLink.classList.add('hidden');
+    signInPassword?.classList.add('hidden');
+    if (passwordInput) { passwordInput.value = ''; passwordInput.disabled = true; }
     loginSignOut.classList.remove('hidden');
     // 沒有權限也還是「已登入」狀態，上方的登出鍵必須可用，
     // 否則使用者會卡在無權限畫面換不了帳號。
@@ -244,6 +250,37 @@
     }
     return redirect.href;
   }
+
+  // 密碼登入。Magic Link 依賴信件送達，而 Supabase 內建寄信有頻率限制、
+  // 也常被歸類為垃圾信；宮方若收不到信就會完全登不進來，所以保留密碼這條路。
+  async function signInWithPassword() {
+    const email = String(emailInput.value || '').trim();
+    const password = String(passwordInput?.value || '');
+    if (!email || !password) {
+      setStatus('請輸入管理者信箱與密碼。');
+      return;
+    }
+    signInPassword.disabled = true;
+    try {
+      const { error } = await api.getSupabaseClient().auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      if (passwordInput) passwordInput.value = '';
+      // 成功後由 onAuthStateChange 接手顯示，這裡不重複畫面
+    } catch (error) {
+      const raw = String(error?.message || '');
+      setStatus(/invalid login credentials/i.test(raw)
+        ? '信箱或密碼不正確。'
+        : `登入失敗：${raw || '未知錯誤'}`);
+    } finally {
+      signInPassword.disabled = false;
+    }
+  }
+
+  signInPassword?.addEventListener('click', signInWithPassword);
+  // 在密碼欄按 Enter 直接送出，手機鍵盤上就是「前往」
+  passwordInput?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') { event.preventDefault(); signInWithPassword(); }
+  });
 
   sendMagicLink?.addEventListener('click', async () => {
     sendMagicLink.disabled = true;

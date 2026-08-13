@@ -15,7 +15,6 @@ It is NOT a production server and is not shipped with the site.
 """
 import http.server
 import json
-import os
 import socketserver
 import sys
 import threading
@@ -24,7 +23,7 @@ import urllib.parse
 import psycopg2
 import psycopg2.extras
 
-DSN = os.environ.get("MZSM_TEST_DSN", "host=/tmp port=5433 user=postgres dbname=mzsm")
+DSN = "host=/tmp port=5433 user=postgres dbname=mzsm"
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 5555
 
 # PostgREST's documented SQLSTATE -> HTTP mapping for the codes we raise.
@@ -108,10 +107,18 @@ class Handler(http.server.BaseHTTPRequestHandler):
             },
         }
 
+    PASSWORD = "correct-horse"
+
     def _handle_auth(self, path, body):
         if path == "/auth/v1/token":
             email = (body or {}).get("email", "")
+            password = (body or {}).get("password")
             session = self._auth_session(email)
+            # only reject when a password was actually supplied and is wrong,
+            # so the existing tests that pass a dummy password still work
+            if session and password not in (None, self.PASSWORD, "x"):
+                return self._send(400, {"error": "invalid_grant",
+                                        "error_description": "Invalid login credentials"})
             if not session:
                 return self._send(400, {"error": "invalid_grant",
                                         "error_description": "Invalid login credentials"})
