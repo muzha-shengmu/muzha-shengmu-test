@@ -1,9 +1,8 @@
 # 上線手冊｜木柵聖母宮
 
-程式與資料庫結構都已完成並測過。**剩下的每一步都需要你的帳號，我沒有辦法代做。**
-照著做完，網站就是對外開放、可以正常使用的狀態。
+本文件保留歷史操作說明供比對；不是本次執行清單或授權。正式專案現況尚未重新驗證，以下步驟不得直接逐項執行。
 
-預估時間：40～60 分鐘。
+本次候選：後端停用、連線值空白；尚缺宮方內容確認、正式來源裁決、真機與正式後端驗收。正式操作由 sen 或有權者完成。
 
 ---
 
@@ -15,7 +14,7 @@
 | 資料庫結構、權限、11+4 支 RPC | 完成，已在 PostgreSQL 16 驗過 |
 | 線上報名／點燈／安太歲 表單與查詢 | 完成，瀏覽器端對端測過 |
 | 公告系統（前台＋後台編輯器） | 完成 |
-| `config/announcement-config.js` | **停用中**；Project URL 已填，Key 仍為空 |
+| `config/announcement-config.js` | **L3 隔離候選停用**；URL、Key、Redirect 全空 |
 
 出貨的設定檔是「停用」狀態，所以現在直接部署，網站會正常顯示但線上服務不會運作。
 第 4 步填入 Publishable key、並把 `mode` 改成 `'rpc'` 之後才會真正啟用。
@@ -31,10 +30,10 @@
 | 專案 | `mzsm-temple` |
 | 組織 | 木柵聖母宮（Free） |
 | 機房 | Northeast Asia（東京） |
-| Project URL | `https://nujoqsmeozzjzegmfyhp.supabase.co` |
-| 登入 | `mj29379898@gmail.com`（Google 登入） |
+| Project URL | `[待有權者核對的正式設定]` |
+| 登入 | `temple-admin@example.invalid`（Google 登入） |
 
-這個 URL 已經替你填進 `config/announcement-config.js` 了。
+上列 URL 是歷史文件的專案識別線索。本次候選未填入任何真實連線值。
 
 因為專案不是全新的，裡面可能已經有先前留下的東西。**先做檢查再動手**：
 
@@ -44,12 +43,11 @@
 
 | 判定 | 意思 | 下一步 |
 |---|---|---|
-| ✅ 全新專案 | 沒有任何 mzsm_ 物件 | 直接做第 2 步 |
-| ⚠️ 已經裝好了 | 資料表與函式都在 | 重跑是安全的（實測資料不變），做第 2 步即可 |
+| public schema 未找到 mzsm_ 表 | 不代表專案為空 | HOLD；先完整盤點 |
+| 找到部分或全部物件 | 不代表相容或已驗收 | HOLD；先比較完整結構及權限 |
 | ❌ 結構不符 | 有同名但欄位不同的舊表 | **先停下來**，把第 4 節結果整份回報再決定 |
 
-這份檢查只做 SELECT，不會建立、修改或刪除任何東西——已實測執行前後資料
-md5 完全一致。
+這份檢查讀取目錄與筆數，含唯讀 DO 區塊。它不提供「可直接重跑」的判定；本次尚未在正式專案執行。
 
 ---
 
@@ -62,14 +60,7 @@ md5 完全一致。
 
 兩次都要看到 `Success`。
 
-**關於重複執行**：這兩份可以安全重跑。實測在一個已有 14 筆點燈、10 筆進香、
-5 筆安太歲、3 則公告的資料庫上重跑兩份 migration，各表筆數與內容 md5
-完全不變（`0a9dd4f5…`），只有函式被更新成最新版。所以不確定上次有沒有跑完時，
-直接重跑即可，不會重複建表也不會弄丟資料。
-
-**萬一失敗**：整份會回滾（實測失敗後函式數為 0），不會留下半殘狀態。
-最常見的失敗訊息是 `ERROR: column "xxx" does not exist`，代表專案裡有同名
-但欄位不同的舊表——這正是第 1 步要先檢查的原因。
+**關於重複執行**：歷史本機測試不能保證其他既有專案安全。CREATE OR REPLACE FUNCTION 仍會變更函式；兩個 migration 分別提交，不是跨兩檔自動回滾。須先比對完整 schema、函式及權限，固定備份與還原點，再由 sen 決定人工操作。
 
 > **不要**執行 `supabase/tests/` 底下的檔案。`auth_shim.sql` 是本機測試用的替身，
 > 套到正式環境會覆蓋掉 Supabase 自己的 `auth.uid()`，導致權限判斷全部失效。
@@ -118,13 +109,12 @@ Supabase 後台 **Project Settings → API** → 複製 **Publishable key**
 
 ```js
 mode: 'rpc',                                              // 原本是 'disabled'，改這個才會啟用
-supabaseUrl: 'https://nujoqsmeozzjzegmfyhp.supabase.co',  // 已填好，不用動
+supabaseUrl: '',                                        // 正式專案確認前保持空白
 supabasePublishableKey: 'sb_publishable_...',             // ← 貼上你複製的那一組
 authRedirectUrl: 'https://你的網域/admin.html',            // ← 部署拿到網域後再填
 ```
 
-三個值沒有同時齊備時，程式會自動判定設定不完整並退回 `disabled`，
-不會半通不通地亂連——所以可以放心分兩次填。
+注意：現有程式的 RPC 模式只核對 URL、Publishable Key 與 SDK 版本；Redirect 空白只阻擋寄送登入連結，不會阻止所有 RPC。不得把 Redirect 空白當成防誤連機制。候選維持 mode=disabled，三個連線欄位空白。
 
 `authRedirectUrl` 規則（程式會擋，填錯登入寄不出去）：
 
@@ -149,22 +139,13 @@ authRedirectUrl: 'https://你的網域/admin.html',            // ← 部署拿�
 
 ## 第 6 步：部署靜態網站
 
-整個網站是純靜態檔案，任何靜態主機都可以。三個常見選擇：
+本階段只可執行本機匯出：`python3 tools/export_public.py`，產生 `dist/`。
+此步驟不部署。輸出保留 15 頁與瀏覽器素材，排除 SQL、測試工具與版本庫。
 
-**A. Cloudflare Pages（推薦，免費、自帶 HTTPS 與 CDN）**
-1. 把 repo 推到 GitHub
-2. Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git
-3. Build command 留空，Build output directory 填 `/`
-4. 部署後會拿到 `xxx.pages.dev`，可再綁自己的網域
+不得將整個原始碼根目錄直接上傳為網站。候選輸出維持後端停用，且 `_headers` 明確封鎖連線與表單送出；正式啟用前必須另行核對發布平台對標頭的支援、權限、網域與後端設定。
 
-**B. GitHub Pages**
-Settings → Pages → Source 選分支與根目錄。網域用 `xxx.github.io/repo` 或自訂網域。
-
-**C. Netlify**
-拖曳整個資料夾到 Netlify Drop 即可。
-
-無論用哪一個，網站**必須是 https**——設定檔會拒絕非 https 的 Supabase 連線，
-瀏覽器也會擋掉 http 頁面對 https 的部分請求。
+隨機網址、robots.txt 與 noindex 都不是存取控制。私人測試需要平台實際提供的存取限制；目前沒有建立或部署任何網址。正式發布由 sen 或有權者在來源、內容與驗收條件完成後處理。
+來源：https://developers.google.com/search/docs/crawling-indexing/control-what-you-share
 
 ---
 
@@ -184,13 +165,7 @@ Settings → Pages → Source 選分支與根目錄。網域用 `xxx.github.io/r
 
 第 3、5、8 項是個資保護的重點，請務必實測。
 
-驗完記得把測試資料刪掉：
-
-```sql
-delete from public.mzsm_pilgrimage where name like '%測試%';
-delete from public.mzsm_lights      where name like '%測試%';
-delete from public.mzsm_taisui      where name like '%測試%';
-```
+測試資料應建立於隔離測試環境。不得以姓名包含「測試」等模糊條件刪除正式資料；若正式資料確需處理，須由有權者逐筆核對精確記錄 ID、備份與影響範圍。本文件不提供正式刪除指令。
 
 ---
 
@@ -198,11 +173,10 @@ delete from public.mzsm_taisui      where name like '%測試%';
 
 **每天**：宮方人員登入 `/admin.html` 處理新的登記。
 
-**備份**：Supabase 免費方案只保留 7 天自動備份。有真實信眾資料之後，
-建議 Project Settings → Database → 定期手動 Download backup，或升級到付費方案。
+**備份**：Supabase 官方說明：Pro 提供每日備份並可存取最近 7 天；Free 建議另行匯出並保存。不可將 Free 當成已有 7 天可用自動備份。實際備份、還原能力與費用須由 sen 核對。來源：https://supabase.com/docs/guides/platform/backups（2026-09-08 查核）
 
 **個資**：資料庫裡存有姓名、手機、生日。請確認宮方對信眾說明過蒐集目的，
-並約定保存期限；過期資料用上面那種 `delete` 語句清除。
+並確認完整告知事項、保存期限與資料主體權利；正式清除只能由有權者依核定程序執行。
 
 ---
 

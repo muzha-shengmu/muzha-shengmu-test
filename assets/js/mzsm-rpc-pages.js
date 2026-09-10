@@ -33,7 +33,7 @@
   }
 
   function disablePage() {
-    document.querySelectorAll('form input,form textarea,form select,form button').forEach((node) => { node.disabled = true; });
+    document.querySelectorAll('form input,form textarea,form select,form button,#tYear,#tMonth,#tDay,#tPicker').forEach((node) => { node.disabled = true; });
   }
 
   function messageFor(error) {
@@ -45,8 +45,8 @@
       UNAUTHENTICATED: '請先登入管理者帳號。',
       NOT_FOUND: '查無此筆資料。',
       CONFLICT: '資料已被其他人更新，請重新載入後再試。',
-      TIMEOUT: '連線逾時，資料未送出，請再試一次。',
-      NETWORK_ERROR: '網路連線失敗，資料未送出，請再試一次。',
+      TIMEOUT: '尚未收到伺服器回覆，送出結果未確認。請保留原填寫內容後重試，或洽宮方確認。',
+      NETWORK_ERROR: '連線中斷，送出結果未確認。請保留原填寫內容後重試，或洽宮方確認。',
       DISABLED: '線上服務目前停用中。',
       MODE_CONFLICT: '測試模式互相衝突，已停止。'
     };
@@ -221,7 +221,7 @@
           try {
             const {record} = await client.publicLookupLight({code:$('lCode').value.trim(), last4:$('lLast').value.trim()});
             if (!record) return renderResult($('lOut'), {title:'查無此點燈資料，請確認點燈碼與手機末四碼。', error:true});
-            renderResult($('lOut'), {title:record.code, rows:[['燈別',record.type],['祈福對象',record.target]], badges:[record.status]});
+            renderResult($('lOut'), {title:record.code, rows:[['燈別',record.type]], badges:[record.status]});
           } catch (error) {
             renderError($('lOut'), error);
           }
@@ -303,7 +303,7 @@
         try {
           const {record} = await client.publicLookupLight({code:$('cqCode').value.trim(), last4:$('cqLast').value.trim()});
           if (!record) return renderResult($('cqOut'), {title:'查無此筆資料，請確認編號與手機末四碼。', error:true});
-          renderResult($('cqOut'), {title:record.code, rows:[['燈別',record.type],['祈福對象',record.target]], badges:[record.status]});
+          renderResult($('cqOut'), {title:record.code, rows:[['燈別',record.type]], badges:[record.status]});
         } catch (error) {
           renderError($('cqOut'), error);
         }
@@ -396,7 +396,7 @@
         try {
           const {record} = await client.publicLookupTaisui({code:$('tCode').value.trim(), last4:$('tLast').value.trim()});
           if (!record) return renderResult($('tOut'), {title:'查無此筆資料，請確認編號與手機末四碼。', error:true});
-          renderResult($('tOut'), {title:record.code, rows:[['祈福對象',record.target],['國曆生日',record.birth],['農曆／生肖','由宮方人工核對']], badges:[record.status]});
+          renderResult($('tOut'), {title:record.code, rows:[['農曆／生肖','由宮方人工核對']], badges:[record.status]});
         } catch (error) {
           renderError($('tOut'), error);
         }
@@ -413,4 +413,8 @@
     taisui:initTaisui
   };
   initializers[page]?.();
+  // 公開表單在 HTML 預設停用；初始化成功且服務可用後才開啟。
+  if (meta.mode !== 'disabled' && ['pilgrimage','light','light-query','taisui'].includes(page)) {
+    document.querySelectorAll('form input,form textarea,form select,form button,#tYear,#tMonth,#tDay,#tPicker').forEach((node) => { node.disabled = false; });
+  }
 })();

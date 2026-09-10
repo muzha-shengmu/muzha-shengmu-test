@@ -6,6 +6,7 @@ never drift apart. Element ids are dictated by assets/js/mzsm-rpc-pages.js —
 if you rename one here you must rename it there too.
 """
 import pathlib
+import re
 
 # 專案根目錄 = 這個檔案的上一層的上一層（tools/ 的父目錄）
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -77,6 +78,14 @@ def text_input(fid, **attrs):
     return f'<input id="{fid}"{extra}/>'
 
 
+def disabled_by_default(html):
+    def disable_tag(match):
+        tag = match.group(0)
+        return tag if re.search(r'\sdisabled(?:[\s=>/])', tag) else re.sub(r'^(<\w+)', r'\1 disabled', tag)
+    html = re.sub(r'<form\b.*?</form>', lambda form: re.sub(r'<(?:input|textarea|select|button)\b[^>]*>', disable_tag, form.group(0)), html, flags=re.S)
+    return re.sub(r'<input\b(?=[^>]*\bid="(?:tYear|tMonth|tDay|tPicker)")[^>]*>', disable_tag, html)
+
+
 def page(path, *, title, description, latin, h1, lede, note, body, page_id, footer_label):
     html = (
         head(title, description)
@@ -92,6 +101,7 @@ def page(path, *, title, description, latin, h1, lede, note, body, page_id, foot
         + SCRIPTS.format(page=page_id)
         + "</body></html>\n"
     )
+    html = disabled_by_default(html)
     (ROOT / path).write_text(html, encoding="utf-8")
     return len(html)
 
@@ -111,11 +121,12 @@ PRIVACY = (
 
 
 def lookup_panel(panel_id, code_id, last_id, out_id, form_id, code_label, hint):
+    prefix = {"pCode": "MSM", "lCode": "LMP", "tCode": "PEA"}[code_id]
     return (
         f'<div class="panel" id="{panel_id}">'
         f'<form class="form" id="{form_id}" novalidate>'
         + field(code_id, code_label, text_input(code_id, inputmode="text", autocomplete="off",
-                                                placeholder="例如：LMP-2026-0001"))
+                                                placeholder=f"例如：{prefix}-2026-0001"))
         + field(last_id, "手機末四碼",
                 text_input(last_id, inputmode="numeric", autocomplete="off",
                            pattern=r"\d{4}", placeholder="0000"),
@@ -125,7 +136,7 @@ def lookup_panel(panel_id, code_id, last_id, out_id, form_id, code_label, hint):
     )
 
 
-THROTTLE_HINT = "為防止他人猜測，同一組編號連續查錯 8 次後會暫停一小時。"
+THROTTLE_HINT = "同一組編號於本小時內累計查錯 8 次後暫停查詢，可於下一個整點後再試。"
 
 # ── 1. 南巡進香 ──────────────────────────────────────────────────────────
 pilgrimage_body = (
@@ -268,31 +279,31 @@ PAGES = [
          description="木柵聖母宮南巡進香線上報名與報名查詢。活動日期、辦法與費用以宮方公告為準。",
          latin="ANNUAL PILGRIMAGE", h1="南巡進香",
          lede="年度進香活動線上報名與查詢。",
-         note="線上報名已開放；活動日期、路線、費用與名額仍以本宮正式公告為準，本頁不收款。",
+         note="線上服務尚未開放，請勿填寫真實個人資料；活動日期、路線、費用與名額仍以本宮正式公告為準，本頁不收款。",
          body=pilgrimage_body, footer_label="南巡進香"),
     dict(path="light.html", page_id="light", title="點燈祈福",
          description="木柵聖母宮點燈祈福線上登記與查詢。燈別、金額與安燈時程以宮方公告為準。",
          latin="BLESSING LAMPS", h1="點燈祈福",
          lede="平安燈、光明燈等點燈線上登記與查詢。",
-         note="線上登記已開放；燈別、金額與安燈時程以本宮正式公告為準，本頁不收款。",
+         note="線上服務尚未開放，請勿填寫真實個人資料；燈別、金額與安燈時程以本宮正式公告為準，本頁不收款。",
          body=light_body, footer_label="點燈祈福"),
     dict(path="light-register.html", page_id="light", title="點燈線上登記",
          description="木柵聖母宮點燈線上登記表單。",
          latin="LAMP REGISTRATION", h1="點燈線上登記",
          lede="填寫後取得點燈碼，可隨時查詢狀態。",
-         note="線上登記已開放；本頁不收款，金額與繳費方式以本宮正式公告為準。",
+         note="線上服務尚未開放，請勿填寫真實個人資料；本頁不收款，金額與繳費方式以本宮正式公告為準。",
          body=light_register_body, footer_label="點燈線上登記"),
     dict(path="light-query.html", page_id="light-query", title="點燈查詢",
          description="以點燈碼與手機末四碼查詢點燈登記狀態。",
          latin="LAMP LOOKUP", h1="點燈查詢",
          lede="以點燈碼與手機末四碼查詢登記狀態。",
-         note="查詢結果只顯示點燈碼、燈別、祈福對象與狀態，不會顯示姓名或完整手機號碼。",
+         note="線上查詢尚未開放；開放後只顯示點燈碼、燈別與狀態。",
          body=light_query_body, footer_label="點燈查詢"),
     dict(path="taisui.html", page_id="taisui", title="安太歲",
          description="木柵聖母宮安太歲線上登記與查詢。農曆與生肖由宮方人工核對。",
          latin="TAI SUI BLESSING", h1="安太歲",
          lede="安太歲線上登記與查詢；農曆與生肖由宮方核對。",
-         note="線上登記已開放；農曆日期與生肖由宮方人工核對，本頁不做自動換算，也不收款。",
+         note="線上服務尚未開放，請勿填寫真實個人資料；農曆日期與生肖由宮方人工核對，本頁不做自動換算，也不收款。",
          body=taisui_body, footer_label="安太歲"),
 ]
 

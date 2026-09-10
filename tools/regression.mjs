@@ -1,9 +1,10 @@
 // 全站回歸：每一頁 × 每一種尺寸，檢查載入、錯誤、破圖、溢出、觸控目標。
 // 用法：node tools/regression.mjs [base-url]
 //   預設 http://127.0.0.1:8145，需先在網站根目錄啟動靜態伺服器。
-import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+import { chromium } from 'playwright';
 
 const BASE = process.argv[2] || 'http://127.0.0.1:8145';
+if (!['localhost','127.0.0.1','[::1]'].includes(new URL(BASE).hostname)) throw new Error('只允許本機測試網址');
 
 // 設定檔啟用後，前端本來就會呼叫自己的 Supabase 專案，那是預期行為。
 // 「外部請求」要抓的是「連到設定以外的第三方」——字型 CDN、分析服務之類，
@@ -22,6 +23,7 @@ const PAGES = [
 ];
 const SIZES = [[360, 800], [390, 844], [768, 1024], [1440, 900], [1920, 1080]];
 
+if (allowedHost) throw new Error('禁止使用含有後端連線設定的原始碼執行版面回歸；請用停用候選');
 const browser = await chromium.launch();
 const totals = {
   loads: 0, badStatus: 0, pageErrors: 0, consoleErrors: 0,
@@ -32,6 +34,7 @@ const problems = [];
 
 for (const [w, h] of SIZES) {
   const ctx = await browser.newContext({ viewport: { width: w, height: h } });
+  await ctx.route('**/*', route => { const u = new URL(route.request().url()); return u.origin === new URL(BASE).origin ? route.continue() : route.abort(); });
   for (const file of PAGES) {
     const p = await ctx.newPage();
     p.on('pageerror', e => {

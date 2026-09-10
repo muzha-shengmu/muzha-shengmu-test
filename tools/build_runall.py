@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Combine the two migrations into one self-guarding script.
+"""Combine the four migrations into one self-guarding script.
 
 Three separate pastes is a lot to ask of someone doing this on a phone. This
 produces one paste that checks for a conflicting schema first and aborts the
@@ -12,15 +12,14 @@ outer transaction, so any failure anywhere rolls the entire thing back.
 import pathlib
 import re
 
-ROOT = pathlib.Path(
-    "/tmp/claude-0/-home-user-muzha-shengmu-test/"
-    "5e1f8530-b2ab-5a42-a070-7298bf5f3272/scratchpad/c008work"
-)
+ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "supabase/RUN_ALL.sql"
 
 MIGRATIONS = [
     "supabase/migrations/20260804000001_mzsm_core.sql",
     "supabase/migrations/20260804000002_mzsm_admin_console.sql",
+    "supabase/migrations/20260910000001_mzsm_deny_direct.sql",
+    "supabase/migrations/20260910000002_mzsm_public_lookup_privacy.sql",
 ]
 
 
@@ -34,14 +33,14 @@ def strip_tx(sql: str) -> str:
 GUARD = """-- ============================================================
 -- 木柵聖母宮｜一次套用（含自動安全檢查）
 -- ============================================================
--- 這一份把「事前檢查 + 兩份 migration」合併成一次執行。
+-- 這一份把「事前檢查 + 四份 migration」合併成一次執行。
 --
 --   * 全部包在同一個交易裡：任何一步失敗，整份回滾，資料庫維持原狀。
 --   * 開頭會先檢查「有沒有同名但結構不同的舊資料表」。有的話立刻中止，
 --     並印出是哪張表少了哪個欄位，不會動到你任何既有資料。
---   * 已經套過也可以安全重跑：資料筆數與內容都不會變，只會更新函式。
+--   * 此守門只檢查部分欄位，不能證明完整相容；正式重跑須先比對完整結構及備份。
 --
--- 用法：Supabase 後台 → SQL Editor → New query → 全部貼上 → Run
+-- 本檔為 L3 候選，不是執行授權。正式專案目前 HOLD，不得直接貼上執行。
 -- 成功時最後一列會顯示「✅ 完成」與各項數量。
 -- ============================================================
 

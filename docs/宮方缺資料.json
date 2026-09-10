@@ -1,0 +1,296 @@
+{
+  "status": "withheld_from_public_build",
+  "reason": "Owner 未提供可信來源的宮史、日期、聯絡、服務辦法及個資告知，不公開相關完整區塊",
+  "routes": {
+    "contact.html": [
+      {
+        "tag": "div",
+        "id": null,
+        "reason": "宮方聯絡或宮史來源未提供"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "宮方聯絡或宮史來源未提供"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "宮方聯絡或宮史來源未提供"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "宮方聯絡或宮史來源未提供"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "宮方聯絡或宮史來源未提供"
+      }
+    ],
+    "pilgrimage.html": [
+      {
+        "tag": "p",
+        "id": null,
+        "reason": "不顯示尚未開放的收件承諾"
+      },
+      {
+        "tag": "a",
+        "id": null,
+        "reason": "服務尚未開放，隱藏失效操作入口"
+      },
+      {
+        "tag": "div",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": "action",
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "script",
+        "id": null,
+        "reason": "不初始化已移除的收件表單"
+      }
+    ],
+    "about.html": [
+      {
+        "tag": "div",
+        "id": null,
+        "reason": "不公開施工補件訊息"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "宮史與分靈敘述未獲 Owner 提供來源"
+      }
+    ],
+    "index.html": [
+      {
+        "tag": "section",
+        "id": "notice",
+        "reason": "公告或聯絡資料未核准"
+      },
+      {
+        "tag": "p",
+        "id": null,
+        "reason": "本宮歷史與日期未獲 Owner 提供來源"
+      },
+      {
+        "tag": "section",
+        "id": "visit",
+        "reason": "公告或聯絡資料未核准"
+      }
+    ],
+    "announcements.html": [
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "公告來源及正式後端未驗證"
+      },
+      {
+        "tag": "div",
+        "id": null,
+        "reason": "公告來源及正式後端未驗證"
+      }
+    ],
+    "light.html": [
+      {
+        "tag": "p",
+        "id": null,
+        "reason": "不顯示尚未開放的收件承諾"
+      },
+      {
+        "tag": "a",
+        "id": null,
+        "reason": "服務尚未開放，隱藏失效操作入口"
+      },
+      {
+        "tag": "div",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": "action",
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "script",
+        "id": null,
+        "reason": "不初始化已移除的收件表單"
+      }
+    ],
+    "mazu.html": [
+      {
+        "tag": "div",
+        "id": null,
+        "reason": "不公開施工補件訊息"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "本宮歷史與日期未獲 Owner 提供來源"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "本宮歷史與日期未獲 Owner 提供來源"
+      }
+    ],
+    "light-query.html": [
+      {
+        "tag": "p",
+        "id": null,
+        "reason": "不顯示尚未開放的收件承諾"
+      },
+      {
+        "tag": "a",
+        "id": null,
+        "reason": "服務尚未開放，隱藏失效操作入口"
+      },
+      {
+        "tag": "div",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": "action",
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "script",
+        "id": null,
+        "reason": "不初始化已移除的收件表單"
+      }
+    ],
+    "taisui.html": [
+      {
+        "tag": "p",
+        "id": null,
+        "reason": "不顯示尚未開放的收件承諾"
+      },
+      {
+        "tag": "a",
+        "id": null,
+        "reason": "服務尚未開放，隱藏失效操作入口"
+      },
+      {
+        "tag": "div",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": "action",
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "script",
+        "id": null,
+        "reason": "不初始化已移除的收件表單"
+      }
+    ],
+    "history.html": [
+      {
+        "tag": "div",
+        "id": null,
+        "reason": "宮方聯絡或宮史來源未提供"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "宮方聯絡或宮史來源未提供"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "宮方聯絡或宮史來源未提供"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "宮方聯絡或宮史來源未提供"
+      }
+    ],
+    "light-register.html": [
+      {
+        "tag": "p",
+        "id": null,
+        "reason": "不顯示尚未開放的收件承諾"
+      },
+      {
+        "tag": "a",
+        "id": null,
+        "reason": "服務尚未開放，隱藏失效操作入口"
+      },
+      {
+        "tag": "div",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": "action",
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "section",
+        "id": null,
+        "reason": "服務規格及個資告知未核准，未開放收件"
+      },
+      {
+        "tag": "script",
+        "id": null,
+        "reason": "不初始化已移除的收件表單"
+      }
+    ]
+  },
+  "required": [
+    "正式聯絡資訊與交通",
+    "宮史與建宮年份",
+    "當年度活動及進香辦法",
+    "點燈與安太歲燈別、費用、名額",
+    "個資蒐集告知與保存政策",
+    "正式公告來源與管理權限"
+  ]
+}

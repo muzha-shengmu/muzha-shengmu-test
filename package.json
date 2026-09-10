@@ -1,0 +1,9 @@
+{
+  "name": "mzsm-isolated-review",
+  "private": true,
+  "scripts": {
+    "dev": "node tools/qa-server.mjs",
+    "build": "python3 tools/export_public.py",
+    "test": "node tools/review-tests.mjs"
+  }
+}

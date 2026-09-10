@@ -1,4 +1,4 @@
-import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+import { chromium } from 'playwright';
 
 const BASE = 'http://127.0.0.1:8140';
 const results = [];

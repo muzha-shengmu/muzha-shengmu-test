@@ -686,7 +686,6 @@ begin
   return jsonb_build_object('record', jsonb_build_object(
     'code',   v_row.id,
     'type',   v_row.type,
-    'target', v_row.target,
     'status', v_row.status
   ));
 end;
@@ -863,8 +862,6 @@ begin
 
   return jsonb_build_object('record', jsonb_build_object(
     'code',         v_row.id,
-    'target',       v_row.target,
-    'birth',        to_char(v_row.birth, 'YYYY-MM-DD'),
     'status',       v_row.status,
     'lunar_status', v_row.lunar_status
   ));

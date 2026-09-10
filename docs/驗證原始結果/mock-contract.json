@@ -1,0 +1,237 @@
+{
+  "kind": "node-vm-and-static-contracts",
+  "passed": 57,
+  "failed": 0,
+  "externalRequests": 0,
+  "sqlExecuted": false,
+  "results": [
+    {
+      "name": "交付設定停用且三個連線欄位為空",
+      "pass": true
+    },
+    {
+      "name": "出貨候選拒絕網址測試模式：127.0.0.1",
+      "pass": true
+    },
+    {
+      "name": "出貨候選拒絕網址測試模式：localhost",
+      "pass": true
+    },
+    {
+      "name": "出貨候選拒絕網址測試模式：[::1]",
+      "pass": true
+    },
+    {
+      "name": "出貨候選拒絕網址測試模式：terminal.local",
+      "pass": true
+    },
+    {
+      "name": "出貨候選拒絕網址測試模式：review.example.invalid",
+      "pass": true
+    },
+    {
+      "name": "出貨候選拒絕網址測試模式：localhost.example.invalid",
+      "pass": true
+    },
+    {
+      "name": "出貨候選拒絕網址測試模式：file",
+      "pass": true
+    },
+    {
+      "name": "開發旗標不能在非本機開啟假管理者：terminal.local",
+      "pass": true
+    },
+    {
+      "name": "開發旗標不能在非本機開啟假管理者：review.example.invalid",
+      "pass": true
+    },
+    {
+      "name": "開發旗標不能在非本機開啟假管理者：127.0.0.1.example.invalid",
+      "pass": true
+    },
+    {
+      "name": "開發旗標不能在非本機開啟假管理者：file",
+      "pass": true
+    },
+    {
+      "name": "demo 與 rpcmock 同時要求時停用",
+      "pass": true
+    },
+    {
+      "name": "15 個前後端呼叫名稱有對應 SQL",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 publicListAnnouncements",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 adminListAnnouncements",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 adminSaveAnnouncement",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 publicCreatePilgrimage",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 publicLookupPilgrimage",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 publicCreateLight",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 publicLookupLight",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 adminListLights",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 adminUpdateLight",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 publicCreateTaisui",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 publicLookupTaisui",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 adminListPilgrimage",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 adminUpdatePilgrimage",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 adminListTaisui",
+      "pass": true
+    },
+    {
+      "name": "停用時拒絕 adminUpdateTaisui",
+      "pass": true
+    },
+    {
+      "name": "未授權本機角色拒絕 adminListAnnouncements",
+      "pass": true
+    },
+    {
+      "name": "未授權本機角色拒絕 adminSaveAnnouncement",
+      "pass": true
+    },
+    {
+      "name": "未授權本機角色拒絕 adminListLights",
+      "pass": true
+    },
+    {
+      "name": "未授權本機角色拒絕 adminUpdateLight",
+      "pass": true
+    },
+    {
+      "name": "未授權本機角色拒絕 adminListPilgrimage",
+      "pass": true
+    },
+    {
+      "name": "未授權本機角色拒絕 adminUpdatePilgrimage",
+      "pass": true
+    },
+    {
+      "name": "未授權本機角色拒絕 adminListTaisui",
+      "pass": true
+    },
+    {
+      "name": "未授權本機角色拒絕 adminUpdateTaisui",
+      "pass": true
+    },
+    {
+      "name": "公告草稿不出現在公開列表",
+      "pass": true
+    },
+    {
+      "name": "公告發布後可讀取",
+      "pass": true
+    },
+    {
+      "name": "舊公告版本不得覆蓋新內容",
+      "pass": true
+    },
+    {
+      "name": "MSM 本機合成登記及同鍵重送不新增",
+      "pass": true
+    },
+    {
+      "name": "MSM 查詢保留編號且不回傳個人欄位",
+      "pass": true
+    },
+    {
+      "name": "MSM 錯誤末四碼查無資料",
+      "pass": true
+    },
+    {
+      "name": "LMP 本機合成登記及同鍵重送不新增",
+      "pass": true
+    },
+    {
+      "name": "LMP 查詢保留編號且不回傳個人欄位",
+      "pass": true
+    },
+    {
+      "name": "LMP 錯誤末四碼查無資料",
+      "pass": true
+    },
+    {
+      "name": "PEA 本機合成登記及同鍵重送不新增",
+      "pass": true
+    },
+    {
+      "name": "PEA 查詢保留編號且不回傳個人欄位",
+      "pass": true
+    },
+    {
+      "name": "PEA 錯誤末四碼查無資料",
+      "pass": true
+    },
+    {
+      "name": "未知欄位驗證失敗也不得記錄秘密值",
+      "pass": true
+    },
+    {
+      "name": "診斷紀錄有數量上限",
+      "pass": true
+    },
+    {
+      "name": "逾時錯誤可辨識",
+      "pass": true
+    },
+    {
+      "name": "公開 SQL 查詢不回傳生日與祈福對象",
+      "pass": true
+    },
+    {
+      "name": "逾時提示不斷言資料未送出",
+      "pass": true
+    },
+    {
+      "name": "五個服務頁在程式未載入時表單仍停用",
+      "pass": true
+    },
+    {
+      "name": "表單外的四個生日輸入預設停用",
+      "pass": true
+    },
+    {
+      "name": "所有測試的真實網路請求為零",
+      "pass": true
+    }
+  ]
+}

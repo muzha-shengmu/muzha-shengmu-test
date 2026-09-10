@@ -31,13 +31,9 @@
     'adminListTaisui',
     'adminUpdateTaisui'
   ]);
-  // 全部 11 支都已在 supabase/migrations 建立對應的 Postgres 函式，
-  // 並以 supabase/tests/rpc_test.sql 驗過契約（權限、驗證、冪等、樂觀鎖、
-  // 個資遮蔽、查詢節流）。先前只開放公告 3 支是因為後端尚未實作。
+  // 15 支 RPC 的候選 SQL 已附於 supabase/migrations。
+  // 程式存在不代表正式專案已套用或驗收；候選設定維持停用。
   const LIVE_RPC_CALLS = new Set(Object.keys(RPC_DEFAULTS));
-  const SENSITIVE_LOG_FIELDS = new Set([
-    'title', 'content', 'name', 'phone', 'last4', 'target', 'birth', 'note'
-  ]);
   const params = new URLSearchParams(root.location?.search || '');
 
   class MzsmRpcError extends Error {
@@ -96,10 +92,8 @@
   }
 
   function payloadForLog(payload) {
-    return Object.fromEntries(Object.entries(payload).map(([key, value]) => [
-      key,
-      SENSITIVE_LOG_FIELDS.has(key) ? '[REDACTED]' : clone(value)
-    ]));
+    // 連未通過驗證的欄位也不記錄值；黑名單無法涵蓋未知機密欄位。
+    return Object.fromEntries(Object.keys(payload).map((key) => [key, '[REDACTED]']));
   }
 
   function assertOnly(payload, allowed) {
@@ -464,7 +458,7 @@
           const code = text(payload, 'code', {required:true, max:80});
           const suffix = last4(payload);
           const row = repository.getCombined().lamps.find((item) => String(item.id) === code && String(item.phone || '').slice(-4) === suffix);
-          return {record: row ? {code:row.id, type:String(row.type || ''), target:String(row.target || ''), status:String(row.status || '待確認')} : null};
+          return {record: row ? {code:row.id, type:String(row.type || ''), status:String(row.status || '待確認')} : null};
         }
         case 'adminListLights': {
           assertOnly(payload, ['limit', 'cursor']);
@@ -551,7 +545,7 @@
           const code = text(payload, 'code', {required:true, max:80});
           const suffix = last4(payload);
           const row = repository.getTaisui().rows.find((item) => String(item.id) === code && String(item.phone || '').slice(-4) === suffix);
-          return {record:row ? {code:row.id, target:row.target, birth:row.birth, status:row.status, lunar_status:'pending_review'} : null};
+          return {record:row ? {code:row.id, status:row.status, lunar_status:'pending_review'} : null};
         }
         default:
           fail('RPC_NOT_MAPPED', `沒有對應的 RPC：${logicalName}`);
@@ -701,6 +695,7 @@
       const payload = clone(asObject(rawPayload));
       const entry = {logical_name:logicalName, rpc_name:rpcMap[logicalName], payload:payloadForLog(payload), started_at:now(), outcome:'pending'};
       this.log.push(entry);
+      if (this.log.length > 100) this.log.shift();
       let timer;
       try {
         const timeout = new Promise((_, reject) => {

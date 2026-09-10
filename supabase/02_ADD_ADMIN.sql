@@ -13,7 +13,7 @@
 do $mzsm_admin$
 declare
   -- ↓↓↓ 只要改這一行 ↓↓↓
-  v_email text := 'mj29379898@gmail.com';
+  v_email text := 'temple-admin@example.invalid';
   -- ↑↑↑ 只要改這一行 ↑↑↑
   v_uid   uuid;
   v_count integer;
@@ -24,12 +24,7 @@ begin
     raise exception E'找不到帳號：%\n\n請先到 Authentication → Users → Add user 建立這個信箱的帳號（記得勾 Auto Confirm User），再回來執行這一份。', v_email;
   end if;
 
-  -- 帳號被刪除重建後 UID 會變，舊的那筆會變成指向不存在的帳號。
-  -- 留著不會造成安全問題（已刪除的帳號登不進來），但會讓管理者名單看起來
-  -- 有兩個人，日後盤點時容易誤判，所以在這裡一併清掉。
-  delete from public.mzsm_admins a
-   where not exists (select 1 from auth.users u where u.id = a.user_id);
-
+  -- 本步只處理指定帳號。其他失聯帳號另列人工盤點，不自動刪除。
   insert into public.mzsm_admins (user_id, email)
   values (v_uid, lower(btrim(v_email)))
   on conflict (user_id) do update set email = excluded.email;

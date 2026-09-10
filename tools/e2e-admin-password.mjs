@@ -1,4 +1,4 @@
-import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+import { chromium } from 'playwright';
 const B='http://127.0.0.1:8140';
 let bad=0,n=0;
 const ck=(name,ok,d='')=>{n++;if(!ok)bad++;console.log(`${ok?'PASS ':'FAIL '} ${name}${d?'  → '+d:''}`)};

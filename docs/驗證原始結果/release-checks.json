@@ -1,0 +1,161 @@
+{
+  "kind": "static-release-guards",
+  "status": "PASS",
+  "results": [
+    {
+      "check": "15 existing HTML routes preserved",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "public page placeholder and unapproved factual content scan",
+      "status": "PASS",
+      "detail": []
+    },
+    {
+      "check": "unapproved collection forms omitted from public HTML",
+      "status": "PASS",
+      "detail": []
+    },
+    {
+      "check": "local resources and anchors",
+      "status": "PASS",
+      "detail": {
+        "checked": 297,
+        "broken": []
+      }
+    },
+    {
+      "check": "unique HTML ids",
+      "status": "PASS",
+      "detail": []
+    },
+    {
+      "check": "public-only export excludes SQL and development files",
+      "status": "PASS",
+      "detail": []
+    },
+    {
+      "check": "secret value scan of candidate text files",
+      "status": "PASS",
+      "detail": []
+    },
+    {
+      "check": "env template names only, values empty",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "SQL source RLS enable and explicit restrictive policy: mzsm_counters",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "SQL source RLS enable and explicit restrictive policy: mzsm_admins",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "SQL source RLS enable and explicit restrictive policy: mzsm_announcements",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "SQL source RLS enable and explicit restrictive policy: mzsm_pilgrimage",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "SQL source RLS enable and explicit restrictive policy: mzsm_lights",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "SQL source RLS enable and explicit restrictive policy: mzsm_taisui",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "SQL source RLS enable and explicit restrictive policy: mzsm_idempotency",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "SQL source RLS enable and explicit restrictive policy: mzsm_lookup_attempts",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "negative DB test source covers 8 tables and 2 roles",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "check": "JavaScript syntax",
+      "status": "PASS",
+      "detail": [
+        {
+          "file": "config/announcement-config.js",
+          "status": "PASS"
+        },
+        {
+          "file": "tools/qa-server.mjs",
+          "status": "PASS"
+        },
+        {
+          "file": "tools/e2e.mjs",
+          "status": "PASS"
+        },
+        {
+          "file": "tools/offline-degrade.mjs",
+          "status": "PASS"
+        },
+        {
+          "file": "tools/regression.mjs",
+          "status": "PASS"
+        },
+        {
+          "file": "tools/review-tests.mjs",
+          "status": "PASS"
+        },
+        {
+          "file": "tools/e2e-admin.mjs",
+          "status": "PASS"
+        },
+        {
+          "file": "tools/e2e-admin-password.mjs",
+          "status": "PASS"
+        },
+        {
+          "file": "assets/js/mzsm-rpc-pages.js",
+          "status": "PASS"
+        },
+        {
+          "file": "assets/js/mzsm-admin-console.js",
+          "status": "PASS"
+        },
+        {
+          "file": "assets/js/announcement-public.js",
+          "status": "PASS"
+        },
+        {
+          "file": "assets/js/mzsm-rpc-client.js",
+          "status": "PASS"
+        },
+        {
+          "file": "assets/js/announcement-admin.js",
+          "status": "PASS"
+        },
+        {
+          "file": "assets/vendor/supabase-js-2.110.8.min.js",
+          "status": "PASS"
+        }
+      ]
+    }
+  ],
+  "RLS negative DB test": "NOT RUN",
+  "Supabase RLS enabled": "NOT RUN",
+  "Browser E2E": "NOT RUN",
+  "Lighthouse": "NOT RUN",
+  "Production": "NOT RUN"
+}

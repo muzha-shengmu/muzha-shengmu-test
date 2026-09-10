@@ -1,6 +1,7 @@
+throw new Error('歷史降級腳本已隔離：必須先改用本機故障替身；不得以正式後端做斷線測試');
 // Supabase 連不上時，網站應該給出明確錯誤，而不是壞掉或無聲失敗。
 // 這個沙箱的代理擋掉 supabase.co，正好可以真實重現這個情境。
-import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+import { chromium } from 'playwright';
 
 const B = 'http://127.0.0.1:8145';
 const b = await chromium.launch();

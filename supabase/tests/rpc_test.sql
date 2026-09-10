@@ -186,6 +186,11 @@ begin
   if v_code !~ '^LMP-\d{4}-0001$' then
     raise exception 'FAIL: 點燈碼格式不符：%', v_code;
   end if;
+  v_result := public.mzsm_public_lookup_light(v_code, '4321');
+  if (v_result -> 'record' ->> 'code') is distinct from v_code
+     or (v_result -> 'record') ?| array['phone','name','target','birth','note'] then
+    raise exception 'FAIL: 點燈公開查詢欄位不符合最小化原則';
+  end if;
   raise notice 'PASS  建立點燈 %（燈別 %）', v_code, v_result ->> 'type';
 
   -- 生日格式錯誤
@@ -297,11 +302,11 @@ begin
   end;
 
   v_result := public.mzsm_public_lookup_taisui(v_code, '2333');
-  if (v_result -> 'record') ? 'phone' or (v_result -> 'record') ? 'name' then
-    raise exception 'FAIL: 安太歲查詢洩漏姓名或手機：%', v_result;
+  if (v_result -> 'record') ?| array['phone','name','target','birth'] then
+    raise exception 'FAIL: 安太歲公開查詢包含個人欄位';
   end if;
-  if (v_result -> 'record' ->> 'birth') <> '1990-06-15' then
-    raise exception 'FAIL: 安太歲生日回傳不正確：%', v_result;
+  if (v_result -> 'record' ->> 'code') is distinct from v_code then
+    raise exception 'FAIL: 安太歲查詢沒有回傳正確編號';
   end if;
   raise notice 'PASS  安太歲查詢正確且未洩漏個資';
 

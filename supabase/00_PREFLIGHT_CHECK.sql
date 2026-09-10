@@ -3,11 +3,9 @@
 -- 專案 mzsm-temple 建立於 2026-07-21，可能已經有先前留下的內容。
 -- **在執行任何 migration 之前，先在 SQL Editor 貼上這一整份並 Run。**
 --
--- 這份只做 SELECT，不建立、不修改、不刪除任何資料表或資料。
+-- 這份只讀取目錄及資料筆數，包含 SELECT 與唯讀 DO 區塊；不修改資料。
 -- 執行後看最後一行的判定：
---   ✅ 可以直接執行 migration
---   ⚠️ 已經裝好了，重跑也安全（資料不會消失）
---   ❌ 有同名但結構不同的表，直接執行會失敗 —— 先把結果整份回報
+--   此檢查不核發 migration 授權。任何結果都必須配合完整差異、備份與人工確認。
 
 select '── 1. 已存在的 mzsm_ 資料表 ──' as "檢查項目";
 
@@ -47,7 +45,7 @@ begin
     out_text := out_text || t.tablename || ' = ' || n || ' 筆；';
   end loop;
   if out_text = '' then
-    raise notice '目前沒有任何 mzsm_ 資料表（全新專案）';
+    raise notice 'public schema 未找到 mzsm_ 資料表；不代表整個專案為空。';
   else
     raise notice '%', out_text;
   end if;
@@ -96,36 +94,5 @@ order by e.tbl, e.col;
 
 select '── 5. 最終判定 ──' as "檢查項目";
 
-with existing as (
-  select count(*) as n from pg_tables
-   where schemaname='public' and tablename like 'mzsm%'
-),
-expected(tbl, col) as (
-  values
-    ('mzsm_announcements','version'), ('mzsm_lights','version'),
-    ('mzsm_lights','created_at'),     ('mzsm_pilgrimage','version'),
-    ('mzsm_taisui','lunar_status'),   ('mzsm_admins','user_id'),
-    ('mzsm_counters','next_value'),   ('mzsm_idempotency','result'),
-    ('mzsm_lookup_attempts','failures')
-),
-mismatch as (
-  select count(*) as n from expected e
-   where exists (select 1 from pg_tables where schemaname='public' and tablename = e.tbl)
-     and not exists (select 1 from information_schema.columns c
-                      where c.table_schema='public' and c.table_name=e.tbl and c.column_name=e.col)
-),
-fns as (
-  select count(*) as n from pg_proc p join pg_namespace n2 on n2.oid=p.pronamespace
-   where n2.nspname='public' and p.proname like 'mzsm_public_%'
-)
-select
-  case
-    when (select n from mismatch) > 0 then
-      '❌ 有同名但結構不同的資料表。直接執行 migration 會失敗（會整份回滾，不會弄壞現有資料）。請把上面第 4 節的結果整份回報，先決定要改名保留還是刪除舊表。'
-    when (select n from existing) = 0 then
-      '✅ 全新專案，沒有任何 mzsm_ 物件。可以直接依序執行兩份 migration。'
-    when (select n from fns) >= 7 then
-      '⚠️ 這個專案已經裝好了（資料表與函式都在）。重跑 migration 是安全的：實測過資料筆數與內容完全不變，只會把函式更新成最新版。若只是要更新程式，重跑即可。'
-    else
-      '⚠️ 有 mzsm_ 資料表但函式不完整（可能上次執行到一半）。重跑兩份 migration 即可補齊，現有資料不會被刪除。'
-  end as "判定";
+-- 目錄盤點不是相容性或授權證明；不以部分欄位與函式數推論可安全重跑。
+select 'HOLD：本次只完成 public schema 的 mzsm_ 目錄與關鍵欄位盤點。尚未驗證其他 schema、完整欄位型別、約束、索引、觸發器、函式內容、權限、備份與還原；不可依本報告直接執行 migration。' as "判定";
